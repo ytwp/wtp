@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  wang.yeting.wtp.core.auto.WtpAutoConfiguration

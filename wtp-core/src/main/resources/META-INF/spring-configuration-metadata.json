@@ -1,0 +1,31 @@
+{
+  "properties": [
+    {
+      "name": "wtp.enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": true,
+      "description": "Turn on WTP auto configuration"
+    },
+    {
+      "name": "wtp.admin.url",
+      "type": "java.lang.String",
+      "description": "adminUrl"
+    },
+    {
+      "name": "wtp.app.id",
+      "type": "java.lang.String",
+      "description": "appId"
+    },
+    {
+      "name": "wtp.cluster.id",
+      "type": "java.lang.String",
+      "description": "clusterId"
+    },
+    {
+      "name": "wtp.connect.retry.interval",
+      "type": "java.lang.Long",
+      "defaultValue": 3000,
+      "description": "WTP connection retry interval milliseconds"
+    }
+  ]
+}
