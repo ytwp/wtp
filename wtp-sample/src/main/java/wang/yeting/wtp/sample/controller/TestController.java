@@ -15,12 +15,12 @@ public class TestController {
     @Autowired
     private Test test;
 
-    @RequestMapping("test")
-    public String test() {
+    @RequestMapping("/get")
+    public String get() {
         return test.getThreadPoolLog();
     }
 
-    @RequestMapping("testPool")
+    @RequestMapping("/testPool")
     public String testPool() {
         return test.testPool();
     }
