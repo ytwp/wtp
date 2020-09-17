@@ -2,7 +2,7 @@
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/ytwp/wtp)
 [![GitHub Release](https://img.shields.io/badge/release-v1.0.0-blue)](https://github.com/ytwp/wtp/releases)
-[![Maven Central Repo](https://img.shields.io/badge/maven%20central-v1.0.0-blue)](https://mvnrepository.com/artifact/com.ctrip.framework.apollo/apollo-client)
+[![Maven Central Repo](https://img.shields.io/badge/maven%20central-v1.0.0-blue)](https://mvnrepository.com/artifact/wang.yeting/wtp-core)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 WTP 是一个轻量级线程池管理系统，能够集中管理不同应用、不同集群的线程配置，修改配置后能够实时刷新，使用起来，简单易用。
