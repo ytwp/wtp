@@ -22,12 +22,12 @@ public class WtpRegistryMonitorHelper {
     }
 
     public void registryMonitor() {
-        while (true) {
+        while (MainThreadPool.monitorRun) {
             try {
                 doRegistryMonitor();
                 Thread.sleep(300000L);
             } catch (Exception e) {
-                log.error("wtp ------> doPushLog Exception = [{}]. ", e);
+                log.error("wtp ------> doRegistryMonitor Exception = [{}]. ", e);
             }
         }
     }

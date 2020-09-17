@@ -4,18 +4,23 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.async.DeferredResult;
 import wang.yeting.wtp.admin.bean.Wtp;
 import wang.yeting.wtp.admin.bean.WtpLog;
 import wang.yeting.wtp.admin.bean.WtpRegistry;
 import wang.yeting.wtp.admin.factory.WtpConfigFactory;
+import wang.yeting.wtp.admin.handler.DeferredResultHelper;
 import wang.yeting.wtp.admin.model.vo.WtpVo;
 import wang.yeting.wtp.admin.service.ServerService;
 import wang.yeting.wtp.admin.service.WtpLogService;
 import wang.yeting.wtp.admin.service.WtpRegistryService;
 import wang.yeting.wtp.admin.service.WtpService;
+import wang.yeting.wtp.admin.thread.PullConfigMonitorHelper;
 import wang.yeting.wtp.admin.thread.WtpLogMonitorHelper;
 import wang.yeting.wtp.core.biz.model.*;
+import wang.yeting.wtp.core.util.HttpResponse;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -36,6 +41,10 @@ public class ServerServiceImpl implements ServerService {
     private final WtpRegistryService wtpRegistryService;
     private final WtpLogMonitorHelper wtpLogMonitorHelper;
 
+    @Value("${pull.config.hold.count:30}")
+    private Integer pullConfigHoldCount;
+
+    private static final HttpResponse DEFAULT_HTTP_RESPONSE = new HttpResponse(HttpResponse.SUCCESS_CODE, new ConfigChangeEvent(new ConcurrentHashMap(0)));
 
     @Override
     public ConfigEvent registry(QueryBo queryBo) {
@@ -64,29 +73,28 @@ public class ServerServiceImpl implements ServerService {
         return wtpLogService.create(wtpLog);
     }
 
+    /**
+     * @param appId
+     * @param clusterId
+     * @param ip
+     * @return
+     */
     @Override
-    public ConfigChangeEvent pullConfig(String appId, String clusterId, String ip) {
+    public DeferredResult<HttpResponse<ConfigChangeEvent>> pullConfig(String appId, String clusterId, String ip) {
         log.info("pullConfig ------> appId：{}  --  clusterId：{}", appId, clusterId);
         wtpRegistryService.registry(new WtpRegistry().setAppId(appId).setClusterId(clusterId).setIp(ip));
 
-        WtpConfigFactory wtpConfigFactory = WtpConfigFactory.getInstance();
-        int count = 0;
-        do {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Boolean configChange = wtpConfigFactory.isConfigChange(appId, clusterId);
-            if (configChange) {
-                CopyOnWriteArrayList<Config> configList = wtpConfigFactory.getConfigChange(appId, clusterId, ip);
-                ConcurrentMap<String, Config> configConcurrentMap = configList.stream().collect(Collectors.toConcurrentMap(Config::getName, Config -> Config));
+        DeferredResult<HttpResponse<ConfigChangeEvent>> deferredResult = new DeferredResult<>(pullConfigHoldCount * 1000L, DEFAULT_HTTP_RESPONSE);
 
-                return new ConfigChangeEvent(configConcurrentMap);
-            }
-        } while (++count < 30);
+        DeferredResultHelper deferredResultHelper = new DeferredResultHelper(appId, clusterId, ip, pullConfigHoldCount, deferredResult);
 
-        return new ConfigChangeEvent(new ConcurrentHashMap(1));
+        PullConfigMonitorHelper.add(deferredResultHelper);
+
+        deferredResult.onCompletion(() -> {
+            PullConfigMonitorHelper.remove(deferredResultHelper);
+        });
+
+        return deferredResult;
     }
 
     @Override
@@ -111,4 +119,5 @@ public class ServerServiceImpl implements ServerService {
         ConcurrentMap<String, Config> configConcurrentMap = configList.stream().collect(Collectors.toConcurrentMap(Config::getName, Config -> Config));
         return new ConfigEvent(configConcurrentMap);
     }
+
 }

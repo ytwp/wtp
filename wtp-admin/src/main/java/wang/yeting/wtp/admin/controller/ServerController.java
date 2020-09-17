@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.async.DeferredResult;
 import wang.yeting.wtp.admin.service.ServerService;
 import wang.yeting.wtp.core.biz.model.*;
 import wang.yeting.wtp.core.util.HttpResponse;
@@ -41,9 +42,8 @@ public class ServerController {
     }
 
     @RequestMapping("/pullConfig/{appId}/{clusterId}/{ip}")
-    public HttpResponse<ConfigChangeEvent> pullConfig(@PathVariable("appId") String appId, @PathVariable("clusterId") String clusterId, @PathVariable("ip") String ip) {
-        ConfigChangeEvent configChangeEvent = serverService.pullConfig(appId, clusterId, ip);
-        return new HttpResponse(HttpResponse.SUCCESS_CODE, configChangeEvent);
+    public DeferredResult<HttpResponse<ConfigChangeEvent>> pullConfig(@PathVariable("appId") String appId, @PathVariable("clusterId") String clusterId, @PathVariable("ip") String ip) {
+        return serverService.pullConfig(appId, clusterId, ip);
     }
 
     @RequestMapping("/registerNoConfigurationWtp")

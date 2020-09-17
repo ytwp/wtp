@@ -23,18 +23,18 @@ public class WtpMonitorHelper {
     }
 
     public void wtpMonitor() {
-        while (true) {
+        while (MainThreadPool.monitorRun) {
             try {
                 doWtpMonitor();
                 Thread.sleep(300000L);
             } catch (Exception e) {
-                log.error("wtp ------> doPushLog Exception = [{}]. ", e);
+                log.error("wtp ------> doWtpMonitor Exception = [{}]. ", e);
             }
         }
     }
 
     private void doWtpMonitor() {
-        log.info("wtp ------> doRegistryMonitor . ");
+        log.info("wtp ------> doWtpMonitor . ");
         List<Wtp> wtpList = wtpService.initConfigFactory();
         WtpFactory wtpFactory = WtpFactory.getInstance();
         wtpFactory.loadWtp(wtpList);

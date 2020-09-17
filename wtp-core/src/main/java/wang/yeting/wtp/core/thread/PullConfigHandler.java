@@ -34,7 +34,7 @@ public class PullConfigHandler {
     public void doPullConfig(AdminBiz adminBiz) {
         WtpConfigBean wtpConfigBean = adminBiz.getWtpConfigBean();
         Long secondsDelay = wtpConfigBean.getConnectRetryInterval();
-        while (true) {
+        while (ThreadPool.threadRun) {
             try {
                 HttpResponse<ConfigChangeEvent> response = adminBiz.pullConfig();
                 if (response.getStatusCode() == HttpResponse.SUCCESS_CODE) {

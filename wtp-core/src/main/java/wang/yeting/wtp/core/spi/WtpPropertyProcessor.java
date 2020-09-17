@@ -18,10 +18,10 @@ import wang.yeting.wtp.core.context.WtpAnnotationContext;
 import wang.yeting.wtp.core.factory.WtpQueueFactory;
 import wang.yeting.wtp.core.factory.WtpThreadPoolFactory;
 import wang.yeting.wtp.core.handler.WtpHandler;
+import wang.yeting.wtp.core.thread.ThreadPool;
 import wang.yeting.wtp.core.thread.PullConfigHandler;
 import wang.yeting.wtp.core.thread.PushLogHandler;
 import wang.yeting.wtp.core.thread.TaskPullConfigHandler;
-import wang.yeting.wtp.core.thread.ThreadPool;
 import wang.yeting.wtp.core.util.HttpResponse;
 
 import java.util.ArrayList;
@@ -63,6 +63,8 @@ public class WtpPropertyProcessor implements ApplicationContextAware, SmartIniti
         for (AdminBiz adminBiz : adminBizList) {
             adminBiz.destroy();
         }
+        ThreadPool.destroy();
+        log.error("wtp ------> destroy.");
     }
 
     @Override
@@ -75,6 +77,8 @@ public class WtpPropertyProcessor implements ApplicationContextAware, SmartIniti
     }
 
     private void start() {
+        log.error("wtp ------> start.");
+
         //生成注册对象
         initAdminBizList();
         //注册到admin 并首次初始化线程池
@@ -89,6 +93,8 @@ public class WtpPropertyProcessor implements ApplicationContextAware, SmartIniti
         pushLog();
         //定时去拉取全部配置
         taskPullConfig();
+
+        log.error("wtp ------> started.");
     }
 
     private void taskPullConfig() {

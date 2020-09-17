@@ -14,6 +14,8 @@ public class ThreadPool {
 
     private static ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = null;
 
+    public volatile static boolean threadRun = true;
+
     public static void loadMainThreadPool(ThreadPoolExecutor threadPool, ScheduledThreadPoolExecutor scheduledThreadPool) {
         threadPoolExecutor = threadPool;
         scheduledThreadPoolExecutor = scheduledThreadPool;
@@ -32,6 +34,12 @@ public class ThreadPool {
     }
 
     private ThreadPool() {
+    }
+
+    public static void destroy() {
+        threadRun = false;
+        scheduledThreadPoolExecutor.shutdown();
+        threadPoolExecutor.shutdown();
     }
 
 }

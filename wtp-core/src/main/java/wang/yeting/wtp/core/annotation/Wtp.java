@@ -3,6 +3,8 @@ package wang.yeting.wtp.core.annotation;
 import wang.yeting.wtp.core.enums.QueueEnums;
 import wang.yeting.wtp.core.enums.RejectedExecutionHandlerEnums;
 
+import java.lang.annotation.*;
+
 /**
  * @author : weipeng
  * @date : 2020-07-23 13:49

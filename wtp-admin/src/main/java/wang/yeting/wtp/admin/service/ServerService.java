@@ -1,6 +1,8 @@
 package wang.yeting.wtp.admin.service;
 
+import org.springframework.web.context.request.async.DeferredResult;
 import wang.yeting.wtp.core.biz.model.*;
+import wang.yeting.wtp.core.util.HttpResponse;
 
 /**
  * @author : weipeng
@@ -12,7 +14,7 @@ public interface ServerService {
 
     Boolean pushLog(WtpLogBo wtpLogBo);
 
-    ConfigChangeEvent pullConfig(String appId, String clusterId, String ip);
+    DeferredResult<HttpResponse<ConfigChangeEvent>> pullConfig(String appId, String clusterId, String ip);
 
     Boolean registerNoConfigurationWtp(WtpBo wtpBo);
 
