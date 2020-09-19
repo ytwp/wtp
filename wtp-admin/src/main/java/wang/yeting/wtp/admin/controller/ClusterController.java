@@ -9,6 +9,7 @@ import wang.yeting.wtp.admin.bean.Cluster;
 import wang.yeting.wtp.admin.model.PageResponse;
 import wang.yeting.wtp.admin.model.Result;
 import wang.yeting.wtp.admin.model.bo.UserBo;
+import wang.yeting.wtp.admin.model.enums.RoleEnum;
 import wang.yeting.wtp.admin.model.vo.ClusterVo;
 import wang.yeting.wtp.admin.service.ClusterService;
 
@@ -55,4 +56,10 @@ public class ClusterController {
         return Result.success(cluster);
     }
 
+    @Permission(roles = {RoleEnum.SUPER_ADMIN, RoleEnum.ADMIN})
+    @GetMapping("/del")
+    public Result<Boolean> del(ClusterVo ClusterVo, @CurrentUser UserBo userBo) {
+        Boolean del = clusterService.del(ClusterVo, userBo);
+        return Result.success(del);
+    }
 }

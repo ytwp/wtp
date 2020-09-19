@@ -21,4 +21,6 @@ public interface AppService {
     Boolean update(App app, UserBo userBo);
 
     App get(AppVo appVo, UserBo userBo);
+
+    Boolean del(AppVo appVo, UserBo userBo);
 }

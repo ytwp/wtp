@@ -9,6 +9,8 @@ import wang.yeting.wtp.admin.exceptions.PermissionException;
 import wang.yeting.wtp.admin.model.Result;
 import wang.yeting.wtp.admin.model.ResultCode;
 
+import java.lang.reflect.UndeclaredThrowableException;
+
 /**
  * @author : weipeng
  * @date : 2020-08-04 16:33
@@ -18,18 +20,29 @@ import wang.yeting.wtp.admin.model.ResultCode;
 public class GlobalDefaultExceptionHandler {
 
     @ExceptionHandler(value = PermissionException.class)
-    public Result handlerPermissionException(Exception exception) {
+    public Result handlerPermissionException(PermissionException exception) {
         return Result.noPermission(exception.getMessage());
     }
 
     @ExceptionHandler(value = LoginException.class)
-    public Result handlerLoginException(Exception exception) {
+    public Result handlerLoginException(LoginException exception) {
         return Result.tokenExpired(exception.getMessage());
     }
 
     @ExceptionHandler(value = BusinessException.class)
-    public Result handlerBusinessException(Exception exception) {
+    public Result handlerBusinessException(BusinessException exception) {
         return Result.exceptionError(exception.getMessage());
+    }
+
+    @ExceptionHandler(value = UndeclaredThrowableException.class)
+    public Result handlerUndeclaredThrowableException(UndeclaredThrowableException exception) {
+        Throwable undeclaredThrowable = exception.getUndeclaredThrowable();
+        if (undeclaredThrowable instanceof LoginException) {
+            return Result.tokenExpired(undeclaredThrowable.getMessage());
+        } else if (undeclaredThrowable instanceof PermissionException) {
+            return Result.noPermission(exception.getMessage());
+        }
+        return Result.exceptionError(undeclaredThrowable.getMessage());
     }
 
     @ExceptionHandler(value = Exception.class)

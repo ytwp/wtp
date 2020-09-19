@@ -4,10 +4,7 @@ import lombok.Getter;
 import wang.yeting.wtp.core.concurrent.ResizableCapacityLinkedBlockingQueue;
 
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.*;
 
 /**
  * @author : weipeng
@@ -40,11 +37,20 @@ public enum QueueEnums {
     /**
      * details {@link ArrayBlockingQueue}
      */
-    arrayBlockingQueue("ArrayBlockingQueue", ArrayBlockingQueue.class);
+    arrayBlockingQueue("ArrayBlockingQueue", ArrayBlockingQueue.class),
+
+    /**
+     * details {@link SynchronousQueue}
+     */
+    synchronousQueue("SynchronousQueue", SynchronousQueue.class),
+
+    /**
+     * details {@link LinkedTransferQueue}
+     */
+    linkedTransferQueue("LinkedTransferQueue", LinkedTransferQueue.class);
 
     private String queueName;
     private Class<?> queueClass;
-
 
     QueueEnums(String queueName, Class<?> queueClass) {
         this.queueName = queueName;

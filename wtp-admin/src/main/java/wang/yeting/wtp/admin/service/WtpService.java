@@ -34,4 +34,6 @@ public interface WtpService {
     Wtp get(LambdaQueryWrapper<Wtp> lambdaQueryWrapper);
 
     Boolean del(Wtp wtp, UserBo userBo);
+
+    Boolean syncConfig(Wtp wtp, String clusterIds, UserBo userBo);
 }

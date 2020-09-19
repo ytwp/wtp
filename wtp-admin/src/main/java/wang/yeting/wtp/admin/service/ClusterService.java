@@ -20,4 +20,6 @@ public interface ClusterService {
     Boolean update(Cluster cluster, UserBo userBo);
 
     Cluster get(ClusterVo clusterVo, UserBo userBo);
+
+    Boolean del(ClusterVo clusterVo, UserBo userBo);
 }

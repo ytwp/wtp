@@ -45,6 +45,12 @@ public class WtpController {
         return Result.success(create);
     }
 
+    @PostMapping("/syncConfig")
+    public Result<Boolean> syncConfig(Wtp wtp, String clusterIds, @CurrentUser UserBo userBo) {
+        Boolean syncConfig = wtpService.syncConfig(wtp, clusterIds, userBo);
+        return Result.success(syncConfig);
+    }
+
     @PostMapping("/del")
     public Result<Boolean> del(Wtp wtp, @CurrentUser UserBo userBo) {
         Boolean del = wtpService.del(wtp, userBo);

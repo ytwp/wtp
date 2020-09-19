@@ -76,6 +76,10 @@ public class WtpQueueFactory {
             return new LinkedBlockingDeque<>(queueCapacity);
         } else if (Objects.equals(QueueEnums.priorityBlockingQueue.getQueueName(), queueName)) {
             return new PriorityBlockingQueue<>(queueCapacity);
+        } else if (Objects.equals(QueueEnums.synchronousQueue.getQueueName(), queueName)) {
+            return new SynchronousQueue<>();
+        } else if (Objects.equals(QueueEnums.linkedTransferQueue.getQueueName(), queueName)) {
+            return new LinkedTransferQueue<>();
         } else {
             throw new WtpConfigException("wtp ------> Queue configuration error. ");
         }

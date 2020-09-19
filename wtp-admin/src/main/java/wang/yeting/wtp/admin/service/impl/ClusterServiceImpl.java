@@ -107,4 +107,9 @@ public class ClusterServiceImpl extends ServiceImpl<ClusterMapper, Cluster> impl
         return cluster;
     }
 
+    @Override
+    public Boolean del(ClusterVo clusterVo, UserBo userBo) {
+        return removeById(clusterVo.getId());
+    }
+
 }

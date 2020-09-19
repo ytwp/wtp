@@ -9,6 +9,7 @@ import wang.yeting.wtp.admin.bean.App;
 import wang.yeting.wtp.admin.model.PageResponse;
 import wang.yeting.wtp.admin.model.Result;
 import wang.yeting.wtp.admin.model.bo.UserBo;
+import wang.yeting.wtp.admin.model.enums.RoleEnum;
 import wang.yeting.wtp.admin.model.vo.AppVo;
 import wang.yeting.wtp.admin.service.AppService;
 
@@ -27,19 +28,19 @@ public class AppController {
 
     @GetMapping("/page")
     public Result<PageResponse> page(AppVo AppVo, @CurrentUser UserBo userBo) {
-        PageResponse page = appService.page(AppVo,userBo);
+        PageResponse page = appService.page(AppVo, userBo);
         return Result.success(page);
     }
 
     @PostMapping("/create")
-    public Result<?> create(App app,@CurrentUser UserBo userBo) {
-        Boolean create = appService.create(app,userBo);
+    public Result<?> create(App app, @CurrentUser UserBo userBo) {
+        Boolean create = appService.create(app, userBo);
         return Result.success(create);
     }
 
     @PostMapping("/update")
-    public Result<?> update(App app,@CurrentUser UserBo userBo) {
-        Boolean create = appService.update(app,userBo);
+    public Result<?> update(App app, @CurrentUser UserBo userBo) {
+        Boolean create = appService.update(app, userBo);
         return Result.success(create);
     }
 
@@ -51,7 +52,14 @@ public class AppController {
 
     @GetMapping("/get")
     public Result<App> get(AppVo AppVo, @CurrentUser UserBo userBo) {
-        App app = appService.get(AppVo,userBo);
+        App app = appService.get(AppVo, userBo);
         return Result.success(app);
+    }
+
+    @Permission(roles = RoleEnum.SUPER_ADMIN)
+    @GetMapping("/del")
+    public Result<Boolean> del(AppVo AppVo, @CurrentUser UserBo userBo) {
+        Boolean del = appService.del(AppVo, userBo);
+        return Result.success(del);
     }
 }

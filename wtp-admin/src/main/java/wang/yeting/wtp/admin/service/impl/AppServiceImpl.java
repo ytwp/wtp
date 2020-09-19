@@ -110,4 +110,9 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
         }
         return getById(appVo.getId());
     }
+
+    @Override
+    public Boolean del(AppVo appVo, UserBo userBo) {
+        return removeById(appVo.getId());
+    }
 }
