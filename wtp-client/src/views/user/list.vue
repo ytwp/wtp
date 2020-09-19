@@ -5,7 +5,14 @@
         <el-button type="primary" @click="newUserVisibleBtn">New User</el-button>
       </el-col>
     </el-row>
-    <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;margin-top: 20px;">
+    <el-table
+      v-loading="listLoading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;margin-top: 20px;"
+    >
       <el-table-column align="center" label="UserId" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.userId }}</span>
@@ -64,13 +71,25 @@
         <template slot-scope="scope">
           <el-button-group>
             <el-button type="primary" size="small" @click="updateUserVisibleBtn(scope.row)">编辑</el-button>
-            <el-button v-if="scope.row.role !== 'SUPPER-ADMIN'" type="primary" size="small" @click="toPermission(scope.row)">授权</el-button>
+            <el-button
+              v-if="scope.row.role !== 'SUPPER-ADMIN'"
+              type="primary"
+              size="small"
+              @click="toPermission(scope.row)"
+            >授权
+            </el-button>
           </el-button-group>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="pageQuery.page" :limit.sync="pageQuery.size" @pagination="page" />
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="pageQuery.page"
+      :limit.sync="pageQuery.size"
+      @pagination="page"
+    />
 
     <el-dialog title="创建用户" :visible.sync="newUserVisible">
       <el-form :model="createForm">
@@ -261,10 +280,9 @@ export default {
 </script>
 
 <style scoped>
-
-  .emptyGif {
-    display: block;
-    width: 45%;
-    margin: 0 auto;
-  }
+.emptyGif {
+  display: block;
+  width: 45%;
+  margin: 0 auto;
+}
 </style>
