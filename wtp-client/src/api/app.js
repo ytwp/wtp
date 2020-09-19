@@ -37,3 +37,11 @@ export function get(id) {
     method: 'get'
   })
 }
+
+export function del(form) {
+  return request({
+    url: `/app/del`,
+    method: 'get',
+    params: form
+  })
+}

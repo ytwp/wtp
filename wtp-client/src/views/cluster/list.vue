@@ -8,10 +8,18 @@
         </el-select>
       </el-col>
       <el-col :span="5">
-        <el-button type="primary" v-if="check(pageQuery.appId)" @click="newClusterVisible = true">New Cluster</el-button>
+        <el-button v-if="check(pageQuery.appId)" type="primary" @click="newClusterVisible = true">New Cluster
+        </el-button>
       </el-col>
     </el-row>
-    <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;margin-top: 20px;">
+    <el-table
+      v-loading="listLoading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;margin-top: 20px;"
+    >
       <el-table-column align="center" label="ID" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
@@ -38,7 +46,9 @@
 
       <el-table-column align="center" label="OnLine 机器">
         <template slot-scope="scope">
-          <el-tag type="success" @click="registryListBtn(scope.row.wtpRegistryList)">{{ '查看( ' + scope.row.wtpRegistryList.length + ' )' }}</el-tag>
+          <el-tag type="success" @click="registryListBtn(scope.row.wtpRegistryList)">
+            {{ '查看( ' + scope.row.wtpRegistryList.length + ' )' }}
+          </el-tag>
         </template>
       </el-table-column>
 
@@ -50,14 +60,30 @@
 
       <el-table-column align="center" label="Actions">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" icon="el-icon-edit" @click="updateClusterVisibleBtn(scope.row.id)">
+          <el-button type="primary" size="small" @click="updateClusterVisibleBtn(scope.row.id)">
             编辑
           </el-button>
+          <el-popconfirm
+            confirm-button-text="好的"
+            cancel-button-text="不用了"
+            icon="el-icon-info"
+            icon-color="red"
+            title="删除后不可恢复,确定删除吗？"
+            @onConfirm="delCluster(scope.row.id)"
+          >
+            <el-button v-if="delBtn" slot="reference" type="danger" size="small">删除</el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="pageQuery.page" :limit.sync="pageQuery.size" @pagination="pageCluster" />
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="pageQuery.page"
+      :limit.sync="pageQuery.size"
+      @pagination="pageCluster"
+    />
 
     <el-dialog title="创建 Cluster" :visible.sync="newClusterVisible">
       <el-form :model="createForm">
@@ -120,189 +146,156 @@
 </template>
 
 <script>
-  import {
-    mapGetters
-  } from 'vuex'
-  import {
-    checkSuperAdmin,
-    checkAdmin,
-    checkAppAdmin,
-    checkAppPermission
-  } from '@/utils/token-utils'
-  import {
-    appOptions
-  } from '@/api/app'
-  import {
-    page,
-    create,
-    update,
-    get
-  } from '@/api/cluster'
-  import Pagination from '@/components/Pagination'
+import {
+  mapGetters
+} from 'vuex'
+import {
+  checkSuperAdmin,
+  checkAdmin,
+  checkAppAdmin
+} from '@/utils/token-utils'
+import {
+  appOptions
+} from '@/api/app'
+import {
+  page,
+  create,
+  update,
+  get,
+  del
+} from '@/api/cluster'
+import Pagination from '@/components/Pagination'
 
-  export default {
-    name: 'ArticleList',
-    components: {
-      Pagination
-    },
-    filters: {
-      statusFilter(status) {
-        const statusMap = {
-          published: 'success',
-          draft: 'info',
-          deleted: 'danger'
-        }
-        return statusMap[status]
+export default {
+  name: 'ArticleList',
+  components: {
+    Pagination
+  },
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        published: 'success',
+        draft: 'info',
+        deleted: 'danger'
       }
+      return statusMap[status]
+    }
+  },
+  data() {
+    return {
+      list: null,
+      total: 0,
+      listLoading: false,
+      newClusterVisible: false,
+      pageQuery: {
+        appId: null,
+        page: 1,
+        size: 20
+      },
+      createForm: {
+        appId: ''
+      },
+      appIdOptions: [],
+      registryVisible: false,
+      wtpRegistryList: null,
+      cluster: {},
+      updateClusterVisible: false,
+      delBtn: false
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'roles',
+      'permissions'
+    ])
+  },
+  created() {
+    this.appOptions()
+    this.delBtn = checkSuperAdmin(this.roles) || checkAdmin(this.roles)
+  },
+  methods: {
+    empty() {
+      this.list = null
     },
-    data() {
-      return {
-        list: null,
-        total: 0,
-        listLoading: false,
-        newClusterVisible: false,
-        pageQuery: {
-          appId: null,
-          page: 1,
-          size: 20
-        },
-        createForm: {
-          appId: ''
-        },
-        appIdOptions: [],
-        registryVisible: false,
-        wtpRegistryList: null,
-        cluster: {},
-        updateClusterVisible: false
+    appOptions() {
+      appOptions().then((response) => {
+        this.appIdOptions = response.data.list
+      })
+    },
+    appIdOptionsChange(value) {
+      this.pageCluster()
+      this.createForm.appId = value
+    },
+    pageCluster() {
+      this.listLoading = true
+      page(this.pageQuery).then((response) => {
+        this.list = response.data.list
+        this.total = response.data.total
+        this.listLoading = false
+      })
+    },
+    formOptionsChange(value) {
+      this.createForm.appId = value
+    },
+    createCluster() {
+      if (!this.createForm.appId || !this.createForm.clusterId || !this.createForm.clusterName) {
+        this.$message.warning('参数不能为空')
+        return
       }
-    },
-    computed: {
-      ...mapGetters([
-        'roles',
-        'permissions'
-      ])
-    },
-    created() {
-      this.appOptions()
-    },
-    methods: {
-      empty() {
-        this.list = null
-      },
-      appOptions() {
-        appOptions().then((response) => {
-          this.appIdOptions = response.data.list
-        })
-      },
-      appIdOptionsChange(value) {
-        this.pageCluster()
-        this.createForm.appId = value
-      },
-      pageCluster() {
-        this.listLoading = true
-        page(this.pageQuery).then((response) => {
-          this.list = response.data.list
-          this.total = response.data.total
-          this.listLoading = false
-        })
-      },
-      formOptionsChange(value) {
-        this.createForm.appId = value
-      },
-      createCluster() {
-        if (!this.createForm.appId || !this.createForm.clusterId || !this.createForm.clusterName) {
-          this.$message.warning('参数不能为空')
-          return
+      create(this.createForm).then((response) => {
+        this.create = response.data
+        if (create) {
+          this.$message.success('添加成功')
+          this.newClusterVisible = false
+          this.createForm.clusterId = null
+          this.createForm.clusterName = null
+          this.pageCluster()
+        } else {
+          this.$message.error('添加失败')
         }
-        create(this.createForm).then((response) => {
-          this.create = response.data
-          if (create) {
-            this.$message.success('添加成功')
-            this.newClusterVisible = false
-            this.createForm.clusterId = null
-            this.createForm.clusterName = null
-            this.page()
-          } else {
-            this.$message.error('添加失败')
-          }
-        })
-      },
-      updateCluster() {
-        if (!this.cluster.id || !this.cluster.clusterName) {
-          this.$message.warning('参数不能为空')
-          return
-        }
-        update(this.cluster).then((response) => {
-          this.update = response.data
-          if (update) {
-            this.$message.success('修改成功')
-            this.updateClusterVisible = false
-            this.page()
-          } else {
-            this.$message.error('修改失败')
-          }
-        })
-      },
-      registryListBtn(wtpRegistryList) {
-        this.wtpRegistryList = wtpRegistryList
-        this.registryVisible = true
-      },
-      check(appId) {
-        return (checkSuperAdmin(this.roles) || checkAdmin(this.roles) || checkAppAdmin(appId, this.permissions))
-      },
-      updateClusterVisibleBtn(id) {
-        get(id).then((response) => {
-          this.cluster = response.data
-          this.updateClusterVisible = true
-        })
+      })
+    },
+    updateCluster() {
+      if (!this.cluster.id || !this.cluster.clusterName) {
+        this.$message.warning('参数不能为空')
+        return
       }
+      update(this.cluster).then((response) => {
+        this.update = response.data
+        if (update) {
+          this.$message.success('修改成功')
+          this.updateClusterVisible = false
+          this.pageCluster()
+        } else {
+          this.$message.error('修改失败')
+        }
+      })
+    },
+    registryListBtn(wtpRegistryList) {
+      this.wtpRegistryList = wtpRegistryList
+      this.registryVisible = true
+    },
+    check(appId) {
+      return (checkSuperAdmin(this.roles) || checkAdmin(this.roles) || checkAppAdmin(appId, this.permissions))
+    },
+    delCluster(id) {
+      del({
+        id: id
+      }).then((response) => {
+        if (response.data) {
+          this.$message.success('删除成功')
+          this.pageCluster()
+        } else {
+          this.$message.error('删除失败')
+        }
+      })
+    },
+    updateClusterVisibleBtn(id) {
+      get(id).then((response) => {
+        this.cluster = response.data
+        this.updateClusterVisible = true
+      })
     }
   }
+}
 </script>
-
-<style scoped>
-  .edit-input {
-    padding-right: 100px;
-  }
-
-  .cancel-btn {
-    position: absolute;
-    right: 15px;
-    top: 10px;
-  }
-</style>
-<style>
-  .el-row {
-    margin-bottom: 20px;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  .el-col {
-    border-radius: 4px;
-  }
-
-  .bg-purple-dark {
-    background: #99a9bf;
-  }
-
-  .bg-purple {
-    background: #d3dce6;
-  }
-
-  .bg-purple-light {
-    background: #e5e9f2;
-  }
-
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-  }
-
-  .row-bg {
-    padding: 10px 0;
-    background-color: #f9fafc;
-  }
-</style>

@@ -52,3 +52,11 @@ export function del(form) {
     params: form
   })
 }
+
+export function syncConfig(form) {
+  return request({
+    url: '/wtp/syncConfig',
+    method: 'post',
+    params: form
+  })
+}

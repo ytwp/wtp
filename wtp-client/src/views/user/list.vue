@@ -20,7 +20,7 @@
 
       <el-table-column align="center" label="avatar">
         <template slot-scope="scope">
-          <img :src="scope.row.avatar" class="emptyGif">
+          <img :src="scope.row.avatar" alt="" class="emptyGif">
         </template>
       </el-table-column>
 
@@ -63,8 +63,8 @@
       <el-table-column align="center" label="Actions">
         <template slot-scope="scope">
           <el-button-group>
-            <el-button type="primary" @click="updateUserVisibleBtn(scope.row)">编辑</el-button>
-            <el-button type="primary" v-if="scope.row.role != 'SUPPER-ADMIN'" @click="toPermission(scope.row)">授权</el-button>
+            <el-button type="primary" size="small" @click="updateUserVisibleBtn(scope.row)">编辑</el-button>
+            <el-button v-if="scope.row.role !== 'SUPPER-ADMIN'" type="primary" size="small" @click="toPermission(scope.row)">授权</el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -96,7 +96,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="newClusterVisible = false">取 消</el-button>
+        <el-button @click="newUserVisible = false">取 消</el-button>
         <el-button type="primary" @click="create">确 定</el-button>
       </div>
     </el-dialog>
@@ -129,189 +129,142 @@
 </template>
 
 <script>
-  import {
-    mapGetters
-  } from 'vuex'
-  import {
-    checkSuperAdmin,
-    checkAdmin,
-    checkUser,
-    checkAppAdmin,
-    checkAppPermission
-  } from '@/utils/token-utils'
-  import {
-    page,
-    create,
-    update
-  } from '@/api/user'
-  import Pagination from '@/components/Pagination'
+import {
+  mapGetters
+} from 'vuex'
+import {
+  checkSuperAdmin,
+  checkAdmin
+} from '@/utils/token-utils'
+import {
+  page,
+  create,
+  update
+} from '@/api/user'
+import Pagination from '@/components/Pagination'
 
-  export default {
-    name: 'ArticleList',
-    components: {
-      Pagination
-    },
-    filters: {
-      statusFilter(status) {
-        const statusMap = {
-          published: 'success',
-          draft: 'info',
-          deleted: 'danger'
-        }
-        return statusMap[status]
+export default {
+  name: 'ArticleList',
+  components: {
+    Pagination
+  },
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        published: 'success',
+        draft: 'info',
+        deleted: 'danger'
+      }
+      return statusMap[status]
+    }
+  },
+  data() {
+    return {
+      list: null,
+      total: 0,
+      listLoading: false,
+      newUserVisible: false,
+      pageQuery: {
+        appId: null,
+        page: 1,
+        size: 20
+      },
+      createForm: {},
+      roleOptions: [{
+        role: 'ADMIN'
+      },
+      {
+        role: 'USER'
+      }
+      ],
+      updateUserVisible: false,
+      updateForm: {}
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'roles',
+      'permissions'
+    ])
+  },
+  created() {
+    this.page()
+  },
+  methods: {
+    checkUpdate() {
+      if (this.updateForm.role === 'ADMIN') {
+        this.updateForm.checkUpdate = checkSuperAdmin(this.roles)
+      } else if (this.updateForm.role === 'USER') {
+        this.updateForm.checkUpdate = checkSuperAdmin(this.roles) || checkAdmin(this.roles)
+      } else {
+        this.updateForm.checkUpdate = false
       }
     },
-    data() {
-      return {
-        list: null,
-        total: 0,
-        listLoading: false,
-        newUserVisible: false,
-        pageQuery: {
-          appId: null,
-          page: 1,
-          size: 20
-        },
-        createForm: {},
-        roleOptions: [{
-            role: 'ADMIN'
-          },
-          {
-            role: 'USER'
-          }
-        ],
-        updateUserVisible: false,
-        updateForm: {}
+    page() {
+      this.listLoading = true
+      page(this.pageQuery).then((response) => {
+        this.list = response.data.list
+        this.total = response.data.total
+        this.listLoading = false
+      })
+    },
+    create() {
+      if (!this.createForm.username || !this.createForm.password) {
+        this.$message.warning('参数不能为空')
+        return
       }
-    },
-    computed: {
-      ...mapGetters([
-        'roles',
-        'permissions'
-      ])
-    },
-    created() {
-      this.page()
-    },
-    methods: {
-      checkUpdate() {
-        if (this.updateForm.role == 'ADMIN') {
-          this.updateForm.checkUpdate = checkSuperAdmin(this.roles)
-        } else if (this.updateForm.role == 'USER') {
-          this.updateForm.checkUpdate = checkSuperAdmin(this.roles) || checkAdmin(this.roles)
+      create(this.createForm).then((response) => {
+        this.create = response.data
+        if (create) {
+          this.$message.success('添加成功')
+          this.newUserVisible = false
+          this.page()
         } else {
-          this.updateForm.checkUpdate = false
+          this.$message.error('添加失败')
         }
-      },
-      page() {
-        this.listLoading = true
-        page(this.pageQuery).then((response) => {
-          this.list = response.data.list
-          this.total = response.data.total
-          this.listLoading = false
-        })
-      },
-      create() {
-        if (!this.createForm.username || !this.createForm.password) {
-          this.$message.warning('参数不能为空')
-          return
-        }
-        create(this.createForm).then((response) => {
-          this.create = response.data
-          if (create) {
-            this.$message.success('添加成功')
-            this.newUserVisible = false
-            this.page()
-          } else {
-            this.$message.error('添加失败')
-          }
-        })
-      },
-      update() {
-        if (!this.updateForm.userId) {
-          this.$message.warning('修改失败')
-          return
-        }
-        update(this.updateForm).then((response) => {
-          this.update = response.data
-          if (update) {
-            this.$message.success('修改成功')
-            this.updateUserVisible = false
-            this.page()
-          } else {
-            this.$message.error('修改失败')
-          }
-        })
-      },
-      newUserVisibleBtn() {
-        this.newUserVisible = true
-        console.log('roleOptions' + this.roleOptions)
-      },
-      updateUserVisibleBtn(user) {
-        user.status = null
-        this.updateForm = user
-        this.checkUpdate()
-        this.updateUserVisible = true
-      },
-      toPermission(user) {
-        this.$router.push({
-          path: './permission',
-          query: user
-        })
+      })
+    },
+    update() {
+      if (!this.updateForm.userId) {
+        this.$message.warning('修改失败')
+        return
       }
+      update(this.updateForm).then((response) => {
+        this.update = response.data
+        if (update) {
+          this.$message.success('修改成功')
+          this.updateUserVisible = false
+          this.page()
+        } else {
+          this.$message.error('修改失败')
+        }
+      })
+    },
+    newUserVisibleBtn() {
+      this.newUserVisible = true
+      console.log('roleOptions' + this.roleOptions)
+    },
+    updateUserVisibleBtn(user) {
+      user.status = null
+      this.updateForm = user
+      this.checkUpdate()
+      this.updateUserVisible = true
+    },
+    toPermission(user) {
+      this.$router.push({
+        path: './permission',
+        query: user
+      })
     }
   }
+}
 </script>
 
 <style scoped>
-  .edit-input {
-    padding-right: 100px;
-  }
-
-  .cancel-btn {
-    position: absolute;
-    right: 15px;
-    top: 10px;
-  }
 
   .emptyGif {
     display: block;
     width: 45%;
     margin: 0 auto;
-  }
-</style>
-<style>
-  .el-row {
-    margin-bottom: 20px;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  .el-col {
-    border-radius: 4px;
-  }
-
-  .bg-purple-dark {
-    background: #99a9bf;
-  }
-
-  .bg-purple {
-    background: #d3dce6;
-  }
-
-  .bg-purple-light {
-    background: #e5e9f2;
-  }
-
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-  }
-
-  .row-bg {
-    padding: 10px 0;
-    background-color: #f9fafc;
   }
 </style>
