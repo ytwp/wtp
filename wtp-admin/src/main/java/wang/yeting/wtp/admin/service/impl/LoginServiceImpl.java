@@ -22,6 +22,7 @@ import wang.yeting.wtp.admin.util.TokenUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -38,7 +39,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     private final TokenUtils tokenUtils;
 
     @Override
-    public Result login(LoginVo loginVo) {
+    public Result<?> login(LoginVo loginVo) {
         String password = tokenUtils.encryptedPassword(loginVo.getPassword());
         User user = getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, loginVo.getUsername()).eq(User::getPassword, password));
         if (user == null) {
@@ -56,7 +57,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     }
 
     @Override
-    public Result info(String token) {
+    public Result<UserBo> info(String token) {
         UserBo userBo = redisUtils.get(TokenUtils.TOKEN_PREFIX + token, UserBo.class);
         return Result.success(userBo);
     }

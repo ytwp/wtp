@@ -9,6 +9,7 @@ import wang.yeting.wtp.admin.bean.User;
 import wang.yeting.wtp.admin.model.PageResponse;
 import wang.yeting.wtp.admin.model.Result;
 import wang.yeting.wtp.admin.model.bo.UserBo;
+import wang.yeting.wtp.admin.model.dto.UserDto;
 import wang.yeting.wtp.admin.model.vo.UserVo;
 import wang.yeting.wtp.admin.service.UserService;
 
@@ -26,8 +27,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/page")
-    public Result<PageResponse> page(UserVo userVo, @CurrentUser UserBo userBo) {
-        PageResponse page = userService.page(userVo, userBo);
+    public Result<PageResponse<UserDto>> page(UserVo userVo, @CurrentUser UserBo userBo) {
+        PageResponse<UserDto> page = userService.page(userVo, userBo);
         return Result.success(page);
     }
 

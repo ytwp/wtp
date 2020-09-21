@@ -38,7 +38,7 @@ public class ServerController {
     @RequestMapping("/pushLog")
     public HttpResponse<Boolean> pushLog(@RequestBody WtpLogBo wtpLogBo) {
         Boolean pushLog = serverService.pushLog(wtpLogBo);
-        return new HttpResponse(HttpResponse.SUCCESS_CODE, pushLog);
+        return new HttpResponse<>(HttpResponse.SUCCESS_CODE, pushLog);
     }
 
     @RequestMapping("/pullConfig/{appId}/{clusterId}/{ip}")
@@ -49,12 +49,12 @@ public class ServerController {
     @RequestMapping("/registerNoConfigurationWtp")
     public HttpResponse<Boolean> registerNoConfigurationWtp(@RequestBody WtpBo wtpBo) {
         Boolean registerNoConfigurationWtp = serverService.registerNoConfigurationWtp(wtpBo);
-        return new HttpResponse(HttpResponse.SUCCESS_CODE, registerNoConfigurationWtp);
+        return new HttpResponse<>(HttpResponse.SUCCESS_CODE, registerNoConfigurationWtp);
     }
 
     @RequestMapping("/taskPullConfig/{appId}/{clusterId}/{ip}")
     public HttpResponse<ConfigEvent> taskPullConfig(@PathVariable("appId") String appId, @PathVariable("clusterId") String clusterId, @PathVariable("ip") String ip) {
         ConfigEvent configEvent = serverService.taskPullConfig(appId, clusterId, ip);
-        return new HttpResponse(HttpResponse.SUCCESS_CODE, configEvent);
+        return new HttpResponse<>(HttpResponse.SUCCESS_CODE, configEvent);
     }
 }

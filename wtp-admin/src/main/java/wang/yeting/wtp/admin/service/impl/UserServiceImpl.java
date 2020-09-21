@@ -38,7 +38,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @SneakyThrows
     @Override
-    public PageResponse page(UserVo userVo, UserBo userBo) {
+    public PageResponse<UserDto> page(UserVo userVo, UserBo userBo) {
         if (!tokenUtils.checkAdmin(userBo)) {
             throw new PermissionException(ResultCode.no_permission.message);
         }
@@ -51,14 +51,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!tokenUtils.checkSuperAdmin(userBo)) {
             lambdaQueryWrapper.in(User::getRole, RoleEnum.ADMIN.getRole(), RoleEnum.USER.getRole());
         }
-        IPage<User> userIPage = page(new Page<>(userVo.getPage(), userVo.getSize()), lambdaQueryWrapper);
-        List<UserDto> userDtoList = userIPage.getRecords().stream().map(user -> {
+        IPage<User> page = page(new Page<>(userVo.getPage(), userVo.getSize()), lambdaQueryWrapper);
+        List<UserDto> userDtoList = page.getRecords().stream().map(user -> {
             UserDto userDto = new UserDto();
             BeanUtils.copyProperties(user, userDto);
             userDto.setStatus(UserEnum.getByUserEnum(user.getStatus()).getMessage());
             return userDto;
         }).collect(Collectors.toList());
-        return new PageResponse().setList(userDtoList).setPage(userIPage.getPages()).setTotal(userIPage.getTotal());
+        return new PageResponse<UserDto>().setList(userDtoList).setPage(page.getPages()).setTotal(page.getTotal());
     }
 
     @SneakyThrows

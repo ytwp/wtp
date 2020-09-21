@@ -180,6 +180,24 @@ export const asyncRoutes = [{
     }
   }]
 },
+{
+  path: '/log',
+  component: Layout,
+  meta: {
+    title: '日志管理',
+    icon: 'tree',
+    roles: ['SUPPER-ADMIN', 'ADMIN', 'USER'] // you can set roles in root nav
+  },
+  children: [{
+    path: 'log',
+    component: () => import('@/views/log/wtpLog'),
+    name: '线程池日志管理',
+    meta: {
+      title: '线程池日志管理',
+      roles: ['SUPPER-ADMIN', 'ADMIN', 'USER'] // or you can only set roles in sub nav
+    }
+  }]
+},
 // 404 page must be placed at the end !!!
 {
   path: '*',

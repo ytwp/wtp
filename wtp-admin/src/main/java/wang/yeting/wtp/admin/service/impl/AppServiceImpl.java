@@ -41,7 +41,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
 
     @SneakyThrows
     @Override
-    public PageResponse page(AppVo AppVo, UserBo userBo) {
+    public PageResponse<App> page(AppVo appVo, UserBo userBo) {
         if (!tokenUtils.checkAdmin(userBo)) {
             throw new PermissionException(ResultCode.no_permission.message);
         }
@@ -50,12 +50,12 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
             List<UserAppPermission> userAppPermissionList = userBo.getUserAppPermissionList();
             Set<String> permissionSet = userAppPermissionList.stream().map(UserAppPermission::getAppId).collect(Collectors.toSet());
             if (CollectionUtil.isEmpty(permissionSet)) {
-                return new PageResponse().setList(null);
+                return new PageResponse<App>().setList(null);
             }
             lambdaQueryWrapper.in(App::getAppId, permissionSet);
         }
-        IPage<App> iPage = page(new Page<>(AppVo.getPage(), AppVo.getSize()), lambdaQueryWrapper);
-        return new PageResponse().setList(iPage.getRecords()).setPage(iPage.getPages()).setTotal(iPage.getTotal());
+        IPage<App> iPage = page(new Page<>(appVo.getPage(), appVo.getSize()), lambdaQueryWrapper);
+        return new PageResponse<App>().setList(iPage.getRecords()).setPage(iPage.getPages()).setTotal(iPage.getTotal());
     }
 
     @SneakyThrows
@@ -78,19 +78,19 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     }
 
     @Override
-    public PageResponse appOptions(UserBo userBo) {
+    public PageResponse<App> appOptions(UserBo userBo) {
         LambdaQueryWrapper<App> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.select(App::getAppId, App::getAppName);
         if (!tokenUtils.checkSuperAdmin(userBo)) {
             List<UserAppPermission> userAppPermissionList = userBo.getUserAppPermissionList();
             Set<String> permissionSet = userAppPermissionList.stream().map(UserAppPermission::getAppId).collect(Collectors.toSet());
             if (CollectionUtil.isEmpty(permissionSet)) {
-                return new PageResponse().setList(null);
+                return new PageResponse<App>().setList(null);
             }
             lambdaQueryWrapper.in(App::getAppId, permissionSet);
         }
         List<App> list = list(lambdaQueryWrapper);
-        return new PageResponse().setList(list);
+        return new PageResponse<App>().setList(list);
     }
 
     @SneakyThrows

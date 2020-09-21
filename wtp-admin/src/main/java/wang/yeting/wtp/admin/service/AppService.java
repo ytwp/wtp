@@ -12,11 +12,11 @@ import wang.yeting.wtp.admin.model.vo.AppVo;
 
 public interface AppService {
 
-    PageResponse page(AppVo AppVo, UserBo userBo);
+    PageResponse<App> page(AppVo appVo, UserBo userBo);
 
     Boolean create(App app, UserBo userBo);
 
-    PageResponse appOptions(UserBo userBo);
+    PageResponse<App> appOptions(UserBo userBo);
 
     Boolean update(App app, UserBo userBo);
 

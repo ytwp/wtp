@@ -3,6 +3,7 @@ package wang.yeting.wtp.admin.service;
 import wang.yeting.wtp.admin.bean.UserAppPermission;
 import wang.yeting.wtp.admin.model.PageResponse;
 import wang.yeting.wtp.admin.model.bo.UserBo;
+import wang.yeting.wtp.admin.model.dto.UserAppPermissionDto;
 import wang.yeting.wtp.admin.model.vo.UserAppPermissionVo;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 public interface UserAppPermissionService {
     List<UserAppPermission> getByUserId(Integer userId);
 
-    PageResponse find(UserAppPermissionVo userAppPermissionVo, UserBo userBo);
+    PageResponse<UserAppPermissionDto> find(UserAppPermissionVo userAppPermissionVo, UserBo userBo);
 
     Boolean create(UserAppPermissionVo userAppPermissionVo, UserBo userBo);
 

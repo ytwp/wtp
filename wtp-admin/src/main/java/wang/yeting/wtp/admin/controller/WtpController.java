@@ -9,6 +9,7 @@ import wang.yeting.wtp.admin.bean.Wtp;
 import wang.yeting.wtp.admin.model.PageResponse;
 import wang.yeting.wtp.admin.model.Result;
 import wang.yeting.wtp.admin.model.bo.UserBo;
+import wang.yeting.wtp.admin.model.dto.WtpDto;
 import wang.yeting.wtp.admin.model.vo.WtpVo;
 import wang.yeting.wtp.admin.service.WtpService;
 import wang.yeting.wtp.core.enums.QueueEnums;
@@ -28,8 +29,8 @@ public class WtpController {
     private final WtpService wtpService;
 
     @GetMapping("/page")
-    public Result<PageResponse> page(WtpVo WtpVo, @CurrentUser UserBo userBo) {
-        PageResponse page = wtpService.page(WtpVo, userBo);
+    public Result<PageResponse<WtpDto>> page(WtpVo wtpVo, @CurrentUser UserBo userBo) {
+        PageResponse<WtpDto> page = wtpService.page(wtpVo, userBo);
         return Result.success(page);
     }
 
@@ -58,18 +59,18 @@ public class WtpController {
     }
 
     @GetMapping("/get")
-    public Result<Wtp> get(WtpVo WtpVo, @CurrentUser UserBo userBo) {
-        Wtp wtp = wtpService.get(WtpVo, userBo);
+    public Result<Wtp> get(WtpVo wtpVo, @CurrentUser UserBo userBo) {
+        Wtp wtp = wtpService.get(wtpVo, userBo);
         return Result.success(wtp);
     }
 
     @GetMapping("/queueOptions")
-    public Result<PageResponse> queueOptions() {
-        return Result.success(new PageResponse().setList(QueueEnums.getAllQueueName()));
+    public Result<PageResponse<String>> queueOptions() {
+        return Result.success(new PageResponse<String>().setList(QueueEnums.getAllQueueName()));
     }
 
     @GetMapping("/rejectedOptions")
-    public Result<PageResponse> rejectedOptions() {
-        return Result.success(new PageResponse().setList(RejectedExecutionHandlerEnums.getAllRejectedExecutionHandlerName()));
+    public Result<PageResponse<String>> rejectedOptions() {
+        return Result.success(new PageResponse<String>().setList(RejectedExecutionHandlerEnums.getAllRejectedExecutionHandlerName()));
     }
 }

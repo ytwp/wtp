@@ -37,15 +37,15 @@ public class UserAppPermissionServiceImpl extends ServiceImpl<UserAppPermissionM
     }
 
     @Override
-    public PageResponse find(UserAppPermissionVo userAppPermissionVo, UserBo userBo) {
-        PageResponse pageResponse = new PageResponse();
+    public PageResponse<UserAppPermissionDto> find(UserAppPermissionVo userAppPermissionVo, UserBo userBo) {
+        PageResponse<UserAppPermissionDto> pageResponse = new PageResponse<>();
         Integer userId = userAppPermissionVo.getUserId() != null ? userAppPermissionVo.getUserId() : userBo.getUserId();
         LambdaQueryWrapper<UserAppPermission> lambdaQueryWrapper = new LambdaQueryWrapper<UserAppPermission>().eq(UserAppPermission::getUserId, userId);
         if (!tokenUtils.checkSuperAdmin(userBo)) {
             List<UserAppPermission> userAppPermissionList = userBo.getUserAppPermissionList();
             Set<String> permissionSet = userAppPermissionList.stream().map(UserAppPermission::getAppId).collect(Collectors.toSet());
             if (CollectionUtil.isEmpty(permissionSet)) {
-                return new PageResponse().setList(null);
+                return new PageResponse<UserAppPermissionDto>().setList(null);
             }
             lambdaQueryWrapper.in(UserAppPermission::getAppId, permissionSet);
         }

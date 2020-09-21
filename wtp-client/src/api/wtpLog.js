@@ -15,3 +15,11 @@ export function report(form) {
     params: form
   })
 }
+
+export function page(form) {
+  return request({
+    url: '/wtpLog/page',
+    method: 'get',
+    params: form
+  })
+}

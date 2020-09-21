@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,20 +61,23 @@ public class WtpServiceImpl extends ServiceImpl<WtpMapper, Wtp> implements WtpSe
 
     @SneakyThrows
     @Override
-    public PageResponse page(WtpVo WtpVo, UserBo userBo) {
-        if (!tokenUtils.checkAppPermission(WtpVo.getAppId(), PermissionEnum.SELECT.getPermission(), userBo)) {
+    public PageResponse<WtpDto> page(WtpVo wtpVo, UserBo userBo) {
+        if (!tokenUtils.checkAppPermission(wtpVo.getAppId(), PermissionEnum.SELECT.getPermission(), userBo)) {
             throw new PermissionException(ResultCode.no_permission.message);
         }
-        LambdaQueryWrapper<Wtp> lambdaQueryWrapper = new LambdaQueryWrapper<Wtp>().eq(Wtp::getAppId, WtpVo.getAppId()).eq(Wtp::getClusterId, WtpVo.getClusterId());
-        IPage<Wtp> clusterIPage = page(new Page<>(WtpVo.getPage(), WtpVo.getSize()), lambdaQueryWrapper);
-        List<Wtp> wtpList = clusterIPage.getRecords();
-        List<WtpRegistry> wtpRegistryList = wtpRegistryService.findRegistry(WtpVo.getAppId(), WtpVo.getClusterId());
+        LambdaQueryWrapper<Wtp> lambdaQueryWrapper = new LambdaQueryWrapper<Wtp>()
+                .eq(Wtp::getAppId, wtpVo.getAppId())
+                .eq(Wtp::getClusterId, wtpVo.getClusterId())
+                .eq(StringUtils.isNotBlank(wtpVo.getName()), Wtp::getName, wtpVo.getName());
+        IPage<Wtp> page = page(new Page<>(wtpVo.getPage(), wtpVo.getSize()), lambdaQueryWrapper);
+        List<Wtp> wtpList = page.getRecords();
+        List<WtpRegistry> wtpRegistryList = wtpRegistryService.findRegistry(wtpVo.getAppId(), wtpVo.getClusterId());
         List<WtpDto> wtpDtoList = wtpList.stream().map(wtp -> {
             WtpDto wtpDto = new WtpDto();
             BeanUtils.copyProperties(wtp, wtpDto);
             return wtpDto;
         }).collect(Collectors.toList());
-        return new PageResponse().setData(wtpRegistryList).setList(wtpDtoList).setPage(clusterIPage.getPages()).setTotal(clusterIPage.getTotal());
+        return new PageResponse<WtpDto>().setData(wtpRegistryList).setList(wtpDtoList).setPage(page.getPages()).setTotal(page.getTotal());
     }
 
     @SneakyThrows
@@ -94,8 +98,8 @@ public class WtpServiceImpl extends ServiceImpl<WtpMapper, Wtp> implements WtpSe
 
     @SneakyThrows
     @Override
-    public Wtp get(WtpVo WtpVo, UserBo userBo) {
-        Wtp wtp = getById(WtpVo.getWtpId());
+    public Wtp get(WtpVo wtpVo, UserBo userBo) {
+        Wtp wtp = getById(wtpVo.getWtpId());
         if (!tokenUtils.checkAppPermission(wtp.getAppId(), PermissionEnum.SELECT.getPermission(), userBo)) {
             throw new PermissionException(ResultCode.no_permission.message);
         }
@@ -103,13 +107,12 @@ public class WtpServiceImpl extends ServiceImpl<WtpMapper, Wtp> implements WtpSe
     }
 
     @Override
-    public Wtp info(WtpVo WtpVo) {
+    public Wtp info(WtpVo wtpVo) {
         LambdaQueryWrapper<Wtp> lambdaQueryWrapper = new LambdaQueryWrapper<Wtp>()
-                .eq(Wtp::getAppId, WtpVo.getAppId())
-                .eq(Wtp::getClusterId, WtpVo.getClusterId())
-                .eq(Wtp::getName, WtpVo.getName());
-        Wtp wtp = getOne(lambdaQueryWrapper);
-        return wtp;
+                .eq(Wtp::getAppId, wtpVo.getAppId())
+                .eq(Wtp::getClusterId, wtpVo.getClusterId())
+                .eq(Wtp::getName, wtpVo.getName());
+        return getOne(lambdaQueryWrapper);
     }
 
     @Override

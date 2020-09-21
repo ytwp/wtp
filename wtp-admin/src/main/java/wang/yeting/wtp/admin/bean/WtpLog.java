@@ -24,10 +24,34 @@ public class WtpLog implements Serializable {
     private String clusterId;
     private String ip;
 
+    /**
+     * 线程池名称
+     * Thread pool name
+     */
     private String name;
+
+    /**
+     * 核心线程数
+     * Number of core threads
+     */
     private Integer corePoolSize;
+
+    /**
+     * 最大线程数
+     * Maximum number of threads
+     */
     private Integer maximumPoolSize;
+
+    /**
+     * 回收线程时间(秒)
+     * Thread recovery time(second )
+     */
     private Long keepAliveSeconds;
+
+    /**
+     * 活跃线程数
+     * Number of active threads
+     */
     private Integer activeCount;
     private Long completedTaskCount;
     private Integer queueSize;

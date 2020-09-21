@@ -46,14 +46,14 @@ public class ClusterServiceImpl extends ServiceImpl<ClusterMapper, Cluster> impl
 
     @SneakyThrows
     @Override
-    public PageResponse options(ClusterVo ClusterVo, UserBo userBo) {
-        if (!tokenUtils.checkAppPermission(ClusterVo.getAppId(), PermissionEnum.SELECT.getPermission(), userBo)) {
+    public PageResponse<Cluster> options(ClusterVo clusterVo, UserBo userBo) {
+        if (!tokenUtils.checkAppPermission(clusterVo.getAppId(), PermissionEnum.SELECT.getPermission(), userBo)) {
             throw new PermissionException(ResultCode.no_permission.message);
         }
-        LambdaQueryWrapper<Cluster> lambdaQueryWrapper = new LambdaQueryWrapper<Cluster>().eq(Cluster::getAppId, ClusterVo.getAppId());
+        LambdaQueryWrapper<Cluster> lambdaQueryWrapper = new LambdaQueryWrapper<Cluster>().eq(Cluster::getAppId, clusterVo.getAppId());
         lambdaQueryWrapper.select(Cluster::getAppId, Cluster::getClusterId, Cluster::getClusterName);
         List<Cluster> clusterList = list(lambdaQueryWrapper);
-        return new PageResponse().setList(clusterList);
+        return new PageResponse<Cluster>().setList(clusterList);
     }
 
     @SneakyThrows
@@ -80,13 +80,13 @@ public class ClusterServiceImpl extends ServiceImpl<ClusterMapper, Cluster> impl
 
     @SneakyThrows
     @Override
-    public PageResponse page(ClusterVo clusterVo, UserBo userBo) {
+    public PageResponse<ClusterDto> page(ClusterVo clusterVo, UserBo userBo) {
         if (!tokenUtils.checkAppPermission(clusterVo.getAppId(), PermissionEnum.SELECT.getPermission(), userBo)) {
             throw new PermissionException(ResultCode.no_permission.message);
         }
         LambdaQueryWrapper<Cluster> lambdaQueryWrapper = new LambdaQueryWrapper<Cluster>().eq(Cluster::getAppId, clusterVo.getAppId());
-        IPage<Cluster> clusterIPage = page(new Page<>(clusterVo.getPage(), clusterVo.getSize()), lambdaQueryWrapper);
-        List<Cluster> clusterList = clusterIPage.getRecords();
+        IPage<Cluster> page = page(new Page<>(clusterVo.getPage(), clusterVo.getSize()), lambdaQueryWrapper);
+        List<Cluster> clusterList = page.getRecords();
         List<ClusterDto> clusterDtoList = clusterList.stream().map(cluster -> {
             ClusterDto clusterDto = new ClusterDto();
             BeanUtils.copyProperties(cluster, clusterDto);
@@ -94,7 +94,7 @@ public class ClusterServiceImpl extends ServiceImpl<ClusterMapper, Cluster> impl
             clusterDto.setWtpRegistryList(wtpRegistryList);
             return clusterDto;
         }).collect(Collectors.toList());
-        return new PageResponse().setList(clusterDtoList).setPage(clusterIPage.getPages()).setTotal(clusterIPage.getTotal());
+        return new PageResponse<ClusterDto>().setList(clusterDtoList).setPage(page.getPages()).setTotal(page.getTotal());
     }
 
     @SneakyThrows

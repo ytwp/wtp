@@ -1,19 +1,17 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="3">
-      <el-col :span="5">
-        <span class="demonstration">AppId: </span>
-        <el-select v-model="pageQuery.appId" filterable placeholder="可搜索" @change="appIdOptionsChange">
+    <div class="table-query">
+      <span class="mr10">
+        <el-select v-model="pageQuery.appId" filterable placeholder="appId (可搜索)" @change="appIdOptionsChange">
           <el-option v-for="item in appIdOptions" :key="item.appId" :label="item.appId" :value="item.appId" />
         </el-select>
-      </el-col>
-      <el-col :span="5">
-        <span class="demonstration">ClusterId: </span>
+      </span>
+      <span class="mr10">
         <el-select
           v-model="pageQuery.clusterId"
           :disabled="clusterIdOptions.length <= 0"
           filterable
-          placeholder="可搜索"
+          placeholder="clusterId (可搜索)"
           @change="clusterIdOptionsChange"
         >
           <el-option
@@ -23,8 +21,27 @@
             :value="item.clusterId"
           />
         </el-select>
-      </el-col>
-      <el-col :span="5">
+      </span>
+      <span class="mr10">
+        <el-input
+          v-model.trim="pageQuery.name"
+          style="width: 150px;"
+          class="filter-item"
+          placeholder="线程池名称"
+          clearable
+          :disabled="!pageQuery.clusterId"
+        />
+      </span>
+      <el-button
+        class="filter-item mr10"
+        type="primary"
+        icon="el-icon-search"
+        :disabled="!pageQuery.clusterId"
+        @click="page"
+      >
+        搜索
+      </el-button>
+      <span class="mr10">
         <el-button
           v-if="check(pageQuery.appId,'INSERT')"
           :disabled="!pageQuery.clusterId"
@@ -33,15 +50,15 @@
         >New
           Wtp
         </el-button>
-      </el-col>
-      <el-col :span="5">
+      </span>
+      <span class="mr10">
         <el-button :disabled="!pageQuery.clusterId" type="primary" @click="registryVisibleBtn">{{
           'OnLine 机器( ' +
             wtpRegistryList.length + ' )'
         }}
         </el-button>
-      </el-col>
-    </el-row>
+      </span>
+    </div>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -1545,7 +1562,6 @@ const usageRateSeries = {
   height: 500px;
   overflow: auto;
 }
-
 </style>
 <style>
 .demo-table-expand {
@@ -1556,5 +1572,22 @@ const usageRateSeries = {
   width: 90px;
   color: #99a9bf;
 }
+</style>
+<style rel="stylesheet/scss" lang="scss" scoped>
+.query-box {
+  display: flex;
+  align-items: center;
+}
 
+.mr10 {
+  margin-right: 10px;
+}
+
+.mtb10 {
+  margin: 10px 0;
+}
+
+audio {
+  width: 50%;
+}
 </style>

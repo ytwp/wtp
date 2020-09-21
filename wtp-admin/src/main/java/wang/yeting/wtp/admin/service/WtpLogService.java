@@ -1,6 +1,7 @@
 package wang.yeting.wtp.admin.service;
 
 import wang.yeting.wtp.admin.bean.WtpLog;
+import wang.yeting.wtp.admin.model.PageResponse;
 import wang.yeting.wtp.admin.model.vo.WtpLogVo;
 
 import java.util.List;
@@ -11,9 +12,36 @@ import java.util.List;
  */
 
 public interface WtpLogService {
-    WtpLog realTime(WtpLogVo WtpLogVo);
 
+    /**
+     * last WtpLog
+     *
+     * @param wtpLogVo
+     * @return
+     */
+    WtpLog realTime(WtpLogVo wtpLogVo);
+
+    /**
+     * create a WtpLog
+     *
+     * @param wtpLog
+     * @return
+     */
     Boolean create(WtpLog wtpLog);
 
-    List<WtpLog> chart(WtpLogVo WtpLogVo);
+    /**
+     * Chart of last 30 minutes
+     *
+     * @param wtpLogVo
+     * @return
+     */
+    List<WtpLog> chart(WtpLogVo wtpLogVo);
+
+    /**
+     * list
+     *
+     * @param wtpLogVo
+     * @return
+     */
+    PageResponse<WtpLog> page(WtpLogVo wtpLogVo);
 }

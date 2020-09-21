@@ -12,10 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wang.yeting.wtp.admin.bean.WtpLog;
 import wang.yeting.wtp.admin.mapper.WtpLogMapper;
+import wang.yeting.wtp.admin.model.PageResponse;
+import wang.yeting.wtp.admin.model.Result;
 import wang.yeting.wtp.admin.model.vo.WtpLogVo;
 import wang.yeting.wtp.admin.service.WtpLogService;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author : weipeng
@@ -25,16 +28,17 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class WtpLogServiceImpl extends ServiceImpl<WtpLogMapper, WtpLog> implements WtpLogService {
+
     @Override
-    public WtpLog realTime(WtpLogVo WtpLogVo) {
+    public WtpLog realTime(WtpLogVo wtpLogVo) {
         LambdaQueryWrapper<WtpLog> lambdaQueryWrapper = new LambdaQueryWrapper<WtpLog>()
-                .eq(WtpLog::getClusterId, WtpLogVo.getClusterId())
-                .eq(WtpLog::getName, WtpLogVo.getName())
-                .eq(WtpLog::getAppId, WtpLogVo.getAppId())
-                .eq(StringUtils.isNotBlank(WtpLogVo.getIp()), WtpLog::getIp, WtpLogVo.getIp());
+                .eq(WtpLog::getClusterId, wtpLogVo.getClusterId())
+                .eq(WtpLog::getName, wtpLogVo.getName())
+                .eq(WtpLog::getAppId, wtpLogVo.getAppId())
+                .eq(StringUtils.isNotBlank(wtpLogVo.getIp()), WtpLog::getIp, wtpLogVo.getIp());
         lambdaQueryWrapper.orderByDesc(WtpLog::getLogTime);
-        IPage<WtpLog> clusterIPage = page(new Page<>(1, 1), lambdaQueryWrapper);
-        List<WtpLog> wtpLogList = clusterIPage.getRecords();
+        IPage<WtpLog> page = page(new Page<>(1, 1), lambdaQueryWrapper);
+        List<WtpLog> wtpLogList = page.getRecords();
         if (CollectionUtil.isNotEmpty(wtpLogList)) {
             return wtpLogList.get(0);
         }
@@ -47,9 +51,9 @@ public class WtpLogServiceImpl extends ServiceImpl<WtpLogMapper, WtpLog> impleme
     }
 
     @Override
-    public List<WtpLog> chart(WtpLogVo WtpLogVo) {
-        Long startTime = WtpLogVo.getStartTime();
-        Long endTime = WtpLogVo.getEndTime();
+    public List<WtpLog> chart(WtpLogVo wtpLogVo) {
+        Long startTime = wtpLogVo.getStartTime();
+        Long endTime = wtpLogVo.getEndTime();
         if (endTime == null) {
             endTime = System.currentTimeMillis();
         }
@@ -57,13 +61,27 @@ public class WtpLogServiceImpl extends ServiceImpl<WtpLogMapper, WtpLog> impleme
             startTime = endTime - 1800000L;
         }
         LambdaQueryWrapper<WtpLog> lambdaQueryWrapper = new LambdaQueryWrapper<WtpLog>()
-                .eq(WtpLog::getAppId, WtpLogVo.getAppId())
-                .eq(WtpLog::getClusterId, WtpLogVo.getClusterId())
-                .eq(WtpLog::getName, WtpLogVo.getName())
-                .eq(StringUtils.isNotBlank(WtpLogVo.getIp()), WtpLog::getIp, WtpLogVo.getIp())
+                .eq(WtpLog::getAppId, wtpLogVo.getAppId())
+                .eq(WtpLog::getClusterId, wtpLogVo.getClusterId())
+                .eq(WtpLog::getName, wtpLogVo.getName())
+                .eq(StringUtils.isNotBlank(wtpLogVo.getIp()), WtpLog::getIp, wtpLogVo.getIp())
                 .ge(WtpLog::getLogTime, startTime)
-                .le(WtpLog::getLogTime, endTime);
-        lambdaQueryWrapper.orderByAsc(WtpLog::getLogTime);
+                .le(WtpLog::getLogTime, endTime)
+                .orderByAsc(WtpLog::getLogTime);
         return list(lambdaQueryWrapper);
+    }
+
+    @Override
+    public PageResponse<WtpLog> page(WtpLogVo wtpLogVo) {
+        LambdaQueryWrapper<WtpLog> lambdaQueryWrapper = new LambdaQueryWrapper<WtpLog>()
+                .eq(StringUtils.isNotBlank(wtpLogVo.getAppId()), WtpLog::getAppId, wtpLogVo.getAppId())
+                .eq(StringUtils.isNotBlank(wtpLogVo.getClusterId()), WtpLog::getClusterId, wtpLogVo.getClusterId())
+                .eq(StringUtils.isNotBlank(wtpLogVo.getName()), WtpLog::getName, wtpLogVo.getName())
+                .eq(StringUtils.isNotBlank(wtpLogVo.getIp()), WtpLog::getIp, wtpLogVo.getIp())
+                .ge(Objects.nonNull(wtpLogVo.getStartTime()), WtpLog::getLogTime, wtpLogVo.getStartTime())
+                .le(Objects.nonNull(wtpLogVo.getEndTime()), WtpLog::getLogTime, wtpLogVo.getEndTime())
+                .orderByAsc(WtpLog::getLogTime);
+        IPage<WtpLog> page = page(new Page<>(wtpLogVo.getPage(), wtpLogVo.getSize()), lambdaQueryWrapper);
+        return new PageResponse<WtpLog>().setList(page.getRecords()).setPage(page.getPages()).setTotal(page.getTotal());
     }
 }

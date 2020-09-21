@@ -3,6 +3,7 @@ package wang.yeting.wtp.admin.service;
 import wang.yeting.wtp.admin.bean.Cluster;
 import wang.yeting.wtp.admin.model.PageResponse;
 import wang.yeting.wtp.admin.model.bo.UserBo;
+import wang.yeting.wtp.admin.model.dto.ClusterDto;
 import wang.yeting.wtp.admin.model.vo.ClusterVo;
 
 /**
@@ -11,11 +12,11 @@ import wang.yeting.wtp.admin.model.vo.ClusterVo;
  */
 
 public interface ClusterService {
-    PageResponse options(ClusterVo ClusterVo, UserBo userBo);
+    PageResponse<Cluster> options(ClusterVo clusterVo, UserBo userBo);
 
     Boolean create(Cluster cluster, UserBo userBo);
 
-    PageResponse page(ClusterVo ClusterVo, UserBo userBo);
+    PageResponse<ClusterDto> page(ClusterVo clusterVo, UserBo userBo);
 
     Boolean update(Cluster cluster, UserBo userBo);
 

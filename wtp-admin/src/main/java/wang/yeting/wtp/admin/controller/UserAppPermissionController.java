@@ -8,6 +8,7 @@ import wang.yeting.wtp.admin.annotation.Permission;
 import wang.yeting.wtp.admin.model.PageResponse;
 import wang.yeting.wtp.admin.model.Result;
 import wang.yeting.wtp.admin.model.bo.UserBo;
+import wang.yeting.wtp.admin.model.dto.UserAppPermissionDto;
 import wang.yeting.wtp.admin.model.enums.RoleEnum;
 import wang.yeting.wtp.admin.model.vo.UserAppPermissionVo;
 import wang.yeting.wtp.admin.service.UserAppPermissionService;
@@ -26,8 +27,8 @@ public class UserAppPermissionController {
     private final UserAppPermissionService userAppPermissionService;
 
     @GetMapping("/find")
-    public Result<PageResponse> find(UserAppPermissionVo userAppPermissionVo, @CurrentUser UserBo userBo) {
-        PageResponse pageResponse = userAppPermissionService.find(userAppPermissionVo, userBo);
+    public Result<PageResponse<UserAppPermissionDto>> find(UserAppPermissionVo userAppPermissionVo, @CurrentUser UserBo userBo) {
+        PageResponse<UserAppPermissionDto> pageResponse = userAppPermissionService.find(userAppPermissionVo, userBo);
         return Result.success(pageResponse);
     }
 

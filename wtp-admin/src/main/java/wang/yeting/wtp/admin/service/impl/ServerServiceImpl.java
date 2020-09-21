@@ -44,7 +44,7 @@ public class ServerServiceImpl implements ServerService {
     @Value("${pull.config.hold.count:30}")
     private Integer pullConfigHoldCount;
 
-    private static final HttpResponse DEFAULT_HTTP_RESPONSE = new HttpResponse(HttpResponse.SUCCESS_CODE, new ConfigChangeEvent(new ConcurrentHashMap(0)));
+    private static final HttpResponse<ConfigChangeEvent> DEFAULT_HTTP_RESPONSE = new HttpResponse<>(HttpResponse.SUCCESS_CODE, new ConfigChangeEvent(new ConcurrentHashMap(0)));
 
     @Override
     public ConfigEvent registry(QueryBo queryBo) {
@@ -90,9 +90,7 @@ public class ServerServiceImpl implements ServerService {
 
         PullConfigMonitorHelper.add(deferredResultHelper);
 
-        deferredResult.onCompletion(() -> {
-            PullConfigMonitorHelper.remove(deferredResultHelper);
-        });
+        deferredResult.onCompletion(() -> PullConfigMonitorHelper.remove(deferredResultHelper));
 
         return deferredResult;
     }

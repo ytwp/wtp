@@ -1,6 +1,7 @@
 package wang.yeting.wtp.admin.service;
 
 import wang.yeting.wtp.admin.model.Result;
+import wang.yeting.wtp.admin.model.bo.UserBo;
 import wang.yeting.wtp.admin.model.vo.LoginVo;
 
 /**
@@ -9,7 +10,7 @@ import wang.yeting.wtp.admin.model.vo.LoginVo;
  */
 public interface LoginService {
 
-    Result login(LoginVo loginVo);
+    Result<?> login(LoginVo loginVo);
 
-    Result info(String token);
+    Result<UserBo> info(String token);
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import wang.yeting.wtp.admin.model.Result;
+import wang.yeting.wtp.admin.model.bo.UserBo;
 import wang.yeting.wtp.admin.model.vo.LoginVo;
 import wang.yeting.wtp.admin.service.LoginService;
 
@@ -19,13 +20,12 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping("/login")
-    public Result login(@RequestBody LoginVo loginVo) {
+    public Result<?> login(@RequestBody LoginVo loginVo) {
         return loginService.login(loginVo);
     }
 
-
     @GetMapping("/info")
-    public Result info(String token) {
+    public Result<UserBo> info(String token) {
         return loginService.info(token);
     }
 
