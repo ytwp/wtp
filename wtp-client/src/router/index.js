@@ -71,7 +71,7 @@ export const constantRoutes = [{
     component: () => import('@/views/dashboard/index'),
     name: 'Dashboard',
     meta: {
-      title: '仪表盘',
+      title: 'dashboard',
       icon: 'dashboard',
       affix: true
     }
@@ -85,7 +85,7 @@ export const constantRoutes = [{
     component: () => import('@/views/documentation/index'),
     name: 'Documentation',
     meta: {
-      title: '文档',
+      title: 'documentation',
       icon: 'documentation',
       affix: true
     }
@@ -101,45 +101,45 @@ export const asyncRoutes = [{
   path: '/user',
   component: Layout,
   meta: {
-    title: '用户',
+    title: 'user',
     icon: 'user',
     roles: ['SUPPER-ADMIN', 'ADMIN'] // you can set roles in root nav
   },
   children: [{
-    path: 'page',
+    path: 'list',
     component: () => import('@/views/user/list'),
-    name: '用户管理',
+    name: '用户列表',
     meta: {
-      title: '用户',
+      title: 'user_list',
       roles: ['SUPPER-ADMIN', 'ADMIN'] // or you can only set roles in sub nav
     }
   },
   {
     path: 'permission',
     component: () => import('@/views/user/permission'),
-    name: '用户权限管理',
+    name: '用户权限',
     hidden: true,
     meta: {
-      title: '用户权限管理',
+      title: 'user_permission',
       roles: ['SUPPER-ADMIN', 'ADMIN'] // or you can only set roles in sub nav
     }
   }
   ]
 },
 {
-  path: '/project',
+  path: '/app',
   component: Layout,
   meta: {
-    title: '项目',
+    title: 'app',
     icon: 'component',
     roles: ['SUPPER-ADMIN', 'ADMIN'] // you can set roles in root nav
   },
   children: [{
-    path: 'page',
-    component: () => import('@/views/project/list'),
-    name: '项目管理',
+    path: 'list',
+    component: () => import('@/views/app/list'),
+    name: '项目列表',
     meta: {
-      title: '项目',
+      title: 'app_list',
       roles: ['SUPPER-ADMIN', 'ADMIN'] // or you can only set roles in sub nav
     }
   }]
@@ -148,16 +148,16 @@ export const asyncRoutes = [{
   path: '/cluster',
   component: Layout,
   meta: {
-    title: '集群',
+    title: 'cluster',
     icon: 'el-icon-s-platform',
     roles: ['SUPPER-ADMIN', 'ADMIN', 'USER'] // you can set roles in root nav
   },
   children: [{
-    path: 'cluster',
+    path: 'list',
     component: () => import('@/views/cluster/list'),
-    name: '集群管理',
+    name: '集群列表',
     meta: {
-      title: '集群',
+      title: 'cluster_list',
       roles: ['SUPPER-ADMIN', 'ADMIN', 'USER'] // or you can only set roles in sub nav
     }
   }]
@@ -166,16 +166,16 @@ export const asyncRoutes = [{
   path: '/wtp',
   component: Layout,
   meta: {
-    title: '线程池管理',
+    title: 'wtp',
     icon: 'tree',
     roles: ['SUPPER-ADMIN', 'ADMIN', 'USER'] // you can set roles in root nav
   },
   children: [{
-    path: 'wtp',
+    path: 'list',
     component: () => import('@/views/wtp/list'),
-    name: '线程池管理',
+    name: '线程池列表',
     meta: {
-      title: '线程池管理',
+      title: 'wtp_list',
       roles: ['SUPPER-ADMIN', 'ADMIN', 'USER'] // or you can only set roles in sub nav
     }
   }]
@@ -184,7 +184,7 @@ export const asyncRoutes = [{
   path: '/log',
   component: Layout,
   meta: {
-    title: '日志管理',
+    title: 'log',
     icon: 'tree',
     roles: ['SUPPER-ADMIN', 'ADMIN', 'USER'] // you can set roles in root nav
   },
@@ -193,7 +193,7 @@ export const asyncRoutes = [{
     component: () => import('@/views/log/wtpLog'),
     name: '线程池日志管理',
     meta: {
-      title: '线程池日志管理',
+      title: 'wtpLog_list',
       roles: ['SUPPER-ADMIN', 'ADMIN', 'USER'] // or you can only set roles in sub nav
     }
   }]

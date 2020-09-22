@@ -15,7 +15,6 @@ export function isExternal(path) {
  * @returns {Boolean}
  */
 export function validUsername(str) {
-  // const valid_map = ['ADMIN', 'editor']
   return str.trim().length < 3
 }
 
@@ -60,7 +59,7 @@ export function validAlphabets(str) {
  * @returns {Boolean}
  */
 export function validEmail(email) {
-  const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return reg.test(email)
 }
 
@@ -69,10 +68,7 @@ export function validEmail(email) {
  * @returns {Boolean}
  */
 export function isString(str) {
-  if (typeof str === 'string' || str instanceof String) {
-    return true
-  }
-  return false
+  return typeof str === 'string' || str instanceof String
 }
 
 /**
