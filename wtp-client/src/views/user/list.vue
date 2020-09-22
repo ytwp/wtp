@@ -1,10 +1,49 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="3">
-      <el-col :span="5">
+    <div class="table-query">
+      <span class="mr10">
+        <el-input
+          v-model.trim="pageQuery.nickname"
+          style="width: 150px;"
+          class="filter-item"
+          placeholder="nickname"
+          clearable
+        />
+      </span>
+      <span class="mr10">
+        <el-input
+          v-model.trim="pageQuery.username"
+          style="width: 150px;"
+          class="filter-item"
+          placeholder="username"
+          clearable
+        />
+      </span>
+      <span class="mr10">
+        <el-input
+          v-model.trim="pageQuery.phone"
+          style="width: 150px;"
+          class="filter-item"
+          placeholder="phone"
+          clearable
+        />
+      </span>
+      <span class="mr10">
+        <el-input
+          v-model.trim="pageQuery.email"
+          style="width: 150px;"
+          class="filter-item"
+          placeholder="email"
+          clearable
+        />
+      </span>
+      <el-button class="filter-item mr10" type="primary" icon="el-icon-search" @click="page">
+        搜索
+      </el-button>
+      <span class="mr10">
         <el-button type="primary" @click="newUserVisibleBtn">New User</el-button>
-      </el-col>
-    </el-row>
+      </span>
+    </div>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -184,7 +223,11 @@ export default {
       listLoading: false,
       newUserVisible: false,
       pageQuery: {
-        appId: null,
+        username: null,
+        nickname: null,
+        phone: null,
+        email: null,
+        role: null,
         page: 1,
         size: 20
       },
@@ -284,5 +327,23 @@ export default {
   display: block;
   width: 45%;
   margin: 0 auto;
+}
+</style>
+<style rel="stylesheet/scss" lang="scss" scoped>
+.query-box {
+  display: flex;
+  align-items: center;
+}
+
+.mr10 {
+  margin-right: 10px;
+}
+
+.mtb10 {
+  margin: 10px 0;
+}
+
+audio {
+  width: 50%;
 }
 </style>

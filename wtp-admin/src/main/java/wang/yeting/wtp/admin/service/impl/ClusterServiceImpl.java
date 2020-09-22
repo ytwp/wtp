@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,7 +85,9 @@ public class ClusterServiceImpl extends ServiceImpl<ClusterMapper, Cluster> impl
         if (!tokenUtils.checkAppPermission(clusterVo.getAppId(), PermissionEnum.SELECT.getPermission(), userBo)) {
             throw new PermissionException(ResultCode.no_permission.message);
         }
-        LambdaQueryWrapper<Cluster> lambdaQueryWrapper = new LambdaQueryWrapper<Cluster>().eq(Cluster::getAppId, clusterVo.getAppId());
+        LambdaQueryWrapper<Cluster> lambdaQueryWrapper = new LambdaQueryWrapper<Cluster>()
+                .eq(Cluster::getAppId, clusterVo.getAppId())
+                .like(StringUtils.isNotBlank(clusterVo.getClusterId()), Cluster::getClusterId, clusterVo.getClusterId());
         IPage<Cluster> page = page(new Page<>(clusterVo.getPage(), clusterVo.getSize()), lambdaQueryWrapper);
         List<Cluster> clusterList = page.getRecords();
         List<ClusterDto> clusterDtoList = clusterList.stream().map(cluster -> {

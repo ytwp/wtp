@@ -1,7 +1,22 @@
 <template>
   <div class="app-container">
-    <el-button type="primary" @click="newAppVisible = true">New App</el-button>
-
+    <div class="table-query">
+      <span class="mr10">
+        <el-input
+          v-model.trim="pageQuery.appId"
+          style="width: 150px;"
+          class="filter-item"
+          placeholder="appId"
+          clearable
+        />
+      </span>
+      <el-button class="filter-item mr10" type="primary" icon="el-icon-search" @click="page">
+        搜索
+      </el-button>
+      <span class="mr10">
+        <el-button type="primary" @click="newAppVisible = true">New App</el-button>
+      </span>
+    </div>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -212,3 +227,21 @@ export default {
   }
 }
 </script>
+<style rel="stylesheet/scss" lang="scss" scoped>
+.query-box {
+  display: flex;
+  align-items: center;
+}
+
+.mr10 {
+  margin-right: 10px;
+}
+
+.mtb10 {
+  margin: 10px 0;
+}
+
+audio {
+  width: 50%;
+}
+</style>

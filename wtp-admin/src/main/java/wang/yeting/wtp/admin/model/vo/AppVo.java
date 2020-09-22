@@ -16,6 +16,7 @@ public class AppVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
+    private String appId;
 
     private Integer page = 1;
     private Integer size = 10;

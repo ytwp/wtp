@@ -154,7 +154,7 @@
               v-if="check(scope.row.appId,'UPDATE')"
               type="primary"
               size="small"
-              @click="updateWtpBtn(scope.row.wtpId)"
+              @click="toWtpLog(scope.row.name)"
             >日志
             </el-button>
             <el-tooltip class="item" effect="dark" content="最后一条日志" placement="bottom-end">
@@ -982,6 +982,17 @@ export default {
         } else {
           this.$message.error('同步失败')
         }
+      })
+    },
+    toWtpLog(name) {
+      const query = {
+        appId: this.pageQuery.appId,
+        clusterId: this.pageQuery.clusterId,
+        name: name
+      }
+      this.$router.push({
+        path: '/log/wtpLog',
+        query: query
       })
     }
   }

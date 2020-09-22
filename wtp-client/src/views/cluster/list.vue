@@ -1,17 +1,29 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="3">
-      <el-col :span="5">
-        <span class="demonstration">AppId: </span>
-        <el-select v-model="pageQuery.appId" filterable placeholder="可搜索" @change="appIdOptionsChange">
+    <div class="table-query">
+      <span class="mr10">
+        <el-select v-model="pageQuery.appId" filterable placeholder="appId (可搜索)" @change="appIdOptionsChange">
           <el-option v-for="item in appIdOptions" :key="item.appId" :label="item.appId" :value="item.appId" />
         </el-select>
-      </el-col>
-      <el-col :span="5">
-        <el-button v-if="check(pageQuery.appId)" type="primary" @click="newClusterVisible = true">New Cluster
+      </span>
+      <span class="mr10">
+        <el-input
+          v-model.trim="pageQuery.clusterId"
+          style="width: 150px;"
+          class="filter-item"
+          placeholder="clusterId"
+          clearable
+          :disabled="!pageQuery.appId"
+        />
+      </span>
+      <el-button class="filter-item mr10" type="primary" icon="el-icon-search" :disabled="!pageQuery.appId" @click="pageCluster">
+        搜索
+      </el-button>
+      <span class="mr10">
+        <el-button v-if="check(pageQuery.appId)" type="primary" :disabled="!pageQuery.appId" @click="newClusterVisible = true">New Cluster
         </el-button>
-      </el-col>
-    </el-row>
+      </span>
+    </div>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -299,3 +311,21 @@ export default {
   }
 }
 </script>
+<style rel="stylesheet/scss" lang="scss" scoped>
+.query-box {
+  display: flex;
+  align-items: center;
+}
+
+.mr10 {
+  margin-right: 10px;
+}
+
+.mtb10 {
+  margin: 10px 0;
+}
+
+audio {
+  width: 50%;
+}
+</style>

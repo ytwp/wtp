@@ -271,7 +271,19 @@ export default {
       'permissions'
     ])
   },
+  watch: {
+    '$route': 'getParams'
+  },
   created() {
+    if (this.$route.query.appId) {
+      this.pageQuery.appId = this.$route.query.appId
+    }
+    if (this.$route.query.clusterId) {
+      this.pageQuery.clusterId = this.$route.query.clusterId
+    }
+    if (this.$route.query.name) {
+      this.pageQuery.name = this.$route.query.name
+    }
     this.appOptions()
     this.page()
   },

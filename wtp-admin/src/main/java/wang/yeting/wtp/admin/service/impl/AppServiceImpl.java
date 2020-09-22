@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wang.yeting.wtp.admin.bean.App;
@@ -54,6 +55,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
             }
             lambdaQueryWrapper.in(App::getAppId, permissionSet);
         }
+        lambdaQueryWrapper.like(StringUtils.isNotBlank(appVo.getAppId()), App::getAppId, appVo.getAppId());
         IPage<App> iPage = page(new Page<>(appVo.getPage(), appVo.getSize()), lambdaQueryWrapper);
         return new PageResponse<App>().setList(iPage.getRecords()).setPage(iPage.getPages()).setTotal(iPage.getTotal());
     }

@@ -189,7 +189,7 @@ export const asyncRoutes = [{
     roles: ['SUPPER-ADMIN', 'ADMIN', 'USER'] // you can set roles in root nav
   },
   children: [{
-    path: 'log',
+    path: 'wtpLog',
     component: () => import('@/views/log/wtpLog'),
     name: '线程池日志管理',
     meta: {
