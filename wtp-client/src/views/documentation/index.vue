@@ -1,6 +1,6 @@
 <template>
   <div class="app-container documentation-container">
-    <a class="document-btn" target="_blank" href="https://github.com/ytwp/wtp/">GitHUb</a>
+    <a class="document-btn" target="_blank" href="https://github.com/ytwp/wtp/">{{ $t('documentation.github') }}</a>
   </div>
 </template>
 
@@ -11,8 +11,7 @@ export default {
   name: 'Documentation',
   components: { DropdownMenu },
   data() {
-    return {
-    }
+    return {}
   }
 }
 </script>
