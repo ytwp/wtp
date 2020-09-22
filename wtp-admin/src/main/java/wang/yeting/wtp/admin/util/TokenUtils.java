@@ -28,6 +28,7 @@ public class TokenUtils {
     private static final String PASSWORD_SUFFIX = "wtp";
 
     public static final String TOKEN_PREFIX = "login:";
+
     public static final String PERMISSION_SPACE_MARK = "+";
 
     public UserBo getUserBoByToken(String token) {
@@ -110,5 +111,9 @@ public class TokenUtils {
             permissions.add(userAppPermission.getAppId() + PERMISSION_SPACE_MARK + userAppPermission.getPermission());
             redisUtils.set(TOKEN_PREFIX + userBo.getToken(), userBo, 7200);
         }
+    }
+
+    public boolean logout(String token) {
+        return redisUtils.delete(TOKEN_PREFIX + token);
     }
 }

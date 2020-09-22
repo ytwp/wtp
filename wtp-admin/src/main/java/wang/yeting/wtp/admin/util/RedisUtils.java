@@ -143,6 +143,16 @@ public class RedisUtils {
     }
 
     /**
+     * 删除key
+     *
+     * @param key 键
+     * @return true成功 false 失败
+     */
+    public boolean delete(String key) {
+        return redisTemplate.delete(key);
+    }
+
+    /**
      * 将值放入缓存
      *
      * @param key   键

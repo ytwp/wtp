@@ -58,8 +58,13 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
 
     @Override
     public Result<UserBo> info(String token) {
-        UserBo userBo = redisUtils.get(TokenUtils.TOKEN_PREFIX + token, UserBo.class);
+        UserBo userBo = tokenUtils.getUserBoByToken(token);
         return Result.success(userBo);
+    }
+
+    @Override
+    public Result<?> logout(String token) {
+        return Result.success(tokenUtils.logout(token));
     }
 
     private void permissionAndUser(User user, String token) {

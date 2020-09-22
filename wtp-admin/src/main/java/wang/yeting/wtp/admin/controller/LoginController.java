@@ -30,9 +30,8 @@ public class LoginController {
     }
 
     @PostMapping("/logout")
-    public String logout() {
-        String q = "{\"code\":20000,\"data\":\"success\"}";
-        return q;
+    public Result<?> logout(String token) {
+        return loginService.logout(token);
     }
 
 }

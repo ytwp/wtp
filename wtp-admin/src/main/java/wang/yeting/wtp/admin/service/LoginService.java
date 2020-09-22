@@ -13,4 +13,6 @@ public interface LoginService {
     Result<?> login(LoginVo loginVo);
 
     Result<UserBo> info(String token);
+
+    Result<?> logout(String token);
 }
