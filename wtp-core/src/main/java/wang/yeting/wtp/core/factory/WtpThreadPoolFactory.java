@@ -131,4 +131,9 @@ public class WtpThreadPoolFactory {
         }
     }
 
+    public void destroy() {
+        for (WtpThreadPoolExecutor wtpThreadPoolExecutor : threadPoolExecutorConcurrentMap.values()) {
+            wtpThreadPoolExecutor.shutdown();
+        }
+    }
 }

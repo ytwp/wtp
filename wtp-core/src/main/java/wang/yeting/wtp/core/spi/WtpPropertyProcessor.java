@@ -64,6 +64,7 @@ public class WtpPropertyProcessor implements ApplicationContextAware, SmartIniti
             adminBiz.destroy();
         }
         ThreadPool.destroy();
+        WtpThreadPoolFactory.getInstance().destroy();
         log.error("wtp ------> destroy.");
     }
 
