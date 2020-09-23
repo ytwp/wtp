@@ -6,7 +6,7 @@
           v-model.trim="pageQuery.nickname"
           style="width: 150px;"
           class="filter-item"
-          placeholder="nickname"
+          :placeholder="$t('user.nickname')"
           clearable
         />
       </span>
@@ -15,7 +15,7 @@
           v-model.trim="pageQuery.username"
           style="width: 150px;"
           class="filter-item"
-          placeholder="username"
+          :placeholder="$t('user.username')"
           clearable
         />
       </span>
@@ -24,7 +24,7 @@
           v-model.trim="pageQuery.phone"
           style="width: 150px;"
           class="filter-item"
-          placeholder="phone"
+          :placeholder="$t('user.phone')"
           clearable
         />
       </span>
@@ -33,15 +33,15 @@
           v-model.trim="pageQuery.email"
           style="width: 150px;"
           class="filter-item"
-          placeholder="email"
+          :placeholder="$t('user.email')"
           clearable
         />
       </span>
       <el-button class="filter-item mr10" type="primary" icon="el-icon-search" @click="page">
-        搜索
+        {{ $t('user.search') }}
       </el-button>
       <span class="mr10">
-        <el-button type="primary" @click="newUserVisibleBtn">New User</el-button>
+        <el-button type="primary" @click="newUserVisibleBtn">{{ $t('user.add') }}</el-button>
       </span>
     </div>
     <el-table
@@ -52,70 +52,73 @@
       highlight-current-row
       style="width: 100%;margin-top: 20px;"
     >
-      <el-table-column align="center" label="UserId" width="80">
+      <el-table-column align="center" :label="$t('user.userId')" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.userId }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="nickname">
+      <el-table-column align="center" :label="$t('user.nickname')">
         <template slot-scope="scope">
           <span>{{ scope.row.nickname }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="avatar">
+      <el-table-column align="center" :label="$t('user.avatar')">
         <template slot-scope="scope">
           <img :src="scope.row.avatar" alt="" class="emptyGif">
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="username">
+      <el-table-column align="center" :label="$t('user.username')">
         <template slot-scope="scope">
           <span>{{ scope.row.username }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="phone">
+      <el-table-column align="center" :label="$t('user.phone')">
         <template slot-scope="scope">
           <span>{{ scope.row.phone }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="email">
+      <el-table-column align="center" :label="$t('user.email')">
         <template slot-scope="scope">
           <span>{{ scope.row.email }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="role">
+      <el-table-column align="center" :label="$t('user.role')">
         <template slot-scope="scope">
           <span>{{ scope.row.role }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="status">
+      <el-table-column align="center" :label="$t('user.status')">
         <template slot-scope="scope">
           <span>{{ scope.row.status }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="创建时间">
+      <el-table-column align="center" :label="$t('user.created')">
         <template slot-scope="scope">
           <span>{{ scope.row.created | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="Actions">
+      <el-table-column align="center" label="Actions" width="200px">
         <template slot-scope="scope">
           <el-button-group>
-            <el-button type="primary" size="small" @click="updateUserVisibleBtn(scope.row)">编辑</el-button>
+            <el-button type="primary" size="small" @click="updateUserVisibleBtn(scope.row)">{{
+              $t('user.edit')
+            }}
+            </el-button>
             <el-button
               v-if="scope.row.role !== 'SUPPER-ADMIN'"
               type="primary"
               size="small"
               @click="toPermission(scope.row)"
-            >授权
+            >{{ $t('user.permission') }}
             </el-button>
           </el-button-group>
         </template>
@@ -130,57 +133,57 @@
       @pagination="page"
     />
 
-    <el-dialog title="创建用户" :visible.sync="newUserVisible">
+    <el-dialog :title="$t('user.add')" :visible.sync="newUserVisible">
       <el-form :model="createForm">
-        <el-form-item label="nickname" label-width="120px">
+        <el-form-item :label="$t('user.nickname')" label-width="120px">
           <el-input v-model="createForm.nickname" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="username" label-width="120px">
+        <el-form-item :label="$t('user.username')" label-width="120px">
           <el-input v-model="createForm.username" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="password" label-width="120px">
+        <el-form-item :label="$t('user.password')" label-width="120px">
           <el-input v-model="createForm.password" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="phone" label-width="120px">
+        <el-form-item :label="$t('user.phone')" label-width="120px">
           <el-input v-model="createForm.phone" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="email" label-width="120px">
+        <el-form-item :label="$t('user.email')" label-width="120px">
           <el-input v-model="createForm.email" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="role" label-width="120px">
-          <el-select v-model="createForm.role" placeholder="role">
-            <el-option v-for="item in roleOptions" :key="item.role" :label="item.role" :value="item.role" />
+        <el-form-item :label="$t('user.role')" label-width="120px">
+          <el-select v-model="createForm.role" :placeholder="$t('user.select')">
+            <el-option v-for="item in roleOptions" :key="item.role" ::label="item.role" :value="item.role" />
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="newUserVisible = false">取 消</el-button>
-        <el-button type="primary" @click="create">确 定</el-button>
+        <el-button @click="newUserVisible = false">{{ $t('user.cancel') }}</el-button>
+        <el-button type="primary" @click="create">{{ $t('user.confirm') }}</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="修改用户" :visible.sync="updateUserVisible">
+    <el-dialog :title="$t('user.update')" :visible.sync="updateUserVisible">
       <el-form :model="updateForm">
-        <el-form-item label="nickname" label-width="120px">
+        <el-form-item :label="$t('user.nickname')" label-width="120px">
           <el-input v-model="updateForm.nickname" autocomplete="off" />
         </el-form-item>
-        <el-form-item v-if="updateForm.checkUpdate" label="password" label-width="120px">
+        <el-form-item v-if="updateForm.checkUpdate" :label="$t('user.password')" label-width="120px">
           <el-input v-model="updateForm.password" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="phone" label-width="120px">
+        <el-form-item :label="$t('user.phone')" label-width="120px">
           <el-input v-model="updateForm.phone" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="email" label-width="120px">
+        <el-form-item :label="$t('user.email')" label-width="120px">
           <el-input v-model="updateForm.email" autocomplete="off" />
         </el-form-item>
-        <el-form-item v-if="updateForm.checkUpdate" label="role" label-width="120px">
-          <el-select v-model="updateForm.role" placeholder="role">
-            <el-option v-for="item in roleOptions" :key="item.role" :label="item.role" :value="item.role" />
+        <el-form-item v-if="updateForm.checkUpdate" :label="$t('user.role')" label-width="120px">
+          <el-select v-model="updateForm.role" :placeholder="$t('user.select')">
+            <el-option v-for="item in roleOptions" :key="item.role" ::label="item.role" :value="item.role" />
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="updateUserVisible = false">取 消</el-button>
-        <el-button type="primary" @click="update">确 定</el-button>
+        <el-button @click="updateUserVisible = false">{{ $t('user.cancel') }}</el-button>
+        <el-button type="primary" @click="update">{{ $t('user.confirm') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -272,33 +275,33 @@ export default {
     },
     create() {
       if (!this.createForm.username || !this.createForm.password) {
-        this.$message.warning('参数不能为空')
+        this.$message.warning(this.$t('app.parameter'))
         return
       }
       create(this.createForm).then((response) => {
         this.create = response.data
         if (create) {
-          this.$message.success('添加成功')
+          this.$message.success(this.$t('app.success'))
           this.newUserVisible = false
           this.page()
         } else {
-          this.$message.error('添加失败')
+          this.$message.error(this.$t('app.fail'))
         }
       })
     },
     update() {
       if (!this.updateForm.userId) {
-        this.$message.warning('修改失败')
+        this.$message.warning(this.$t('app.fail'))
         return
       }
       update(this.updateForm).then((response) => {
         this.update = response.data
         if (update) {
-          this.$message.success('修改成功')
+          this.$message.success(this.$t('app.success'))
           this.updateUserVisible = false
           this.page()
         } else {
-          this.$message.error('修改失败')
+          this.$message.error(this.$t('app.fail'))
         }
       })
     },

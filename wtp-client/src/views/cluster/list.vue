@@ -2,7 +2,12 @@
   <div class="app-container">
     <div class="table-query">
       <span class="mr10">
-        <el-select v-model="pageQuery.appId" filterable placeholder="appId (可搜索)" @change="appIdOptionsChange">
+        <el-select
+          v-model="pageQuery.appId"
+          filterable
+          :placeholder="$t('cluster.searchable')"
+          @change="appIdOptionsChange"
+        >
           <el-option v-for="item in appIdOptions" :key="item.appId" :label="item.appId" :value="item.appId" />
         </el-select>
       </span>
@@ -11,16 +16,28 @@
           v-model.trim="pageQuery.clusterId"
           style="width: 150px;"
           class="filter-item"
-          placeholder="clusterId"
+          :placeholder="$t('cluster.clusterId')"
           clearable
           :disabled="!pageQuery.appId"
         />
       </span>
-      <el-button class="filter-item mr10" type="primary" icon="el-icon-search" :disabled="!pageQuery.appId" @click="pageCluster">
-        搜索
+      <el-button
+        class="filter-item mr10"
+        type="primary"
+        icon="el-icon-search"
+        :disabled="!pageQuery.appId"
+        @click="pageCluster"
+      >
+        {{ $t('cluster.search') }}
       </el-button>
       <span class="mr10">
-        <el-button v-if="check(pageQuery.appId)" type="primary" :disabled="!pageQuery.appId" @click="newClusterVisible = true">New Cluster
+        <el-button
+          v-if="check(pageQuery.appId)"
+          type="primary"
+          :disabled="!pageQuery.appId"
+          @click="newClusterVisible = true"
+        >
+          {{ $t('cluster.add') }}
         </el-button>
       </span>
     </div>
@@ -32,39 +49,39 @@
       highlight-current-row
       style="width: 100%;margin-top: 20px;"
     >
-      <el-table-column align="center" label="ID" width="80">
+      <el-table-column align="center" :label="$t('cluster.id')" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="AppId">
+      <el-table-column align="center" :label="$t('cluster.appId')">
         <template slot-scope="scope">
           <span>{{ scope.row.appId }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="ClusterId">
+      <el-table-column align="center" :label="$t('cluster.clusterId')">
         <template slot-scope="scope">
           <span>{{ scope.row.clusterId }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="ClusterName">
+      <el-table-column align="center" :label="$t('cluster.clusterName')">
         <template slot-scope="scope">
           <span>{{ scope.row.clusterName }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="OnLine 机器">
+      <el-table-column align="center" :label="$t('cluster.onLine')">
         <template slot-scope="scope">
           <el-tag type="success" @click="registryListBtn(scope.row.wtpRegistryList)">
-            {{ '查看( ' + scope.row.wtpRegistryList.length + ' )' }}
+            {{ $t('cluster.look') + '( ' + scope.row.wtpRegistryList.length + ' )' }}
           </el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="创建时间">
+      <el-table-column align="center" :label="$t('cluster.created')">
         <template slot-scope="scope">
           <span>{{ scope.row.created | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
@@ -73,17 +90,17 @@
       <el-table-column align="center" label="Actions">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="updateClusterVisibleBtn(scope.row.id)">
-            编辑
+            {{ $t('cluster.edit') }}
           </el-button>
           <el-popconfirm
-            confirm-button-text="好的"
-            cancel-button-text="不用了"
+            :confirm-button-text="$t('cluster.del_confirm_button_text')"
+            :cancel-button-text="$t('cluster.del_cancel_button_text')"
             icon="el-icon-info"
             icon-color="red"
-            title="删除后不可恢复,确定删除吗？"
+            :title="$t('cluster.del_title')"
             @onConfirm="delCluster(scope.row.id)"
           >
-            <el-button v-if="delBtn" slot="reference" type="danger" size="small">删除</el-button>
+            <el-button v-if="delBtn" slot="reference" type="danger" size="small">{{ $t('cluster.del') }}</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -97,57 +114,57 @@
       @pagination="pageCluster"
     />
 
-    <el-dialog title="创建 Cluster" :visible.sync="newClusterVisible">
+    <el-dialog :title="$t('cluster.add')" :visible.sync="newClusterVisible">
       <el-form :model="createForm">
-        <el-form-item label="AppId" label-width="120px">
-          <el-select v-model="createForm.appId" filterable placeholder="可搜索">
+        <el-form-item :label="$t('cluster.appId')" label-width="120px">
+          <el-select v-model="createForm.appId" filterable>
             <el-option v-for="item in appIdOptions" :key="item.appId" :label="item.appId" :value="item.appId" />
           </el-select>
         </el-form-item>
-        <el-form-item label="ClusterId" label-width="120px">
+        <el-form-item :label="$t('cluster.clusterId')" label-width="120px">
           <el-input v-model="createForm.clusterId" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="ClusterName" label-width="120px">
+        <el-form-item :label="$t('cluster.clusterName')" label-width="120px">
           <el-input v-model="createForm.clusterName" autocomplete="off" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="newClusterVisible = false">取 消</el-button>
-        <el-button type="primary" @click="createCluster">确 定</el-button>
+        <el-button @click="newClusterVisible = false">{{ $t('cluster.cancel') }}</el-button>
+        <el-button type="primary" @click="createCluster">{{ $t('cluster.confirm') }}</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog title="修改 Cluster" :visible.sync="updateClusterVisible">
+    <el-dialog :title="$t('cluster.update')" :visible.sync="updateClusterVisible">
       <el-form :model="cluster">
-        <el-form-item label="AppId" label-width="120px">
+        <el-form-item :label="$t('cluster.appId')" label-width="120px">
           <el-input v-model="cluster.appId" disabled autocomplete="off" />
         </el-form-item>
-        <el-form-item label="ClusterId" label-width="120px">
+        <el-form-item :label="$t('cluster.clusterId')" label-width="120px">
           <el-input v-model="cluster.clusterId" disabled autocomplete="off" />
         </el-form-item>
-        <el-form-item label="ClusterName" label-width="120px">
+        <el-form-item :label="$t('cluster.clusterName')" label-width="120px">
           <el-input v-model="cluster.clusterName" autocomplete="off" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="updateClusterVisible = false">取 消</el-button>
-        <el-button type="primary" @click="updateCluster">确 定</el-button>
+        <el-button @click="updateClusterVisible = false">{{ $t('cluster.cancel') }}</el-button>
+        <el-button type="primary" @click="updateCluster">{{ $t('cluster.confirm') }}</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog title="OnLine 机器" :visible.sync="registryVisible">
+    <el-dialog :title="$t('cluster.onLine')" :visible.sync="registryVisible">
       <el-table :data="wtpRegistryList">
-        <el-table-column align="center" label="IP">
+        <el-table-column align="center" :label="$t('cluster.ip')">
           <template slot-scope="scope">
             <span>{{ scope.row.ip }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="上次拉取配置时间">
+        <el-table-column align="center" :label="$t('cluster.last_pull_time')">
           <template slot-scope="scope">
             <span>{{ scope.row.lastPullTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="注册时间">
+        <el-table-column align="center" :label="$t('cluster.registration_time')">
           <template slot-scope="scope">
             <span>{{ scope.row.created | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
           </template>
@@ -251,35 +268,35 @@ export default {
     },
     createCluster() {
       if (!this.createForm.appId || !this.createForm.clusterId || !this.createForm.clusterName) {
-        this.$message.warning('参数不能为空')
+        this.$message.warning(this.$t('cluster.parameter'))
         return
       }
       create(this.createForm).then((response) => {
         this.create = response.data
         if (create) {
-          this.$message.success('添加成功')
+          this.$message.success(this.$t('cluster.success'))
           this.newClusterVisible = false
           this.createForm.clusterId = null
           this.createForm.clusterName = null
           this.pageCluster()
         } else {
-          this.$message.error('添加失败')
+          this.$message.error(this.$t('cluster.fail'))
         }
       })
     },
     updateCluster() {
       if (!this.cluster.id || !this.cluster.clusterName) {
-        this.$message.warning('参数不能为空')
+        this.$message.warning(this.$t('cluster.parameter'))
         return
       }
       update(this.cluster).then((response) => {
         this.update = response.data
         if (update) {
-          this.$message.success('修改成功')
+          this.$message.success(this.$t('cluster.success'))
           this.updateClusterVisible = false
           this.pageCluster()
         } else {
-          this.$message.error('修改失败')
+          this.$message.error(this.$t('cluster.fail'))
         }
       })
     },
@@ -295,10 +312,10 @@ export default {
         id: id
       }).then((response) => {
         if (response.data) {
-          this.$message.success('删除成功')
+          this.$message.success(this.$t('cluster.success'))
           this.pageCluster()
         } else {
-          this.$message.error('删除失败')
+          this.$message.error(this.$t('cluster.fail'))
         }
       })
     },

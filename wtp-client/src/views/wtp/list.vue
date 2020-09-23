@@ -2,7 +2,12 @@
   <div class="app-container">
     <div class="table-query">
       <span class="mr10">
-        <el-select v-model="pageQuery.appId" filterable placeholder="appId (可搜索)" @change="appIdOptionsChange">
+        <el-select
+          v-model="pageQuery.appId"
+          filterable
+          :placeholder="$t('wtp.appId_searchable')"
+          @change="appIdOptionsChange"
+        >
           <el-option v-for="item in appIdOptions" :key="item.appId" :label="item.appId" :value="item.appId" />
         </el-select>
       </span>
@@ -11,7 +16,7 @@
           v-model="pageQuery.clusterId"
           :disabled="clusterIdOptions.length <= 0"
           filterable
-          placeholder="clusterId (可搜索)"
+          :placeholder="$t('wtp.clusterId_searchable')"
           @change="clusterIdOptionsChange"
         >
           <el-option
@@ -27,7 +32,7 @@
           v-model.trim="pageQuery.name"
           style="width: 150px;"
           class="filter-item"
-          placeholder="线程池名称"
+          :placeholder="$t('wtp.name')"
           clearable
           :disabled="!pageQuery.clusterId"
         />
@@ -39,7 +44,7 @@
         :disabled="!pageQuery.clusterId"
         @click="page"
       >
-        搜索
+        {{ $t('wtp.search') }}
       </el-button>
       <span class="mr10">
         <el-button
@@ -47,13 +52,12 @@
           :disabled="!pageQuery.clusterId"
           type="primary"
           @click="newWtpVisible = true"
-        >New
-          Wtp
+        >{{ $t('wtp.add') }}
         </el-button>
       </span>
       <span class="mr10">
         <el-button :disabled="!pageQuery.clusterId" type="primary" @click="registryVisibleBtn">{{
-          'OnLine 机器( ' +
+          $t('wtp.onLine') + '( ' +
             wtpRegistryList.length + ' )'
         }}
         </el-button>
@@ -67,59 +71,59 @@
       highlight-current-row
       style="width: 100%;margin-top: 20px;"
     >
-      <el-table-column align="center" label="ID" width="60">
+      <el-table-column align="center" :label="$t('wtp.wtpId')" width="60">
         <template slot-scope="scope">
           <span>{{ scope.row.wtpId }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="AppId" width="100">
+      <el-table-column align="center" :label="$t('wtp.appId')" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.appId }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="ClusterId">
+      <el-table-column align="center" :label="$t('wtp.clusterId')">
         <template slot-scope="scope">
           <span>{{ scope.row.clusterId }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="title">
+      <el-table-column align="center" :label="$t('wtp.title')">
         <template slot-scope="scope">
           <span>{{ scope.row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="PoolName">
+      <el-table-column align="center" :label="$t('wtp.name')">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="corePoolSize" width="80">
+      <el-table-column align="center" :label="$t('wtp.corePoolSize')" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.corePoolSize }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="maximumPoolSize" width="80">
+      <el-table-column align="center" :label="$t('wtp.maximumPoolSize')" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.maximumPoolSize }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="keepAliveSeconds" width="80">
+      <el-table-column align="center" :label="$t('wtp.keepAliveSeconds')" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.keepAliveSeconds }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="queueCapacity" width="80">
+      <el-table-column align="center" :label="$t('wtp.queueCapacity')" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.queueCapacity }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="queueName">
+      <el-table-column align="center" :label="$t('wtp.queueName')">
         <template slot-scope="scope">
           <span>{{ scope.row.queueName }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="rejectedName">
+      <el-table-column align="center" :label="$t('wtp.rejectedExecutionHandlerName')">
         <template slot-scope="scope">
           <span>{{ scope.row.rejectedExecutionHandlerName }}</span>
         </template>
@@ -132,20 +136,24 @@
               type="primary"
               size="small"
               @click="updateWtpBtn(scope.row.wtpId)"
-            >编辑
+            >{{ $t('wtp.edit') }}
             </el-button>
-            <el-tooltip class="item" effect="dark" content="同步配置到其他Cluster" placement="top-end">
-              <el-button type="primary" size="small" @click="syncConfigVisibleBtn(scope.row)">同步</el-button>
+            <el-tooltip class="item" effect="dark" :content="$t('wtp.sync_content')" placement="top-end">
+              <el-button type="primary" size="small" @click="syncConfigVisibleBtn(scope.row)">{{
+                $t('wtp.sync')
+              }}
+              </el-button>
             </el-tooltip>
             <el-popconfirm
-              confirm-button-text="好的"
-              cancel-button-text="不用了"
+              :confirm-button-text="$t('wtp.del_confirm_button_text')"
+              :cancel-button-text="$t('wtp.del_cancel_button_text')"
               icon="el-icon-info"
               icon-color="red"
-              title="删除后不可恢复,确定删除吗？"
+              :title="$t('wtp.del_title')"
               @onConfirm="delWtpBtn(scope.row.wtpId)"
             >
-              <el-button v-if="check(scope.row.appId,'DELETE')" slot="reference" type="danger" size="small">删除
+              <el-button v-if="check(scope.row.appId,'DELETE')" slot="reference" type="danger" size="small">
+                {{ $t('wtp.del') }}
               </el-button>
             </el-popconfirm>
           </el-button-group>
@@ -155,22 +163,22 @@
               type="primary"
               size="small"
               @click="toWtpLog(scope.row.name)"
-            >日志
+            >{{ $t('wtp.log') }}
             </el-button>
-            <el-tooltip class="item" effect="dark" content="最后一条日志" placement="bottom-end">
+            <el-tooltip class="item" effect="dark" :content="$t('wtp.last_log')" placement="bottom-end">
               <el-button
                 type="primary"
                 size="small"
                 @click="realTime(scope.row.appId, scope.row.clusterId, scope.row.name)"
-              >lastLog
+              >{{ $t('wtp.last_log') }}
               </el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="最近30分钟图表" placement="bottom-end">
+            <el-tooltip class="item" effect="dark" :content="$t('wtp.report_content')" placement="bottom-end">
               <el-button
                 type="primary"
                 size="small"
                 @click="report(scope.row.appId, scope.row.clusterId, scope.row.name)"
-              >报表
+              >{{ $t('wtp.report') }}
               </el-button>
             </el-tooltip>
           </el-button-group>
@@ -186,15 +194,15 @@
       @pagination="page"
     />
 
-    <el-dialog title="创建 Wtp" :visible.sync="newWtpVisible">
+    <el-dialog :title="$t('wtp.add')" :visible.sync="newWtpVisible">
       <el-form :model="createForm">
-        <el-form-item label="AppId" label-width="140px">
-          <el-select v-model="createForm.appId" filterable placeholder="可搜索">
+        <el-form-item :label="$t('wtp.appId')" label-width="140px">
+          <el-select v-model="createForm.appId" filterable :placeholder="$t('wtp.searchable')">
             <el-option v-for="item in appIdOptions" :key="item.appId" :label="item.appId" :value="item.appId" />
           </el-select>
         </el-form-item>
-        <el-form-item label="ClusterId" label-width="140px">
-          <el-select v-model="createForm.clusterId" filterable placeholder="可搜索">
+        <el-form-item :label="$t('wtp.clusterId')" label-width="140px">
+          <el-select v-model="createForm.clusterId" filterable :placeholder="$t('wtp.searchable')">
             <el-option
               v-for="item in clusterIdOptions"
               :key="item.clusterId"
@@ -203,13 +211,13 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="title" label-width="140px">
+        <el-form-item :label="$t('wtp.title')" label-width="140px">
           <el-input v-model="createForm.title" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="PoolName" label-width="140px">
+        <el-form-item :label="$t('wtp.name')" label-width="140px">
           <el-input v-model="createForm.name" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="corePoolSize" label-width="140px">
+        <el-form-item :label="$t('wtp.corePoolSize')" label-width="140px">
           <el-input-number
             v-model="createForm.corePoolSize"
             controls-position="right"
@@ -217,7 +225,7 @@
             :max="createForm.maximumPoolSize?createForm.maximumPoolSize:2147483647"
           />
         </el-form-item>
-        <el-form-item label="maximumPoolSize" label-width="140px">
+        <el-form-item :label="$t('wtp.maximumPoolSize')" label-width="140px">
           <el-input-number
             v-model="createForm.maximumPoolSize"
             controls-position="right"
@@ -225,22 +233,22 @@
             :max="2147483647"
           />
         </el-form-item>
-        <el-form-item label="keepAliveSeconds" label-width="140px">
+        <el-form-item :label="$t('wtp.keepAliveSeconds')" label-width="140px">
           <el-input-number v-model="createForm.keepAliveSeconds" controls-position="right" :min="1" />
         </el-form-item>
         <el-alert
           v-if="SynchronousQueueAndLinkedTransferQueue"
           :closable="false"
-          title="当前 queueName 不支持设置queueCapacity,也不会生效."
+          :title="$t('wtp.SynchronousQueueAndLinkedTransferQueue')"
           type="warning"
         />
         <el-alert
           v-if="PriorityBlockingQueue"
           :closable="false"
-          title="PriorityBlockingQueue 的 queueCapacity 是队列初始长度, 并非最大长度."
+          :title="$t('wtp.PriorityBlockingQueue')"
           type="warning"
         />
-        <el-form-item label="queueCapacity" label-width="140px">
+        <el-form-item :label="$t('wtp.queueCapacity')" label-width="140px">
           <el-input-number
             v-model="createForm.queueCapacity"
             controls-position="right"
@@ -249,36 +257,41 @@
             :max="SynchronousQueueAndLinkedTransferQueue ? 0 : 9223372036854775807"
           />
         </el-form-item>
-        <el-form-item label="queueName" label-width="140px">
-          <el-select v-model="createForm.queueName" filterable placeholder="可搜索" @change="createUueueChange">
+        <el-form-item :label="$t('wtp.queueName')" label-width="140px">
+          <el-select
+            v-model="createForm.queueName"
+            filterable
+            :placeholder="$t('wtp.searchable')"
+            @change="createQueueChange"
+          >
             <el-option v-for="item in queueListOptions" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
-        <el-form-item label="rejectedName" label-width="140px">
-          <el-select v-model="createForm.rejectedExecutionHandlerName" filterable placeholder="可搜索">
+        <el-form-item :label="$t('wtp.rejectedExecutionHandlerName')" label-width="140px">
+          <el-select v-model="createForm.rejectedExecutionHandlerName" filterable :placeholder="$t('wtp.searchable')">
             <el-option v-for="item in rejectedListOptions" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
-        <el-form-item label="负责人" label-width="140px">
+        <el-form-item :label="$t('wtp.ownerName')" label-width="140px">
           <el-input v-model="createForm.ownerName" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="负责人邮箱" label-width="140px">
+        <el-form-item :label="$t('wtp.alarmEmail')" label-width="140px">
           <el-input v-model="createForm.alarmEmail" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="是否告警" label-width="140px">
+        <el-form-item :label="$t('wtp.openAlarm')" label-width="140px">
           <el-switch v-model="createForm.openAlarm" active-color="#13ce66" inactive-color="#ff4949" />
         </el-form-item>
-        <el-form-item v-if="createForm.openAlarm" label="活跃告警(%)" label-width="140px">
+        <el-form-item v-if="createForm.openAlarm" :label="$t('wtp.poolAlarmThreshold')" label-width="140px">
           <el-input-number v-model="createForm.poolAlarmThreshold" controls-position="right" :min="0" :max="100" />
         </el-form-item>
         <el-alert
           v-if="createForm.openAlarm && createForm.queueName && (createForm.queueName === 'LinkedTransferQueue' || createForm.queueName === 'SynchronousQueue')"
           :closable="false"
-          title="当前 queueName 不支持设置队列容量告警."
+          :title="$t('queueAlarmThreshold_title')"
           type="warning"
           close-text="知道了"
         />
-        <el-form-item v-if="createForm.openAlarm" label="队列容量告警(%)" label-width="140px">
+        <el-form-item v-if="createForm.openAlarm" :label="$t('wtp.queueAlarmThreshold')" label-width="140px">
           <el-input-number
             v-model="createForm.queueAlarmThreshold"
             :disabled="SynchronousQueueAndLinkedTransferQueue"
@@ -289,29 +302,29 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="newWtpVisible = false">取 消</el-button>
-        <el-button type="primary" @click="createWtp">确 定</el-button>
+        <el-button @click="newWtpVisible = false">{{ $t('wtp.cancel') }}</el-button>
+        <el-button type="primary" @click="createWtp">{{ $t('wtp.confirm') }}</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog title="修改 Wtp" :visible.sync="updateWtpVisible">
+    <el-dialog :title="$t('wtp.update')" :visible.sync="updateWtpVisible">
       <el-form :model="wtp">
-        <el-form-item label="AppId" label-width="140px">
+        <el-form-item :label="$t('wtp.appId')" label-width="140px">
           <el-input v-model="wtp.appId" disabled autocomplete="off" />
         </el-form-item>
-        <el-form-item label="ClusterId" label-width="140px">
+        <el-form-item :label="$t('wtp.clusterId')" label-width="140px">
           <el-input v-model="wtp.clusterId" disabled autocomplete="off" />
         </el-form-item>
-        <el-form-item label="title" label-width="140px">
+        <el-form-item :label="$t('wtp.title')" label-width="140px">
           <el-input v-model="wtp.title" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="PoolName" label-width="140px">
+        <el-form-item :label="$t('wtp.name')" label-width="140px">
           <el-input v-model="wtp.name" :disabled="true" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="corePoolSize" label-width="140px">
+        <el-form-item :label="$t('wtp.corePoolSize')" label-width="140px">
           <el-input-number v-model="wtp.corePoolSize" controls-position="right" :min="0" :max="wtp.maximumPoolSize" />
         </el-form-item>
-        <el-form-item label="maximumPoolSize" label-width="140px">
+        <el-form-item :label="$t('wtp.maximumPoolSize')" label-width="140px">
           <el-input-number
             v-model="wtp.maximumPoolSize"
             controls-position="right"
@@ -319,31 +332,28 @@
             :max="2147483647"
           />
         </el-form-item>
-        <el-form-item label="keepAliveSeconds" label-width="140px">
+        <el-form-item :label="$t('wtp.keepAliveSeconds')" label-width="140px">
           <el-input-number v-model="wtp.keepAliveSeconds" controls-position="right" :min="1" />
         </el-form-item>
         <el-alert
           v-if="wtp.queueName && wtp.queueName.indexOf('ResizableCapacity') < 0"
           :closable="false"
-          title="（谨慎）当前 queueName 不支持动态修改队列长度 ，需重启项目，才能生效"
+          :title="$t('wtp.queueName_title')"
           type="warning"
-          close-text="知道了"
         />
         <el-alert
           v-if="SynchronousQueueAndLinkedTransferQueue"
           :closable="false"
-          title="当前 queueName 不支持设置queueCapacity,也不会生效."
+          :title="$t('wtp.SynchronousQueueAndLinkedTransferQueue')"
           type="warning"
-          close-text="知道了"
         />
         <el-alert
           v-if="PriorityBlockingQueue"
           :closable="false"
-          title="PriorityBlockingQueue 的 queueCapacity 是队列初始长度, 并非最大长度."
+          :title="$t('wtp.PriorityBlockingQueue')"
           type="warning"
-          close-text="知道了"
         />
-        <el-form-item label="queueCapacity" label-width="140px">
+        <el-form-item :label="$t('wtp.queueCapacity')" label-width="140px">
           <el-input-number
             v-model="wtp.queueCapacity"
             controls-position="right"
@@ -355,40 +365,39 @@
         <el-alert
           v-if="wtpRegistryList.length > 0"
           :closable="false"
-          title="（谨慎）修改 queueName 需重启项目，才能生效"
+          :title="$t('wtp.queueName_title2')"
           type="warning"
           close-text="知道了"
         />
-        <el-form-item label="queueName" label-width="140px">
-          <el-select v-model="wtp.queueName" filterable placeholder="可搜索" @change="updateUueueChange">
+        <el-form-item :label="$t('wtp.queueName')" label-width="140px">
+          <el-select v-model="wtp.queueName" filterable :placeholder="$t('wtp.searchable')" @change="updateQueueChange">
             <el-option v-for="item in queueListOptions" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
-        <el-form-item label="rejectedName" label-width="140px">
-          <el-select v-model="wtp.rejectedExecutionHandlerName" filterable placeholder="可搜索">
+        <el-form-item :label="$t('wtp.rejectedExecutionHandlerName')" label-width="140px">
+          <el-select v-model="wtp.rejectedExecutionHandlerName" filterable :placeholder="$t('wtp.searchable')">
             <el-option v-for="item in rejectedListOptions" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
-        <el-form-item label="负责人" label-width="140px">
+        <el-form-item :label="$t('wtp.ownerName')" label-width="140px">
           <el-input v-model="wtp.ownerName" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="负责人邮箱" label-width="140px">
+        <el-form-item :label="$t('wtp.alarmEmail')" label-width="140px">
           <el-input v-model="wtp.alarmEmail" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="是否告警" label-width="140px">
+        <el-form-item :label="$t('wtp.openAlarm')" label-width="140px">
           <el-switch v-model="wtp.openAlarm" active-color="#13ce66" inactive-color="#ff4949" />
         </el-form-item>
-        <el-form-item v-if="wtp.openAlarm" label="活跃告警(%)" label-width="140px">
+        <el-form-item v-if="wtp.poolAlarmThreshold" :label="$t('wtp.poolAlarmThreshold')" label-width="140px">
           <el-input-number v-model="wtp.poolAlarmThreshold" controls-position="right" :min="0" :max="100" />
         </el-form-item>
         <el-alert
           v-if="SynchronousQueueAndLinkedTransferQueue"
           :closable="false"
-          title="当前 queueName 不支持设置队列容量告警."
+          :title="$t('wtp.queueAlarmThreshold_title')"
           type="warning"
-          close-text="知道了"
         />
-        <el-form-item v-if="wtp.openAlarm" label="队列容量告警(%)" label-width="140px">
+        <el-form-item v-if="wtp.openAlarm" :label="$t('wtp.queueAlarmThreshold')" label-width="140px">
           <el-input-number
             v-model="wtp.queueAlarmThreshold"
             :disabled="SynchronousQueueAndLinkedTransferQueue"
@@ -399,75 +408,78 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="updateWtpVisible = false,SynchronousQueueAndLinkedTransferQueue = false">取 消</el-button>
+        <el-button @click="updateWtpVisible = false,SynchronousQueueAndLinkedTransferQueue = false">{{
+          $t('wtp.cancel')
+        }}
+        </el-button>
         <el-popconfirm
-          confirm-button-text="好的"
-          cancel-button-text="不用了"
+          :confirm-button-text="$t('wtp.del_confirm_button_text')"
+          :cancel-button-text="$t('wtp.del_cancel_button_text')"
           icon="el-icon-info"
           icon-color="red"
-          title="确定修改吗？"
+          :title="$t('wtp.update_title')"
           @onConfirm="updateWtp"
         >
-          <el-button slot="reference" type="primary">确 定</el-button>
+          <el-button slot="reference" type="primary">{{ $t('wtp.confirm') }}</el-button>
         </el-popconfirm>
       </div>
     </el-dialog>
 
-    <el-dialog title="实时数据" :visible.sync="realTimeVisible" @close="closeRealTimeVisible">
+    <el-dialog :title="$t('wtp.last_log')" :visible.sync="realTimeVisible" @close="closeRealTimeVisible">
       <el-form :model="wtpLog" label-position="left" inline class="demo-table-expand">
-        <el-form-item label="AppId" label-width="120px">
+        <el-form-item :label="$t('wtp.appId')" label-width="120px">
           <span>{{ wtpLog.appId }}</span>
         </el-form-item>
-        <el-form-item label="ClusterId" label-width="120px">
+        <el-form-item :label="$t('wtp.clusterId')" label-width="120px">
           <span>{{ wtpLog.clusterId }}</span>
         </el-form-item>
-        <el-form-item label="PoolName" label-width="120px">
+        <el-form-item :label="$t('wtp.name')" label-width="120px">
           <span>{{ wtpLog.name }}</span>
         </el-form-item>
-        <el-form-item label="ip" label-width="120px">
+        <el-form-item :label="$t('wtp.ip')" label-width="120px">
           <span>{{ wtpLog.ip }}</span>
         </el-form-item>
         <el-divider />
-        <el-form-item label="核心线程数" label-width="120px">
+        <el-form-item :label="$t('wtp.corePoolSize')" label-width="120px">
           <span>{{ wtpLog.corePoolSize }}</span>
         </el-form-item>
-        <el-form-item label="最大线程数" label-width="120px">
+        <el-form-item :label="$t('wtp.maximumPoolSize')" label-width="120px">
           <span>{{ wtpLog.maximumPoolSize }}</span>
         </el-form-item>
-        <el-form-item label="回收时间(秒)" label-width="120px">
+        <el-form-item :label="$t('wtp.keepAliveSeconds')" label-width="120px">
           <span>{{ wtpLog.keepAliveSeconds }}</span>
         </el-form-item>
-        <el-form-item label="线程活跃数" label-width="120px">
+        <el-form-item :label="$t('wtp.activeCount')" label-width="120px">
           <span>{{ wtpLog.activeCount }}</span>
         </el-form-item>
-        <el-form-item label="线程活跃率" label-width="120px">
+        <el-form-item :label="$t('wtp.threadRate')" label-width="120px">
           <span>{{ numberPercentDiv(wtpLog.activeCount, wtpLog.maximumPoolSize, 2) }}</span>
         </el-form-item>
-        <el-form-item label="完成任务数" label-width="120px">
+        <el-form-item :label="$t('wtp.completedTaskCount')" label-width="120px">
           <span>{{ wtpLog.completedTaskCount }}</span>
         </el-form-item>
-        <el-form-item label="队列长度" label-width="120px">
+        <el-form-item :label="$t('wtp.queueLength')" label-width="120px">
           <span>{{ wtpLog.queueSize + wtpLog.queueRemainingCapacity }}</span>
         </el-form-item>
-        <el-form-item label="排队数" label-width="120px">
+        <el-form-item :label="$t('wtp.queueSize')" label-width="120px">
           <span>{{ wtpLog.queueSize }}</span>
         </el-form-item>
-        <el-form-item label="队列中剩余容量" label-width="120px">
+        <el-form-item :label="$t('wtp.queueRemainingCapacity')" label-width="120px">
           <span>{{ wtpLog.queueRemainingCapacity }}</span>
         </el-form-item>
-        <el-form-item label="队列使用率" label-width="120px">
+        <el-form-item :label="$t('wtp.queueRate')" label-width="120px">
           <span>{{ numberPercentDiv(wtpLog.queueSize, wtpLog.queueSize + wtpLog.queueRemainingCapacity, 2) }}</span>
         </el-form-item>
-        <el-form-item label="rejected次数" label-width="120px">
+        <el-form-item :label="$t('wtp.rejectedExecutionCount')" label-width="120px">
           <span>{{ wtpLog.rejectedExecutionCount }}</span>
         </el-form-item>
-        <el-form-item label="总执行时间" label-width="120px">
+        <el-form-item :label="$t('wtp.totalTime')" label-width="120px">
           <span>{{ wtpLog.totalTime }}</span>
         </el-form-item>
-        <el-form-item label="平均执行时间" label-width="120px">
+        <el-form-item :label="$t('wtp.averageTime')" label-width="120px">
           <span>{{ wtpLog.totalTime === 0 ? 0 : numberDiv(wtpLog.totalTime, wtpLog.completedTaskCount, 0) }}</span>
         </el-form-item>
-        <el-form-item label="更新时间" label-width="120px">
+        <el-form-item :label="$t('wtp.logTime')" label-width="120px">
           <span>{{ wtpLog.logTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
         </el-form-item>
       </el-form>
@@ -475,46 +487,48 @@
 
     <el-dialog title="" :visible.sync="reportVisible" fullscreen>
       <div class="el-dialog-div">
-        <chart id="usageRateChart" :chart-option="usageRateOptionc" height="90%" width="100%" />
+        <chart id="usageRateChart" :chart-option="usageRateOptions" height="90%" width="100%" />
       </div>
       <div class="el-dialog-div">
-        <chart id="poolChart" :chart-option="poolOptionc" height="90%" width="100%" />
+        <chart id="poolChart" :chart-option="poolOptions" height="90%" width="100%" />
       </div>
       <div class="el-dialog-div">
-        <chart id="queueChart" :chart-option="queueOptionc" height="90%" width="100%" />
+        <chart id="queueChart" :chart-option="queueOptions" height="90%" width="100%" />
       </div>
     </el-dialog>
 
-    <el-dialog title="OnLine 机器" :visible.sync="registryVisible">
+    <el-dialog :title="$t('wtp.onLine')" :visible.sync="registryVisible">
       <el-table :data="wtpRegistryList">
-        <el-table-column align="center" label="IP">
+        <el-table-column align="center" :label="$t('wtp.ip')">
           <template slot-scope="scope">
             <span>{{ scope.row.ip }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="上次拉取配置时间">
+        <el-table-column align="center" :label="$t('wtp.last_pull_time')">
           <template slot-scope="scope">
             <span>{{ scope.row.lastPullTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="注册时间">
+        <el-table-column align="center" :label="$t('wtp.registration_time')">
           <template slot-scope="scope">
             <span>{{ scope.row.created | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
           </template>
         </el-table-column>
       </el-table>
     </el-dialog>
-    <el-dialog title="选择机器" :visible.sync="wtpRegistryVisible" width="30%" center>
-      <el-select v-model="reportForm.ip" filterable placeholder="可搜索">
+    <el-dialog :title="$t('wtp.select')" :visible.sync="wtpRegistryVisible" width="30%" center>
+      <el-select v-model="reportForm.ip" filterable placeholder="$t('wtp.searchable')">
         <el-option v-for="item in wtpRegistryList" :key="item.ip" :label="item.ip" :value="item.ip" />
       </el-select>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="wtpRegistryVisible = false">取 消</el-button>
-        <el-button type="primary" @click="doReport">确 定</el-button>
+        <el-button @click="wtpRegistryVisible = false">{{ $t('wtp.cancel') }}</el-button>
+        <el-button type="primary" @click="doReport">{{ $t('wtp.confirm') }}</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="同步配置" :visible.sync="syncConfigVisible">
-      <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全选</el-checkbox>
+    <el-dialog :title="$t('wtp.sync')" :visible.sync="syncConfigVisible">
+      <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">
+        {{ $t('wtp.check_all') }}
+      </el-checkbox>
       <div style="margin: 15px 0;" />
       <el-checkbox-group v-model="syncConfigCheckedCities" @change="handleCheckedCitiesChange">
         <el-checkbox
@@ -528,16 +542,16 @@
         </el-checkbox>
       </el-checkbox-group>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="syncConfigVisible = false">取 消</el-button>
+        <el-button @click="syncConfigVisible = false">{{ $t('wtp.cancel') }}</el-button>
         <el-popconfirm
-          confirm-button-text="好的"
-          cancel-button-text="不用了"
+          :confirm-button-text="$t('wtp.del_confirm_button_text')"
+          :cancel-button-text="$t('wtp.del_cancel_button_text')"
           icon="el-icon-info"
           icon-color="red"
-          title="同步后当前配置将覆盖被同步的cluster,确定同步吗？"
+          :title="$t('wtp.sync_title')"
           @onConfirm="syncConfigBtn()"
         >
-          <el-button slot="reference" type="primary">确 定</el-button>
+          <el-button slot="reference" type="primary">{{ $t('wtp.confirm') }}</el-button>
         </el-popconfirm>
       </span>
     </el-dialog>
@@ -625,9 +639,9 @@ export default {
       rejectedListOptions: [],
       wtpLog: {},
       wtp: {},
-      poolOptionc: {},
-      queueOptionc: {},
-      usageRateOptionc: {},
+      poolOptions: {},
+      queueOptions: {},
+      usageRateOptions: {},
       wtpRegistryList: [],
       intervalId: null,
       wtpRegistryVisible: false,
@@ -650,11 +664,11 @@ export default {
   },
   created() {
     this.appOptions()
-    this.queueOptions()
+    this.queryQueueOptions()
     this.rejectedOptions()
   },
   methods: {
-    updateUueueChange(value) {
+    updateQueueChange(value) {
       if (value === 'LinkedTransferQueue' || value === 'SynchronousQueue') {
         this.wtp.queueCapacity = 0
         this.wtp.queueAlarmThreshold = 0
@@ -664,7 +678,7 @@ export default {
       }
       this.PriorityBlockingQueue = value === 'PriorityBlockingQueue'
     },
-    createUueueChange(value) {
+    createQueueChange(value) {
       if (value === 'LinkedTransferQueue' || value === 'SynchronousQueue') {
         this.createForm.queueCapacity = 0
         this.createForm.queueAlarmThreshold = 0
@@ -691,7 +705,7 @@ export default {
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.clusterIdOptions.length
       console.log(this.syncConfigCheckedCities)
     },
-    queueOptions() {
+    queryQueueOptions() {
       queueOptions().then((response) => {
         this.queueListOptions = response.data.list
       })
@@ -744,7 +758,7 @@ export default {
       create(this.createForm).then((response) => {
         this.create = response.data
         if (create) {
-          this.$message.success('添加成功')
+          this.$message.success(this.$t('wtp.success'))
           this.newWtpVisible = false
           this.createForm = {
             appId: this.createForm.appId,
@@ -754,7 +768,7 @@ export default {
           this.PriorityBlockingQueue = false
           this.page()
         } else {
-          this.$message.error('添加失败')
+          this.$message.error(this.$t('wtp.fail'))
         }
       })
     },
@@ -774,7 +788,7 @@ export default {
           this.wtpLog = wtpLog
           this.realTimeVisible = true
         } else {
-          this.$message.warning('无实时数据')
+          this.$message.warning(this.$t('wtp.no_log'))
         }
       })
     },
@@ -786,7 +800,7 @@ export default {
         const wtpRegistryList = response.data
         this.wtpRegistryList = wtpRegistryList
         if (wtpRegistryList === null || wtpRegistryList.length === 0) {
-          this.$message.warning('无在线机器')
+          this.$message.warning(this.$t('wtp.no_online'))
           return
         }
         if (wtpRegistryList.length === 1) {
@@ -800,13 +814,14 @@ export default {
       })
     },
     doReport() {
-      this.poolOptionc = poolSeries
-      this.queueOptionc = queueSeries
-      this.usageRateOptionc = usageRateSeries
+      this.initReportLang()
+      this.poolOptions = poolSeries
+      this.queueOptions = queueSeries
+      this.usageRateOptions = usageRateSeries
       report(this.reportForm).then((response) => {
         const list = response.data
         if (!list || list.length === 0) {
-          this.$message.warning('无日志数据')
+          this.$message.warning(this.$t('wtp.no_log'))
         }
         const timeList = []
         const corePoolSizeList = []
@@ -838,56 +853,56 @@ export default {
     },
     checkEmpty(wtp) {
       if (!wtp.appId) {
-        this.$message.error('appId 不能为空')
+        this.$message.error(this.$t('wtp.appId') + this.$t('wtp.not_empty'))
         return true
       }
       if (!wtp.clusterId) {
-        this.$message.error('clusterId 不能为空')
+        this.$message.error(this.$t('wtp.clusterId') + this.$t('wtp.not_empty'))
         return true
       }
       if (!wtp.name) {
-        this.$message.error('poolName 不能为空')
+        this.$message.error(this.$t('wtp.name') + this.$t('wtp.not_empty'))
         return true
       }
       if (!wtp.corePoolSize) {
-        this.$message.error('corePoolSize 不能为空')
+        this.$message.error(this.$t('wtp.corePoolSize') + this.$t('wtp.not_empty'))
         return true
       }
       if (!wtp.maximumPoolSize) {
-        this.$message.error('maximumPoolSize 不能为空')
+        this.$message.error(this.$t('wtp.maximumPoolSize') + this.$t('wtp.not_empty'))
         return true
       }
       if (wtp.corePoolSize > wtp.maximumPoolSize) {
-        this.$message.error('corePoolSize 不能大于 maximumPoolSize')
+        this.$message.error(this.$t('wtp.corePoolSize') + this.$t('wtp.not_greater') + this.$t('wtp.maximumPoolSize'))
         return true
       }
       if (!wtp.keepAliveSeconds) {
-        this.$message.error('keepAliveSeconds 不能为空')
+        this.$message.error(this.$t('wtp.keepAliveSeconds') + this.$t('wtp.not_empty'))
         return true
       }
       if (wtp.queueCapacity == null) {
-        this.$message.error('queueCapacity 不能为空')
+        this.$message.error(this.$t('wtp.queueCapacity') + this.$t('wtp.not_empty'))
         return true
       }
       if (!wtp.queueName) {
-        this.$message.error('queueName 不能为空')
+        this.$message.error(this.$t('wtp.queueName') + this.$t('wtp.not_empty'))
         return true
       }
       if (!wtp.ownerName) {
-        this.$message.error('负责人 不能为空')
+        this.$message.error(this.$t('wtp.ownerName') + this.$t('wtp.not_empty'))
         return true
       }
       if (wtp.openAlarm) {
         if (!wtp.alarmEmail) {
-          this.$message.error('告警邮箱 不能为空')
+          this.$message.error(this.$t('wtp.alarmEmail') + this.$t('wtp.not_empty'))
           return true
         }
         if (!wtp.poolAlarmThreshold) {
-          this.$message.error('活跃告警 不能为空')
+          this.$message.error(this.$t('wtp.poolAlarmThreshold') + this.$t('wtp.not_empty'))
           return true
         }
         if (wtp.queueAlarmThreshold == null) {
-          this.$message.error('队列容量告警 不能为空')
+          this.$message.error(this.$t('wtp.queueAlarmThreshold') + this.$t('wtp.not_empty'))
           return true
         }
       }
@@ -898,13 +913,13 @@ export default {
       }
       update(this.wtp).then((response) => {
         if (response.data) {
-          this.$message.success('修改成功')
+          this.$message.success(this.$t('wtp.success'))
           this.updateWtpVisible = false
           this.SynchronousQueueAndLinkedTransferQueue = false
           this.PriorityBlockingQueue = false
           this.page()
         } else {
-          this.$message.error('修改失败')
+          this.$message.error(this.$t('wtp.fail'))
         }
       })
     },
@@ -913,26 +928,26 @@ export default {
         this.wtp = response.data
         this.SynchronousQueueAndLinkedTransferQueue = false
         this.PriorityBlockingQueue = false
-        this.updateUueueChange(this.wtp.queueName)
+        this.updateQueueChange(this.wtp.queueName)
         this.updateWtpVisible = true
       })
     },
     pollChart(timeList, corePoolSizeList, maximumPoolSizeList, activeCountList) {
-      this.poolOptionc.xAxis[0].data = timeList
-      this.poolOptionc.series[0].data = corePoolSizeList
-      this.poolOptionc.series[1].data = maximumPoolSizeList
-      this.poolOptionc.series[2].data = activeCountList
+      this.poolOptions.xAxis[0].data = timeList
+      this.poolOptions.series[0].data = corePoolSizeList
+      this.poolOptions.series[1].data = maximumPoolSizeList
+      this.poolOptions.series[2].data = activeCountList
     },
     queueChart(timeList, queueSizeList, queueResidueList, queueUseList) {
-      this.queueOptionc.xAxis[0].data = timeList
-      this.queueOptionc.series[0].data = queueResidueList
-      this.queueOptionc.series[1].data = queueSizeList
-      this.queueOptionc.series[2].data = queueUseList
+      this.queueOptions.xAxis[0].data = timeList
+      this.queueOptions.series[0].data = queueResidueList
+      this.queueOptions.series[1].data = queueSizeList
+      this.queueOptions.series[2].data = queueUseList
     },
     usageRateChart(timeList, poolUsageRateList, queueUsageRateList) {
-      this.usageRateOptionc.xAxis[0].data = timeList
-      this.usageRateOptionc.series[0].data = poolUsageRateList
-      this.usageRateOptionc.series[1].data = queueUsageRateList
+      this.usageRateOptions.xAxis[0].data = timeList
+      this.usageRateOptions.series[0].data = poolUsageRateList
+      this.usageRateOptions.series[1].data = queueUsageRateList
     },
     numberPercentDiv(arg1, arg2, digit) {
       return ((arg1 / arg2) * 100).toFixed(digit)
@@ -949,10 +964,10 @@ export default {
         wtpId: wtpId
       }).then((response) => {
         if (response.data) {
-          this.$message.success('删除成功')
+          this.$message.success(this.$t('wtp.success'))
           this.page()
         } else {
-          this.$message.error('删除失败')
+          this.$message.error(this.$t('wtp.fail'))
         }
       })
     },
@@ -968,7 +983,7 @@ export default {
     },
     syncConfigBtn() {
       if (this.syncConfigCheckedCities.length < 1) {
-        this.$message.error('未选择同步目标')
+        this.$message.error(this.$t('wtp.unselected') + this.$t('wtp.sync') + this.$t('wtp.clusterId'))
         return
       }
       const form = JSON.parse(JSON.stringify(this.syncWtp))
@@ -976,11 +991,11 @@ export default {
       syncConfig(form).then((response) => {
         const sync = response.data
         if (sync) {
-          this.$message.success('同步成功')
+          this.$message.success(this.$t('wtp.success'))
           this.syncConfigVisible = false
           this.page()
         } else {
-          this.$message.error('同步失败')
+          this.$message.error(this.$t('wtp.fail'))
         }
       })
     },
@@ -994,6 +1009,24 @@ export default {
         path: '/log/wtpLog',
         query: query
       })
+    },
+    initReportLang() {
+      poolSeries.title.text = this.$t('wtp.thread')
+      poolSeries.legend.data = [this.$t('wtp.corePoolSize'), this.$t('wtp.maximumPoolSize'), this.$t('wtp.activeCount')]
+      poolSeries.series[0].name = this.$t('wtp.corePoolSize')
+      poolSeries.series[1].name = this.$t('wtp.maximumPoolSize')
+      poolSeries.series[2].name = this.$t('wtp.activeCount')
+
+      queueSeries.title.text = this.$t('wtp.queue')
+      queueSeries.legend.data = [this.$t('wtp.queueRemainingCapacity'), this.$t('wtp.queueLength'), this.$t('wtp.queueSize')]
+      queueSeries.series[0].name = this.$t('wtp.queueRemainingCapacity')
+      queueSeries.series[1].name = this.$t('wtp.queueLength')
+      queueSeries.series[2].name = this.$t('wtp.queueSize')
+
+      usageRateSeries.title.text = this.$t('wtp.use_rate')
+      usageRateSeries.legend.data = [this.$t('wtp.threadRate'), this.$t('wtp.queueRate')]
+      usageRateSeries.series[0].name = this.$t('wtp.threadRate')
+      usageRateSeries.series[1].name = this.$t('wtp.queueRate')
     }
   }
 }
