@@ -158,7 +158,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="newUserVisible = false">{{ $t('user.cancel') }}</el-button>
-        <el-button type="primary" @click="create">{{ $t('user.confirm') }}</el-button>
+        <el-button type="primary" @click="createUser">{{ $t('user.confirm') }}</el-button>
       </div>
     </el-dialog>
     <el-dialog :title="$t('user.update')" :visible.sync="updateUserVisible">
@@ -183,7 +183,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="updateUserVisible = false">{{ $t('user.cancel') }}</el-button>
-        <el-button type="primary" @click="update">{{ $t('user.confirm') }}</el-button>
+        <el-button type="primary" @click="updateUser">{{ $t('user.confirm') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -273,7 +273,7 @@ export default {
         this.listLoading = false
       })
     },
-    create() {
+    createUser() {
       if (!this.createForm.username || !this.createForm.password) {
         this.$message.warning(this.$t('app.parameter'))
         return
@@ -289,7 +289,7 @@ export default {
         }
       })
     },
-    update() {
+    updateUser() {
       if (!this.updateForm.userId) {
         this.$message.warning(this.$t('app.fail'))
         return
