@@ -1,27 +1,24 @@
 <template>
   <div class="app-container">
-    <el-row>
-      <el-col :span="12">
-        <el-transfer
-          v-model="transferValue"
-          filterable
-          filter-placeholder="请输 AppId"
-          :data="transferData"
-          :titles="['AppId列表', '已有权限']"
-          @change="handleChange"
-        />
-      </el-col>
-      <el-col :span="12">
-        <el-tree
-          :data="treeData"
-          show-checkbox
-          node-key="id"
-          :default-expanded-keys="[]"
-          :default-checked-keys="treeChecked"
-          @check-change="handleCheckChange"
-        />
-      </el-col>
-    </el-row>
+    <el-divider content-position="left">{{ $t('permission.authorized_appId') }}</el-divider>
+    <el-transfer
+      v-model="transferValue"
+      filterable
+      :filter-placeholder="$t('permission.appId')"
+      :data="transferData"
+      :titles="[$t('permission.authorized_title1'), $t('permission.authorized_title2')]"
+      @change="handleChange"
+    />
+    <el-divider content-position="left">{{ $t('permission.specific_authorization') }}</el-divider>
+    <el-tree
+      :data="treeData"
+      show-checkbox
+      node-key="id"
+      :empty-text="$t('permission.empty_text')"
+      :default-expanded-keys="[]"
+      :default-checked-keys="treeChecked"
+      @check-change="handleCheckChange"
+    />
   </div>
 </template>
 
@@ -75,10 +72,10 @@ export default {
             appId: movedKey
           }).then((response) => {
             if (response.data) {
-              this.$message.success('添加成功')
+              this.$message.success(this.$t('permission.success'))
               this.findPermission()
             } else {
-              this.$message.error('添加失败')
+              this.$message.error(this.$t('permission.fail'))
             }
           })
         }
@@ -91,10 +88,10 @@ export default {
             appId: movedKey
           }).then((response) => {
             if (response.data) {
-              this.$message.success('删除成功')
+              this.$message.success(this.$t('permission.success'))
               this.findPermission()
             } else {
-              this.$message.error('删除失败')
+              this.$message.error(this.$t('permission.fail'))
             }
           })
         }
@@ -114,9 +111,9 @@ export default {
             permission: data.label
           }).then((response) => {
             if (response.data) {
-              this.$message.success('添加成功')
+              this.$message.success(this.$t('permission.success'))
             } else {
-              this.$message.error('添加失败')
+              this.$message.error(this.$t('permission.fail'))
             }
           })
         }
@@ -130,9 +127,9 @@ export default {
             permission: data.label
           }).then((response) => {
             if (response.data) {
-              this.$message.success('删除成功')
+              this.$message.success(this.$t('permission.success'))
             } else {
-              this.$message.error('删除失败')
+              this.$message.error(this.$t('permission.fail'))
             }
           })
         }

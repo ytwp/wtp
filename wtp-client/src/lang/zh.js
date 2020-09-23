@@ -114,6 +114,16 @@ export default {
     success: '成功',
     fail: '失败'
   },
+  permission: {
+    authorized_appId: '授权AppId',
+    authorized_title1: '未授权',
+    authorized_title2: '已授权',
+    appId: 'AppId',
+    specific_authorization: 'AppId具体授权',
+    empty_text: '无数据',
+    success: '成功',
+    fail: '失败'
+  },
   wtp: {
     appId_searchable: 'AppId (可搜索)',
     clusterId_searchable: 'ClusterId (可搜索)',
@@ -185,5 +195,40 @@ export default {
     queue: '队列',
     use_rate: '利用率'
   },
-  log: {}
+  wtpLog: {
+    appId_searchable: 'AppId (可搜索)',
+    clusterId_searchable: 'ClusterId (可搜索)',
+    name: '线程池名称',
+    search: '搜索',
+    start_date: '开始时间',
+    end_date: '结束时间',
+    ip: 'IP',
+    latest_week: '最近一周',
+    last_month: '最近一个月',
+    last_three_months: '最近三个月',
+    largestPoolSize: '最大创建线程数',
+    poolSize: '当前线程数',
+    taskCount: '完成任务总数(约)',
+    maximumTime: '最大执行时间',
+    created: '创建时间',
+    wtpId: 'ID',
+    appId: 'AppId',
+    clusterId: 'ClusterId',
+    corePoolSize: '核心线程数',
+    maximumPoolSize: '最大线程数',
+    keepAliveSeconds: '回收时间(秒)',
+    queueCapacity: '队列长度',
+    queueName: '队列名称',
+    activeCount: '活跃线程数',
+    threadRate: '线程利用率',
+    completedTaskCount: '完成任务数',
+    queueLength: '队列长度',
+    queueSize: '排队长度',
+    queueRemainingCapacity: '剩余长度',
+    queueRate: '队列利用率',
+    rejectedExecutionCount: 'rejected次',
+    totalTime: '总执行时间',
+    averageTime: '平均执行时间',
+    logTime: '日志时间'
+  }
 }

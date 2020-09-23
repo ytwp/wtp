@@ -114,6 +114,16 @@ export default {
     success: 'success',
     fail: 'fail'
   },
+  permission: {
+    authorized_appId: 'authorized AppId',
+    authorized_title1: 'unauthorized',
+    authorized_title2: 'be authorized',
+    appId: 'AppId',
+    specific_authorization: 'AppId specific authorization',
+    empty_text: 'No Data',
+    success: 'success',
+    fail: 'fail'
+  },
   wtp: {
     appId_searchable: 'AppId (searchable)',
     clusterId_searchable: 'ClusterId (searchable)',
@@ -184,5 +194,41 @@ export default {
     thread: 'thread',
     queue: 'queue',
     use_rate: 'use rate'
+  },
+  wtpLog: {
+    appId_searchable: 'AppId (searchable)',
+    clusterId_searchable: 'ClusterId (searchable)',
+    name: 'Pool Name',
+    search: 'search',
+    start_date: 'start date',
+    end_date: 'end date',
+    ip: 'IP',
+    latest_week: 'latest week',
+    last_month: 'last month',
+    last_three_months: 'last three months',
+    largestPoolSize: 'largestPoolSize',
+    poolSize: 'poolSize',
+    taskCount: 'taskCount(about)',
+    maximumTime: 'Maximum execution time',
+    created: 'creation time',
+    wtpId: 'ID',
+    appId: 'AppId',
+    clusterId: 'ClusterId',
+    corePoolSize: 'corePoolSize',
+    maximumPoolSize: 'maximumPoolSize',
+    keepAliveSeconds: 'keepAliveSeconds(second)',
+    queueCapacity: 'queueCapacity',
+    queueName: 'queueName',
+    activeCount: 'active threads',
+    threadRate: 'thread use rate',
+    completedTaskCount: 'completed task count',
+    queueLength: 'queue length',
+    queueSize: 'queue size',
+    queueRemainingCapacity: 'queue remaining capacity',
+    queueRate: 'queue use rate',
+    rejectedExecutionCount: 'rejected number',
+    totalTime: 'total execution time',
+    averageTime: 'average execution time',
+    logTime: 'log time'
   }
 }

@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="table-query">
       <span class="mr10">
-        <el-select v-model="pageQuery.appId" filterable placeholder="appId (可搜索)" @change="appIdOptionsChange">
+        <el-select v-model="pageQuery.appId" filterable :placeholder="$t('wtpLog.appId_searchable')" @change="appIdOptionsChange">
           <el-option v-for="item in appIdOptions" :key="item.appId" :label="item.appId" :value="item.appId" />
         </el-select>
       </span>
@@ -11,7 +11,7 @@
           v-model="pageQuery.clusterId"
           :disabled="clusterIdOptions.length <= 0"
           filterable
-          placeholder="clusterId (可搜索)"
+          :placeholder="$t('wtpLog.clusterId_searchable')"
           @change="clusterIdOptionsChange"
         >
           <el-option
@@ -27,27 +27,26 @@
           v-model.trim="pageQuery.name"
           style="width: 150px;"
           class="filter-item"
-          placeholder="线程池名称"
+          :placeholder="$t('wtpLog.name')"
           clearable
         />
       </span>
       <span class="mr10">
-        <el-input v-model.trim="pageQuery.ip" style="width: 150px;" class="filter-item" placeholder="IP" clearable />
+        <el-input v-model.trim="pageQuery.ip" style="width: 150px;" class="filter-item" :placeholder="$t('wtpLog.ip')" clearable />
       </span>
       <span class="mr10">
         <el-date-picker
           v-model="queryTime"
           type="datetimerange"
           :picker-options="pickerOptions"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          :start-placeholder="$t('wtpLog.start_date')"
+          :end-placeholder="$t('wtpLog.end_date')"
           align="right"
           @change="handleChangeDate"
         />
       </span>
       <el-button class="filter-item mr10" type="primary" icon="el-icon-search" @click="page">
-        搜索
+        {{ $t('wtpLog.search') }}
       </el-button>
     </div>
     <el-table
@@ -61,118 +60,118 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="AppId" label-width="120px">
+            <el-form-item :label="$t('wtpLog.appId')" label-width="200px">
               <span>{{ props.row.appId }}</span>
             </el-form-item>
-            <el-form-item label="ClusterId" label-width="120px">
+            <el-form-item :label="$t('wtpLog.clusterId')" label-width="200px">
               <span>{{ props.row.clusterId }}</span>
             </el-form-item>
-            <el-form-item label="IP" label-width="120px">
+            <el-form-item :label="$t('wtpLog.ip')" label-width="200px">
               <span>{{ props.row.ip }}</span>
             </el-form-item>
-            <el-form-item label="线程池名称" label-width="120px">
+            <el-form-item :label="$t('wtpLog.name')" label-width="200px">
               <span>{{ props.row.name }}</span>
             </el-form-item>
-            <el-form-item label="日志时间" label-width="120px">
+            <el-form-item :label="$t('wtpLog.logTime')" label-width="200px">
               <span>{{ props.row.logTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
             </el-form-item>
-            <el-form-item label="创建时间" label-width="120px">
+            <el-form-item :label="$t('wtpLog.created')" label-width="200px">
               <span>{{ props.row.created | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
             </el-form-item>
             <el-divider />
-            <el-form-item label="核心线程数" label-width="120px">
+            <el-form-item :label="$t('wtpLog.corePoolSize')" label-width="200px">
               <span>{{ props.row.corePoolSize }}</span>
             </el-form-item>
-            <el-form-item label="最大线程数" label-width="120px">
+            <el-form-item :label="$t('wtpLog.maximumPoolSize')" label-width="200px">
               <span>{{ props.row.maximumPoolSize }}</span>
             </el-form-item>
-            <el-form-item label="回收时间(秒)" label-width="120px">
+            <el-form-item :label="$t('wtpLog.keepAliveSeconds')" label-width="200px">
               <span>{{ props.row.keepAliveSeconds }}</span>
             </el-form-item>
-            <el-form-item label="线程活跃数" label-width="120px">
+            <el-form-item :label="$t('wtpLog.activeCount')" label-width="200px">
               <span>{{ props.row.activeCount }}</span>
             </el-form-item>
-            <el-form-item label="线程活跃率" label-width="120px">
+            <el-form-item :label="$t('wtpLog.threadRate')" label-width="200px">
               <span>{{ numberPercentDiv(props.row.activeCount, props.row.maximumPoolSize, 2) }}</span>
             </el-form-item>
-            <el-form-item label="完成任务数" label-width="120px">
+            <el-form-item :label="$t('wtpLog.completedTaskCount')" label-width="200px">
               <span>{{ props.row.completedTaskCount }}</span>
             </el-form-item>
-            <el-form-item label="队列长度" label-width="120px">
+            <el-form-item :label="$t('wtpLog.activeCount')" label-width="200px">
               <span>{{ props.row.queueSize + props.row.queueRemainingCapacity }}</span>
             </el-form-item>
-            <el-form-item label="排队数" label-width="120px">
+            <el-form-item :label="$t('wtpLog.queueSize')" label-width="200px">
               <span>{{ props.row.queueSize }}</span>
             </el-form-item>
-            <el-form-item label="队列中剩余容量" label-width="120px">
+            <el-form-item :label="$t('wtpLog.queueRemainingCapacity')" label-width="200px">
               <span>{{ props.row.queueRemainingCapacity }}</span>
             </el-form-item>
-            <el-form-item label="队列使用率" label-width="120px">
+            <el-form-item :label="$t('wtpLog.queueRate')" label-width="200px">
               <span>{{
                 numberPercentDiv(props.row.queueSize, props.row.queueSize + props.row.queueRemainingCapacity, 2)
               }}</span>
             </el-form-item>
-            <el-form-item label="最大创建线程数" label-width="120px">
+            <el-form-item :label="$t('wtpLog.largestPoolSize')" label-width="200px">
               <span>{{ props.row.largestPoolSize }}</span>
             </el-form-item>
-            <el-form-item label="rejected次数" label-width="120px">
+            <el-form-item :label="$t('wtpLog.rejectedExecutionCount')" label-width="200px">
               <span>{{ props.row.rejectedExecutionCount }}</span>
             </el-form-item>
-            <el-form-item label="当前线程数" label-width="120px">
+            <el-form-item :label="$t('wtpLog.poolSize')" label-width="200px">
               <span>{{ props.row.poolSize }}</span>
             </el-form-item>
-            <el-form-item label="完成任务总数(约)" label-width="120px">
+            <el-form-item :label="$t('wtpLog.taskCount')" label-width="200px">
               <span>{{ props.row.taskCount }}</span>
             </el-form-item>
-            <el-form-item label="总执行时间" label-width="120px">
+            <el-form-item :label="$t('wtpLog.totalTime')" label-width="200px">
               <span>{{ props.row.totalTime }}</span>
             </el-form-item>
-            <el-form-item label="最大执行时间" label-width="120px">
+            <el-form-item :label="$t('wtpLog.maximumTime')" label-width="200px">
               <span>{{ props.row.maximumTime }}</span>
             </el-form-item>
-            <el-form-item label="平均执行时间" label-width="120px">
+            <el-form-item :label="$t('wtpLog.averageTime')" label-width="200px">
               <span>{{ numberPercentDiv(props.row.totalTime, props.row.taskCount, 2) }}</span>
             </el-form-item>
           </el-form>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="appId">
+      <el-table-column align="center" :label="$t('wtpLog.appId')">
         <template slot-scope="scope">
           <span>{{ scope.row.appId }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="clusterId">
+      <el-table-column align="center" :label="$t('wtpLog.clusterId')">
         <template slot-scope="scope">
           <span>{{ scope.row.clusterId }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="线程池名称">
+      <el-table-column align="center" :label="$t('wtpLog.name')">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="ip">
+      <el-table-column align="center" :label="$t('wtpLog.ip')">
         <template slot-scope="scope">
           <span>{{ scope.row.ip }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="当前线程数">
+      <el-table-column align="center" :label="$t('wtpLog.poolSize')">
         <template slot-scope="scope">
           <span>{{ scope.row.poolSize }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="队列中剩余容量">
+      <el-table-column align="center" :label="$t('wtpLog.queueRemainingCapacity')">
         <template slot-scope="scope">
           <span>{{ scope.row.queueRemainingCapacity }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="rejected次数">
+      <el-table-column align="center" :label="$t('wtpLog.rejectedExecutionCount')">
         <template slot-scope="scope">
           <span>{{ scope.row.rejectedExecutionCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="创建时间">
+      <el-table-column align="center" :label="$t('wtpLog.created')">
         <template slot-scope="scope">
           <span>{{ scope.row.created | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
@@ -237,7 +236,7 @@ export default {
       clusterIdOptions: [],
       pickerOptions: {
         shortcuts: [{
-          text: '最近一周',
+          text: this.$t('wtpLog.latest_week'),
           onClick(picker) {
             const end = new Date()
             const start = new Date()
@@ -245,7 +244,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近一个月',
+          text: this.$t('wtpLog.last_month'),
           onClick(picker) {
             const end = new Date()
             const start = new Date()
@@ -253,7 +252,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近三个月',
+          text: this.$t('wtpLog.last_three_months'),
           onClick(picker) {
             const end = new Date()
             const start = new Date()
