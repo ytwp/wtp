@@ -44,7 +44,10 @@ export default {
   },
   documentation: {
     documentation: 'Documentation',
-    github: 'Github Repository'
+    github: 'Github Repository',
+    gitee: 'Gitee Repository',
+    usage: 'Usage',
+    FAQ: 'FAQ'
   },
   app: {
     appId: 'appId',

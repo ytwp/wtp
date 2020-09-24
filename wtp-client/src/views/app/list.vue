@@ -14,7 +14,7 @@
         {{ $t('app.search') }}
       </el-button>
       <span class="mr10">
-        <el-button type="primary" icon="el-icon-plus" @click="newAppVisible = true">{{ $t('app.add') }}</el-button>
+        <el-button type="primary" @click="newAppVisible = true">{{ $t('app.add') }}</el-button>
       </span>
     </div>
     <el-table

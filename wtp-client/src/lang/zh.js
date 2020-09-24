@@ -44,7 +44,10 @@ export default {
   },
   documentation: {
     documentation: '文档',
-    github: 'Github 地址'
+    github: 'Github 地址',
+    gitee: 'Gitee 地址',
+    usage: '接入指南',
+    FAQ: '常见问题'
   },
   app: {
     appId: 'AppId',

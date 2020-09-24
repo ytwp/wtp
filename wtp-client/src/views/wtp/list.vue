@@ -426,60 +426,60 @@
     </el-dialog>
 
     <el-dialog :title="$t('wtp.last_log')" :visible.sync="realTimeVisible" @close="closeRealTimeVisible">
-      <el-form :model="wtpLog" label-position="left" inline class="demo-table-expand">
-        <el-form-item :label="$t('wtp.appId')" label-width="120px">
+      <el-form :model="wtpLog" label-position="left" class="demo-table-expand">
+        <el-form-item :label="$t('wtp.appId')" label-width="200px">
           <span>{{ wtpLog.appId }}</span>
         </el-form-item>
-        <el-form-item :label="$t('wtp.clusterId')" label-width="120px">
+        <el-form-item :label="$t('wtp.clusterId')" label-width="200px">
           <span>{{ wtpLog.clusterId }}</span>
         </el-form-item>
-        <el-form-item :label="$t('wtp.name')" label-width="120px">
+        <el-form-item :label="$t('wtp.name')" label-width="200px">
           <span>{{ wtpLog.name }}</span>
         </el-form-item>
-        <el-form-item :label="$t('wtp.ip')" label-width="120px">
+        <el-form-item :label="$t('wtp.ip')" label-width="200px">
           <span>{{ wtpLog.ip }}</span>
         </el-form-item>
         <el-divider />
-        <el-form-item :label="$t('wtp.corePoolSize')" label-width="120px">
+        <el-form-item :label="$t('wtp.corePoolSize')" label-width="200px">
           <span>{{ wtpLog.corePoolSize }}</span>
         </el-form-item>
-        <el-form-item :label="$t('wtp.maximumPoolSize')" label-width="120px">
+        <el-form-item :label="$t('wtp.maximumPoolSize')" label-width="200px">
           <span>{{ wtpLog.maximumPoolSize }}</span>
         </el-form-item>
-        <el-form-item :label="$t('wtp.keepAliveSeconds')" label-width="120px">
+        <el-form-item :label="$t('wtp.keepAliveSeconds')" label-width="200px">
           <span>{{ wtpLog.keepAliveSeconds }}</span>
         </el-form-item>
-        <el-form-item :label="$t('wtp.activeCount')" label-width="120px">
+        <el-form-item :label="$t('wtp.activeCount')" label-width="200px">
           <span>{{ wtpLog.activeCount }}</span>
         </el-form-item>
-        <el-form-item :label="$t('wtp.threadRate')" label-width="120px">
+        <el-form-item :label="$t('wtp.threadRate')" label-width="200px">
           <span>{{ numberPercentDiv(wtpLog.activeCount, wtpLog.maximumPoolSize, 2) }}</span>
         </el-form-item>
-        <el-form-item :label="$t('wtp.completedTaskCount')" label-width="120px">
+        <el-form-item :label="$t('wtp.completedTaskCount')" label-width="200px">
           <span>{{ wtpLog.completedTaskCount }}</span>
         </el-form-item>
-        <el-form-item :label="$t('wtp.queueLength')" label-width="120px">
+        <el-form-item :label="$t('wtp.queueLength')" label-width="200px">
           <span>{{ wtpLog.queueSize + wtpLog.queueRemainingCapacity }}</span>
         </el-form-item>
-        <el-form-item :label="$t('wtp.queueSize')" label-width="120px">
+        <el-form-item :label="$t('wtp.queueSize')" label-width="200px">
           <span>{{ wtpLog.queueSize }}</span>
         </el-form-item>
-        <el-form-item :label="$t('wtp.queueRemainingCapacity')" label-width="120px">
+        <el-form-item :label="$t('wtp.queueRemainingCapacity')" label-width="200px">
           <span>{{ wtpLog.queueRemainingCapacity }}</span>
         </el-form-item>
-        <el-form-item :label="$t('wtp.queueRate')" label-width="120px">
+        <el-form-item :label="$t('wtp.queueRate')" label-width="200px">
           <span>{{ numberPercentDiv(wtpLog.queueSize, wtpLog.queueSize + wtpLog.queueRemainingCapacity, 2) }}</span>
         </el-form-item>
-        <el-form-item :label="$t('wtp.rejectedExecutionCount')" label-width="120px">
+        <el-form-item :label="$t('wtp.rejectedExecutionCount')" label-width="200px">
           <span>{{ wtpLog.rejectedExecutionCount }}</span>
         </el-form-item>
-        <el-form-item :label="$t('wtp.totalTime')" label-width="120px">
+        <el-form-item :label="$t('wtp.totalTime')" label-width="200px">
           <span>{{ wtpLog.totalTime }}</span>
         </el-form-item>
-        <el-form-item :label="$t('wtp.averageTime')" label-width="120px">
+        <el-form-item :label="$t('wtp.averageTime')" label-width="200px">
           <span>{{ wtpLog.totalTime === 0 ? 0 : numberDiv(wtpLog.totalTime, wtpLog.completedTaskCount, 0) }}</span>
         </el-form-item>
-        <el-form-item :label="$t('wtp.logTime')" label-width="120px">
+        <el-form-item :label="$t('wtp.logTime')" label-width="200px">
           <span>{{ wtpLog.logTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
         </el-form-item>
       </el-form>
