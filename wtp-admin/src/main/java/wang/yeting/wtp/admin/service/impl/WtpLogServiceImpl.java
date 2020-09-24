@@ -86,7 +86,7 @@ public class WtpLogServiceImpl extends ServiceImpl<WtpLogMapper, WtpLog> impleme
                 .eq(StringUtils.isNotBlank(wtpLogVo.getIp()), WtpLog::getIp, wtpLogVo.getIp())
                 .ge(Objects.nonNull(wtpLogVo.getStartTime()), WtpLog::getLogTime, wtpLogVo.getStartTime())
                 .le(Objects.nonNull(wtpLogVo.getEndTime()), WtpLog::getLogTime, wtpLogVo.getEndTime())
-                .orderByAsc(WtpLog::getLogTime);
+                .orderByDesc(WtpLog::getLogTime);
         if (!tokenUtils.checkSuperAdmin(userBo)) {
             List<String> permissions = userBo.getPermissions();
             Set<String> appIdSet = new HashSet<>();

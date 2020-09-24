@@ -1,6 +1,7 @@
 package wang.yeting.wtp.core.enums;
 
 import lombok.Getter;
+import wang.yeting.wtp.core.concurrent.ResizableCapacityLinkedBlockingDeque;
 import wang.yeting.wtp.core.concurrent.ResizableCapacityLinkedBlockingQueue;
 
 import java.util.*;
@@ -18,6 +19,11 @@ public enum QueueEnums {
      * Dynamically modifiable {@link LinkedBlockingQueue}
      */
     resizableCapacityLinkedBlockIngQueue("ResizableCapacityLinkedBlockingQueue", ResizableCapacityLinkedBlockingQueue.class),
+
+    /**
+     * Dynamically modifiable {@link LinkedBlockingDeque}
+     */
+    resizableCapacityLinkedBlockingDeque("ResizableCapacityLinkedBlockingDeque", ResizableCapacityLinkedBlockingDeque.class),
 
     /**
      * details {@link LinkedBlockingQueue}

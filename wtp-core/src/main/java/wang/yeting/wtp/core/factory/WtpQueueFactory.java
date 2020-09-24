@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import wang.yeting.wtp.core.annotation.Wtp;
 import wang.yeting.wtp.core.biz.model.Config;
 import wang.yeting.wtp.core.biz.model.ConfigEvent;
+import wang.yeting.wtp.core.concurrent.ResizableCapacityLinkedBlockingDeque;
 import wang.yeting.wtp.core.concurrent.ResizableCapacityLinkedBlockingQueue;
 import wang.yeting.wtp.core.enums.QueueEnums;
 import wang.yeting.wtp.core.exceptions.WtpConfigException;
@@ -68,6 +69,8 @@ public class WtpQueueFactory {
     private BlockingQueue<Runnable> createQueue(String queueName, Integer queueCapacity) {
         if (Objects.equals(QueueEnums.resizableCapacityLinkedBlockIngQueue.getQueueName(), queueName)) {
             return new ResizableCapacityLinkedBlockingQueue<>(queueCapacity);
+        } else if (Objects.equals(QueueEnums.resizableCapacityLinkedBlockingDeque.getQueueName(), queueName)) {
+            return new ResizableCapacityLinkedBlockingDeque<>(queueCapacity);
         } else if (Objects.equals(QueueEnums.linkedBlockingQueue.getQueueName(), queueName)) {
             return new LinkedBlockingQueue<>(queueCapacity);
         } else if (Objects.equals(QueueEnums.arrayBlockingQueue.getQueueName(), queueName)) {
@@ -93,14 +96,21 @@ public class WtpQueueFactory {
             if (blockingQueue instanceof ResizableCapacityLinkedBlockingQueue) {
                 ResizableCapacityLinkedBlockingQueue queue = (ResizableCapacityLinkedBlockingQueue) blockingQueue;
                 queue.setCapacity(queueCapacity);
+            } else if (blockingQueue instanceof ResizableCapacityLinkedBlockingDeque) {
+                ResizableCapacityLinkedBlockingDeque queue = (ResizableCapacityLinkedBlockingDeque) blockingQueue;
+                queue.setCapacity(queueCapacity);
             } else if (blockingQueue instanceof LinkedBlockingQueue) {
                 log.error("wtp ------>  Dynamic resizing of LinkedBlockingQueue is not supported .");
             } else if (blockingQueue instanceof ArrayBlockingQueue) {
-                log.error("wtp ------>  Dynamic resizing of LinkedBlockingQueue is not supported .");
+                log.error("wtp ------>  Dynamic resizing of ArrayBlockingQueue is not supported .");
             } else if (blockingQueue instanceof LinkedBlockingDeque) {
-                log.error("wtp ------>  Dynamic resizing of LinkedBlockingQueue is not supported .");
+                log.error("wtp ------>  Dynamic resizing of LinkedBlockingDeque is not supported .");
             } else if (blockingQueue instanceof PriorityBlockingQueue) {
-                log.error("wtp ------>  Dynamic resizing of LinkedBlockingQueue is not supported .");
+                log.error("wtp ------>  Dynamic resizing of PriorityBlockingQueue is not supported .");
+            } else if (blockingQueue instanceof SynchronousQueue) {
+                log.error("wtp ------>  Dynamic resizing of SynchronousQueue is not supported .");
+            } else if (blockingQueue instanceof LinkedTransferQueue) {
+                log.error("wtp ------>  Dynamic resizing of LinkedTransferQueue is not supported .");
             } else {
                 log.error("wtp ------>  Incorrect Queue configuration .");
             }

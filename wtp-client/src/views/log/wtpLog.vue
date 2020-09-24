@@ -97,7 +97,7 @@
             <el-form-item :label="$t('wtpLog.completedTaskCount')" label-width="200px">
               <span>{{ props.row.completedTaskCount }}</span>
             </el-form-item>
-            <el-form-item :label="$t('wtpLog.activeCount')" label-width="200px">
+            <el-form-item :label="$t('wtpLog.queueLength')" label-width="200px">
               <span>{{ props.row.queueSize + props.row.queueRemainingCapacity }}</span>
             </el-form-item>
             <el-form-item :label="$t('wtpLog.queueSize')" label-width="200px">
@@ -130,7 +130,7 @@
               <span>{{ props.row.maximumTime }}</span>
             </el-form-item>
             <el-form-item :label="$t('wtpLog.averageTime')" label-width="200px">
-              <span>{{ numberPercentDiv(props.row.totalTime, props.row.taskCount, 2) }}</span>
+              <span>{{ props.row.totalTime === 0 ? 0 : numberDiv(props.row.totalTime, props.row.completedTaskCount, 0) }}</span>
             </el-form-item>
           </el-form>
         </template>
@@ -324,6 +324,9 @@ export default {
     },
     numberPercentDiv(arg1, arg2, digit) {
       return ((arg1 / arg2) * 100).toFixed(digit)
+    },
+    numberDiv(arg1, arg2, digit) {
+      return (arg1 / arg2).toFixed(digit)
     }
   }
 }

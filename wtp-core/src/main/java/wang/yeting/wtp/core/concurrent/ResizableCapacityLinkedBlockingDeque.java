@@ -9,11 +9,9 @@ import java.util.function.Consumer;
 
 /**
  * @author : weipeng
- * @version : 1.0
- * @date : 2020-07-01 20:22
+ * @date : 2020-09-24 15:30
  */
-
-public class ResizableCapacityLinkedBlockingQueue<E>
+public class ResizableCapacityLinkedBlockingDeque<E>
         extends AbstractQueue<E>
         implements BlockingDeque<E>, java.io.Serializable {
 
@@ -123,26 +121,28 @@ public class ResizableCapacityLinkedBlockingQueue<E>
     private final Condition notFull = lock.newCondition();
 
     /**
-     * Creates a {@code ResizableCapacityLinkedBlockIngQueue} with a capacity of
+     * Creates a {@code ResizableCapacityLinkedBlockingDeque} with a capacity of
      * {@link Integer#MAX_VALUE}.
      */
-    public ResizableCapacityLinkedBlockingQueue() {
+    public ResizableCapacityLinkedBlockingDeque() {
         this(Integer.MAX_VALUE);
     }
 
     /**
-     * Creates a {@code ResizableCapacityLinkedBlockIngQueue} with the given (fixed) capacity.
+     * Creates a {@code ResizableCapacityLinkedBlockingDeque} with the given (fixed) capacity.
      *
      * @param capacity the capacity of this deque
      * @throws IllegalArgumentException if {@code capacity} is less than 1
      */
-    public ResizableCapacityLinkedBlockingQueue(int capacity) {
-        if (capacity <= 0) throw new IllegalArgumentException();
+    public ResizableCapacityLinkedBlockingDeque(int capacity) {
+        if (capacity <= 0) {
+            throw new IllegalArgumentException();
+        }
         this.capacity = capacity;
     }
 
     /**
-     * Creates a {@code ResizableCapacityLinkedBlockIngQueue} with a capacity of
+     * Creates a {@code ResizableCapacityLinkedBlockingDeque} with a capacity of
      * {@link Integer#MAX_VALUE}, initially containing the elements of
      * the given collection, added in traversal order of the
      * collection's iterator.
@@ -151,7 +151,7 @@ public class ResizableCapacityLinkedBlockingQueue<E>
      * @throws NullPointerException if the specified collection or any
      *                              of its elements are null
      */
-    public ResizableCapacityLinkedBlockingQueue(Collection<? extends E> c) {
+    public ResizableCapacityLinkedBlockingDeque(Collection<? extends E> c) {
         this(Integer.MAX_VALUE);
         final ReentrantLock lock = this.lock;
         lock.lock(); // Never contended, but necessary for visibility
@@ -160,7 +160,7 @@ public class ResizableCapacityLinkedBlockingQueue<E>
                 if (e == null) {
                     throw new NullPointerException();
                 }
-                if (!linkLast(new Node<E>(e))) {
+                if (!linkLast(new Node<>(e))) {
                     throw new IllegalStateException("Deque full");
                 }
             }
@@ -177,8 +177,9 @@ public class ResizableCapacityLinkedBlockingQueue<E>
      */
     private boolean linkFirst(Node<E> node) {
         // assert lock.isHeldByCurrentThread();
-        if (count >= capacity)
+        if (count >= capacity) {
             return false;
+        }
         Node<E> f = first;
         node.next = f;
         first = node;
@@ -197,8 +198,9 @@ public class ResizableCapacityLinkedBlockingQueue<E>
      */
     private boolean linkLast(Node<E> node) {
         // assert lock.isHeldByCurrentThread();
-        if (count >= capacity)
+        if (count >= capacity) {
             return false;
+        }
         Node<E> l = last;
         node.prev = l;
         last = node;
@@ -314,7 +316,7 @@ public class ResizableCapacityLinkedBlockingQueue<E>
         if (e == null) {
             throw new NullPointerException();
         }
-        Node<E> node = new Node<E>(e);
+        Node<E> node = new Node<>(e);
         final ReentrantLock lock = this.lock;
         lock.lock();
         try {
@@ -329,7 +331,9 @@ public class ResizableCapacityLinkedBlockingQueue<E>
      */
     @Override
     public boolean offerLast(E e) {
-        if (e == null) throw new NullPointerException();
+        if (e == null) {
+            throw new NullPointerException();
+        }
         Node<E> node = new Node<E>(e);
         final ReentrantLock lock = this.lock;
         lock.lock();
@@ -392,7 +396,7 @@ public class ResizableCapacityLinkedBlockingQueue<E>
         if (e == null) {
             throw new NullPointerException();
         }
-        Node<E> node = new Node<E>(e);
+        Node<E> node = new Node<>(e);
         long nanos = unit.toNanos(timeout);
         final ReentrantLock lock = this.lock;
         lock.lockInterruptibly();
@@ -416,8 +420,10 @@ public class ResizableCapacityLinkedBlockingQueue<E>
     @Override
     public boolean offerLast(E e, long timeout, TimeUnit unit)
             throws InterruptedException {
-        if (e == null) throw new NullPointerException();
-        Node<E> node = new Node<E>(e);
+        if (e == null) {
+            throw new NullPointerException();
+        }
+        Node<E> node = new Node<>(e);
         long nanos = unit.toNanos(timeout);
         final ReentrantLock lock = this.lock;
         lock.lockInterruptibly();
@@ -618,9 +624,7 @@ public class ResizableCapacityLinkedBlockingQueue<E>
 
     @Override
     public boolean removeLastOccurrence(Object o) {
-        if (o == null) {
-            return false;
-        }
+        if (o == null) return false;
         final ReentrantLock lock = this.lock;
         lock.lock();
         try {
@@ -994,6 +998,7 @@ public class ResizableCapacityLinkedBlockingQueue<E>
                 a = (T[]) java.lang.reflect.Array.newInstance
                         (a.getClass().getComponentType(), count);
             }
+
             int k = 0;
             for (Node<E> p = first; p != null; p = p.next) {
                 a[k++] = (T) p.item;
@@ -1086,7 +1091,7 @@ public class ResizableCapacityLinkedBlockingQueue<E>
     }
 
     /**
-     * Base class for Iterators for ResizableCapacityLinkedBlockIngQueue
+     * Base class for Iterators for ResizableCapacityLinkedBlockingDeque
      */
     private abstract class AbstractItr implements Iterator<E> {
         /**
@@ -1114,7 +1119,7 @@ public class ResizableCapacityLinkedBlockingQueue<E>
 
         AbstractItr() {
             // set to initial position
-            final ReentrantLock lock = ResizableCapacityLinkedBlockingQueue.this.lock;
+            final ReentrantLock lock = ResizableCapacityLinkedBlockingDeque.this.lock;
             lock.lock();
             try {
                 next = firstNode();
@@ -1149,7 +1154,7 @@ public class ResizableCapacityLinkedBlockingQueue<E>
          * Advances next.
          */
         void advance() {
-            final ReentrantLock lock = ResizableCapacityLinkedBlockingQueue.this.lock;
+            final ReentrantLock lock = ResizableCapacityLinkedBlockingDeque.this.lock;
             lock.lock();
             try {
                 // assert next != null;
@@ -1176,13 +1181,14 @@ public class ResizableCapacityLinkedBlockingQueue<E>
             return x;
         }
 
+        @Override
         public void remove() {
             Node<E> n = lastRet;
             if (n == null) {
                 throw new IllegalStateException();
             }
             lastRet = null;
-            final ReentrantLock lock = ResizableCapacityLinkedBlockingQueue.this.lock;
+            final ReentrantLock lock = ResizableCapacityLinkedBlockingDeque.this.lock;
             lock.lock();
             try {
                 if (n.item != null) {
@@ -1229,13 +1235,13 @@ public class ResizableCapacityLinkedBlockingQueue<E>
      */
     static final class LBDSpliterator<E> implements Spliterator<E> {
         static final int MAX_BATCH = 1 << 25;  // max batch array size;
-        final ResizableCapacityLinkedBlockingQueue<E> queue;
+        final ResizableCapacityLinkedBlockingDeque<E> queue;
         Node<E> current;    // current node; null until initialized
         int batch;          // batch size for splits
         boolean exhausted;  // true when no more nodes
         long est;           // size estimate
 
-        LBDSpliterator(ResizableCapacityLinkedBlockingQueue<E> queue) {
+        LBDSpliterator(ResizableCapacityLinkedBlockingDeque<E> queue) {
             this.queue = queue;
             this.est = queue.size();
         }
@@ -1248,7 +1254,7 @@ public class ResizableCapacityLinkedBlockingQueue<E>
         @Override
         public Spliterator<E> trySplit() {
             Node<E> h;
-            final ResizableCapacityLinkedBlockingQueue<E> q = this.queue;
+            final ResizableCapacityLinkedBlockingDeque<E> q = this.queue;
             int b = batch;
             int n = (b <= 0) ? 1 : (b >= MAX_BATCH) ? MAX_BATCH : b + 1;
             if (!exhausted &&
@@ -1290,7 +1296,7 @@ public class ResizableCapacityLinkedBlockingQueue<E>
             if (action == null) {
                 throw new NullPointerException();
             }
-            final ResizableCapacityLinkedBlockingQueue<E> q = this.queue;
+            final ResizableCapacityLinkedBlockingDeque<E> q = this.queue;
             final ReentrantLock lock = q.lock;
             if (!exhausted) {
                 exhausted = true;
@@ -1324,7 +1330,7 @@ public class ResizableCapacityLinkedBlockingQueue<E>
             if (action == null) {
                 throw new NullPointerException();
             }
-            final ResizableCapacityLinkedBlockingQueue<E> q = this.queue;
+            final ResizableCapacityLinkedBlockingDeque<E> q = this.queue;
             final ReentrantLock lock = q.lock;
             if (!exhausted) {
                 E e = null;
@@ -1396,8 +1402,9 @@ public class ResizableCapacityLinkedBlockingQueue<E>
             // Write out capacity and any hidden stuff
             s.defaultWriteObject();
             // Write out all elements in the proper order.
-            for (Node<E> p = first; p != null; p = p.next)
+            for (Node<E> p = first; p != null; p = p.next) {
                 s.writeObject(p.item);
+            }
             // Use trailing null as sentinel
             s.writeObject(null);
         } finally {
@@ -1431,3 +1438,4 @@ public class ResizableCapacityLinkedBlockingQueue<E>
     }
 
 }
+
