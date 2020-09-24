@@ -139,7 +139,12 @@
             >{{ $t('wtp.edit') }}
             </el-button>
             <el-tooltip class="item" effect="dark" :content="$t('wtp.sync_content')" placement="top-end">
-              <el-button type="primary" size="small" @click="syncConfigVisibleBtn(scope.row)">{{
+              <el-button
+                v-if="check(scope.row.appId,'UPDATE')"
+                type="primary"
+                size="small"
+                @click="syncConfigVisibleBtn(scope.row)"
+              >{{
                 $t('wtp.sync')
               }}
               </el-button>
@@ -159,7 +164,6 @@
           </el-button-group>
           <el-button-group style="margin-top: 8px;">
             <el-button
-              v-if="check(scope.row.appId,'UPDATE')"
               type="primary"
               size="small"
               @click="toWtpLog(scope.row.name)"

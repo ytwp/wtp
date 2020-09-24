@@ -8,14 +8,17 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import wang.yeting.wtp.admin.bean.User;
 import wang.yeting.wtp.admin.bean.UserAppPermission;
 import wang.yeting.wtp.admin.mapper.UserAppPermissionMapper;
 import wang.yeting.wtp.admin.model.PageResponse;
 import wang.yeting.wtp.admin.model.bo.UserBo;
 import wang.yeting.wtp.admin.model.dto.UserAppPermissionDto;
 import wang.yeting.wtp.admin.model.enums.PermissionEnum;
+import wang.yeting.wtp.admin.model.enums.RoleEnum;
 import wang.yeting.wtp.admin.model.vo.UserAppPermissionVo;
 import wang.yeting.wtp.admin.service.UserAppPermissionService;
+import wang.yeting.wtp.admin.service.UserService;
 import wang.yeting.wtp.admin.util.TokenUtils;
 
 import java.util.*;
@@ -30,6 +33,7 @@ import java.util.stream.Collectors;
 public class UserAppPermissionServiceImpl extends ServiceImpl<UserAppPermissionMapper, UserAppPermission> implements UserAppPermissionService {
 
     private final TokenUtils tokenUtils;
+    private final UserService userService;
 
     @Override
     public List<UserAppPermission> getByUserId(Integer userId) {
@@ -78,7 +82,12 @@ public class UserAppPermissionServiceImpl extends ServiceImpl<UserAppPermissionM
         UserAppPermission userAppPermission = new UserAppPermission();
         BeanUtil.copyProperties(userAppPermissionVo, userAppPermission);
         if (StringUtils.isBlank(userAppPermission.getPermission())) {
-            userAppPermission.setPermission(PermissionEnum.SELECT.getPermission());
+            User user = userService.getById(userAppPermissionVo.getUserId());
+            if (Objects.equals(user.getRole(), RoleEnum.ADMIN.getRole())) {
+                userAppPermission.setPermission(PermissionEnum.ADMIN.getPermission());
+            } else {
+                userAppPermission.setPermission(PermissionEnum.SELECT.getPermission());
+            }
         }
         return save(userAppPermission);
     }

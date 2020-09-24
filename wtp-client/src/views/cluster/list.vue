@@ -89,7 +89,7 @@
 
       <el-table-column align="center" label="Actions">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="updateClusterVisibleBtn(scope.row.id)">
+          <el-button v-if="check(pageQuery.appId)" type="primary" size="small" @click="updateClusterVisibleBtn(scope.row.id)">
             {{ $t('cluster.edit') }}
           </el-button>
           <el-popconfirm
