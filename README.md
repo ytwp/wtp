@@ -23,17 +23,26 @@ The project is based on [ApacheLicense-2.0](http://www.apache.org/licenses/LICEN
 
 ## Features 
 + **统一管理**
-  + 在Web页面可轻松管理不同应用、不同集群、不用池的参数配置
+  + 在Web页面可轻松管理不同应用、不同集群、不用池的参数配置。
   
 + **实时生效**
-  + 在Web页面修改完配置后，客户端能实时（1~3秒）接收到配置，并更新线程池配置。
+  + 在Web页面修改完配置后，客户端能实时（1秒）接收到配置，并更新线程池配置。
 
 + **客户端运行监控**
   + 监控线程池运行状况，进行统计分析，可快速了解线程池当前的工作状况。
 
 * **阈值报警**
   * 支持队列长度、线程活跃度阈值，进行告警。
-
+  
+* **线程数允许日志**
+  * 统计线程池运行状态，线程数，队列数，rejected次数等等...。
+  
+* **动态修改**
+  * 支持修改核心线程数，最大线程数，队列长度，rejected处理方式等等...。
+  
+* **国际化**
+  * Web端支持国际化设置，提供中文、英文两种语言，默认为中文。
+  
 # Usage
   * [接入指南](https://github.com/ytwp/wtp/wiki/%E6%8E%A5%E5%85%A5%E6%8C%87%E5%8D%97)
  
@@ -50,3 +59,7 @@ The project is based on [ApacheLicense-2.0](http://www.apache.org/licenses/LICEN
   </thead>
 </table>
 
+# Screenshots
+![线程池管理页面](https://img.yeting.wang/wtp/3.png)
+![线程池运行报表](https://img.yeting.wang/wtp/5.png)
+![线程池日志页面](https://img.yeting.wang/wtp/1.png)
