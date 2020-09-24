@@ -13,12 +13,16 @@ import org.springframework.stereotype.Service;
 import wang.yeting.wtp.admin.bean.WtpLog;
 import wang.yeting.wtp.admin.mapper.WtpLogMapper;
 import wang.yeting.wtp.admin.model.PageResponse;
-import wang.yeting.wtp.admin.model.Result;
+import wang.yeting.wtp.admin.model.bo.UserBo;
+import wang.yeting.wtp.admin.model.enums.PermissionEnum;
 import wang.yeting.wtp.admin.model.vo.WtpLogVo;
 import wang.yeting.wtp.admin.service.WtpLogService;
+import wang.yeting.wtp.admin.util.TokenUtils;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author : weipeng
@@ -28,6 +32,8 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class WtpLogServiceImpl extends ServiceImpl<WtpLogMapper, WtpLog> implements WtpLogService {
+
+    private final TokenUtils tokenUtils;
 
     @Override
     public WtpLog realTime(WtpLogVo wtpLogVo) {
@@ -72,7 +78,7 @@ public class WtpLogServiceImpl extends ServiceImpl<WtpLogMapper, WtpLog> impleme
     }
 
     @Override
-    public PageResponse<WtpLog> page(WtpLogVo wtpLogVo) {
+    public PageResponse<WtpLog> page(WtpLogVo wtpLogVo, UserBo userBo) {
         LambdaQueryWrapper<WtpLog> lambdaQueryWrapper = new LambdaQueryWrapper<WtpLog>()
                 .eq(StringUtils.isNotBlank(wtpLogVo.getAppId()), WtpLog::getAppId, wtpLogVo.getAppId())
                 .eq(StringUtils.isNotBlank(wtpLogVo.getClusterId()), WtpLog::getClusterId, wtpLogVo.getClusterId())
@@ -81,6 +87,17 @@ public class WtpLogServiceImpl extends ServiceImpl<WtpLogMapper, WtpLog> impleme
                 .ge(Objects.nonNull(wtpLogVo.getStartTime()), WtpLog::getLogTime, wtpLogVo.getStartTime())
                 .le(Objects.nonNull(wtpLogVo.getEndTime()), WtpLog::getLogTime, wtpLogVo.getEndTime())
                 .orderByAsc(WtpLog::getLogTime);
+        if (!tokenUtils.checkSuperAdmin(userBo)) {
+            List<String> permissions = userBo.getPermissions();
+            Set<String> appIdSet = new HashSet<>();
+            for (String permission : permissions) {
+                if (permission.contains(PermissionEnum.ADMIN.getPermission()) || permission.contains(PermissionEnum.SELECT.getPermission())) {
+                    String[] split = StringUtils.split(permission, TokenUtils.PERMISSION_SPACE_MARK);
+                    appIdSet.add(split[0]);
+                }
+            }
+            lambdaQueryWrapper.in(WtpLog::getAppId, appIdSet);
+        }
         IPage<WtpLog> page = page(new Page<>(wtpLogVo.getPage(), wtpLogVo.getSize()), lambdaQueryWrapper);
         return new PageResponse<WtpLog>().setList(page.getRecords()).setPage(page.getPages()).setTotal(page.getTotal());
     }

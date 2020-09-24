@@ -2,6 +2,7 @@ package wang.yeting.wtp.admin.service;
 
 import wang.yeting.wtp.admin.bean.WtpLog;
 import wang.yeting.wtp.admin.model.PageResponse;
+import wang.yeting.wtp.admin.model.bo.UserBo;
 import wang.yeting.wtp.admin.model.vo.WtpLogVo;
 
 import java.util.List;
@@ -43,5 +44,5 @@ public interface WtpLogService {
      * @param wtpLogVo
      * @return
      */
-    PageResponse<WtpLog> page(WtpLogVo wtpLogVo);
+    PageResponse<WtpLog> page(WtpLogVo wtpLogVo, UserBo userBo);
 }

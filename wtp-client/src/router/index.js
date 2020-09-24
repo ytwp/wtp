@@ -185,7 +185,7 @@ export const asyncRoutes = [{
   component: Layout,
   meta: {
     title: 'log',
-    icon: 'tree',
+    icon: 'el-icon-date',
     roles: ['SUPPER-ADMIN', 'ADMIN', 'USER'] // you can set roles in root nav
   },
   children: [{
