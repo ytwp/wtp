@@ -190,7 +190,8 @@ public class WtpPropertyProcessor implements ApplicationContextAware, SmartIniti
                     .setKeepAliveSeconds(wtp.defaultKeepAliveSeconds())
                     .setName(wtp.value())
                     .setQueueCapacity(wtp.defaultQueueCapacity())
-                    .setQueueName(wtp.defaultQueueName().getQueueName());
+                    .setQueueName(wtp.defaultQueueName().getQueueName())
+                    .setRejectedExecutionHandlerName(wtp.rejectedExecutionHandlerName().getRejectedExecutionHandlerName());
             try {
                 HttpResponse<Boolean> response = adminBiz.registerNoConfigurationWtp(wtpBo);
                 if (response.getStatusCode() == HttpResponse.SUCCESS_CODE) {

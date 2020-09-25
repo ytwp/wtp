@@ -24,4 +24,5 @@ public class WtpBo  implements Serializable {
     private Long keepAliveSeconds;
     private Integer queueCapacity;
     private String queueName;
+    private String rejectedExecutionHandlerName;
 }
