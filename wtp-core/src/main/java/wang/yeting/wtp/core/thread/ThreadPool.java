@@ -38,6 +38,8 @@ public class ThreadPool {
 
     public static void destroy() {
         threadRun = false;
+        TaskPullConfigHandler.destroy();
+        PushLogHandler.destroy();
         scheduledThreadPoolExecutor.shutdown();
         threadPoolExecutor.shutdown();
     }

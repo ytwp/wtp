@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -32,6 +33,8 @@ public class PushLogHandler {
 
     private Set<Map.Entry<String, WtpThreadPoolExecutor>> entrySet;
 
+    private static ScheduledFuture<?> scheduledFuture;
+
     private WtpConfigBean wtpConfigBean;
     private String appId;
     private String clusterId;
@@ -46,7 +49,7 @@ public class PushLogHandler {
         ConcurrentMap<String, WtpThreadPoolExecutor> threadPoolConcurrentMap = wtpThreadPoolFactory.getThreadPoolConcurrentMap();
         this.entrySet = threadPoolConcurrentMap.entrySet();
 
-        ThreadPool.getScheduledThreadPoolExecutor().scheduleWithFixedDelay(() -> {
+        scheduledFuture = ThreadPool.getScheduledThreadPoolExecutor().scheduleWithFixedDelay(() -> {
             try {
                 doPushLog();
             } catch (Exception e) {
@@ -119,4 +122,9 @@ public class PushLogHandler {
         }
     }
 
+    public static void destroy() {
+        if (scheduledFuture != null) {
+            scheduledFuture.cancel(true);
+        }
+    }
 }

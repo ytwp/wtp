@@ -7,6 +7,8 @@ import wang.yeting.wtp.admin.factory.WtpFactory;
 import wang.yeting.wtp.admin.service.WtpService;
 
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author : weipeng
@@ -18,19 +20,20 @@ public class WtpMonitorHelper {
 
     private WtpService wtpService;
 
+    private static ScheduledFuture<?> scheduledFuture;
+
     public WtpMonitorHelper(WtpService wtpService) {
         this.wtpService = wtpService;
     }
 
-    public void wtpMonitor() {
-        while (MainThreadPool.monitorRun) {
+    public void wtpMonitor(Long configRefreshSecond) {
+        scheduledFuture = MainThreadPool.getScheduledThreadPoolExecutor().scheduleAtFixedRate(() -> {
             try {
                 doWtpMonitor();
-                Thread.sleep(300000L);
             } catch (Exception e) {
                 log.error("wtp ------> doWtpMonitor Exception = [{}]. ", e);
             }
-        }
+        }, configRefreshSecond, configRefreshSecond, TimeUnit.SECONDS);
     }
 
     private void doWtpMonitor() {
@@ -42,4 +45,9 @@ public class WtpMonitorHelper {
         wtpConfigFactory.loadConfig(wtpList);
     }
 
+    public static void destroy() {
+        if (scheduledFuture != null) {
+            scheduledFuture.cancel(true);
+        }
+    }
 }

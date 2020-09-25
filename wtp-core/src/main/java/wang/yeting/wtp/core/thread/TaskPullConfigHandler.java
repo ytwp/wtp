@@ -7,6 +7,7 @@ import wang.yeting.wtp.core.factory.WtpThreadPoolFactory;
 import wang.yeting.wtp.core.util.HttpResponse;
 
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -17,8 +18,10 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class TaskPullConfigHandler {
 
+    private static ScheduledFuture<?> scheduledFuture;
+
     public void taskPullConfig(List<AdminBiz> adminBizList) {
-        ThreadPool.getScheduledThreadPoolExecutor().scheduleWithFixedDelay(() -> {
+        scheduledFuture = ThreadPool.getScheduledThreadPoolExecutor().scheduleWithFixedDelay(() -> {
             try {
                 doTaskPullConfig(adminBizList);
             } catch (Exception e) {
@@ -48,5 +51,9 @@ public class TaskPullConfigHandler {
         wtpThreadPoolFactory.refreshConfig(configEvent);
     }
 
-
+    public static void destroy() {
+        if (scheduledFuture != null) {
+            scheduledFuture.cancel(true);
+        }
+    }
 }

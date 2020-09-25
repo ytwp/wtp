@@ -4,21 +4,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.SmartInitializingSingleton;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import wang.yeting.wtp.admin.bean.Wtp;
+import wang.yeting.wtp.admin.factory.WtpConfigFactory;
+import wang.yeting.wtp.admin.factory.WtpFactory;
 import wang.yeting.wtp.admin.service.WtpRegistryService;
 import wang.yeting.wtp.admin.service.WtpService;
 import wang.yeting.wtp.admin.thread.MainThreadPool;
 import wang.yeting.wtp.admin.thread.PullConfigMonitorHelper;
 import wang.yeting.wtp.admin.thread.WtpMonitorHelper;
 import wang.yeting.wtp.admin.thread.WtpRegistryMonitorHelper;
-import wang.yeting.wtp.core.concurrent.ResizableCapacityLinkedBlockingQueue;
+import wang.yeting.wtp.admin.util.RedisUtils;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * @author : weipeng
@@ -29,6 +31,12 @@ import java.util.concurrent.TimeUnit;
 public class WtpHelperConfig implements ApplicationContextAware, SmartInitializingSingleton, DisposableBean {
 
     private ApplicationContext applicationContext;
+
+    @Value("${config.refresh.second}")
+    private Long configRefreshSecond;
+
+    @Value("${registry.monitor.second}")
+    private Long registryMonitorSecond;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -43,6 +51,8 @@ public class WtpHelperConfig implements ApplicationContextAware, SmartInitializi
 
     @Override
     public void afterSingletonsInstantiated() {
+        initFactory();
+
         initMainThreadPool();
 
         registryMonitor();
@@ -50,6 +60,20 @@ public class WtpHelperConfig implements ApplicationContextAware, SmartInitializi
         wtpMonitor();
 
         pullConfigMonitor();
+    }
+
+    private void initFactory(){
+        RedisUtils redisUtils = applicationContext.getBean(RedisUtils.class);
+        WtpFactory.refreshInstance();
+        WtpFactory wtpFactory = WtpFactory.getInstance();
+        WtpConfigFactory.refreshInstance(redisUtils,configRefreshSecond);
+        WtpConfigFactory wtpConfigFactory = WtpConfigFactory.getInstance();
+
+        WtpService wtpService = applicationContext.getBean(WtpService.class);
+        List<Wtp> wtpList = wtpService.initConfigFactory();
+
+        wtpFactory.loadWtp(wtpList);
+        wtpConfigFactory.loadConfig(wtpList);
     }
 
     private void pullConfigMonitor() {
@@ -65,23 +89,17 @@ public class WtpHelperConfig implements ApplicationContextAware, SmartInitializi
     }
 
     private void initMainThreadPool() {
-        MainThreadPool.loadMainThreadPool(new ThreadPoolExecutor(10, 10, 60, TimeUnit.SECONDS, new ResizableCapacityLinkedBlockingQueue<>(10), new ThreadFactory() {
-                    @Override
-                    public Thread newThread(Runnable r) {
-                        return new Thread(r, "wtp main-" + r.hashCode());
-                    }
-                }), Executors.newCachedThreadPool()
+        MainThreadPool.loadMainThreadPool(new ThreadPoolExecutor(5, 10, 60, TimeUnit.SECONDS, new SynchronousQueue<>(), r -> new Thread(r, "wtp main-" + r.hashCode()))
+                , Executors.newCachedThreadPool()
+                , new ScheduledThreadPoolExecutor(5, r -> new Thread(r, "wtp Scheduled-" + r.hashCode()))
         );
     }
 
     private void registryMonitor() {
         try {
-            MainThreadPool.execute(() -> {
-                        WtpRegistryService wtpRegistryService = (WtpRegistryService) applicationContext.getBean("wtpRegistryServiceImpl");
-                        WtpRegistryMonitorHelper wtpRegistryMonitorHelper = new WtpRegistryMonitorHelper(wtpRegistryService);
-                        wtpRegistryMonitorHelper.registryMonitor();
-                    }
-            );
+            WtpRegistryService wtpRegistryService = (WtpRegistryService) applicationContext.getBean("wtpRegistryServiceImpl");
+            WtpRegistryMonitorHelper wtpRegistryMonitorHelper = new WtpRegistryMonitorHelper(wtpRegistryService);
+            wtpRegistryMonitorHelper.registryMonitor(registryMonitorSecond);
         } catch (Exception e) {
             throw new RuntimeException("registryMonitor");
         }
@@ -89,12 +107,9 @@ public class WtpHelperConfig implements ApplicationContextAware, SmartInitializi
 
     private void wtpMonitor() {
         try {
-            MainThreadPool.execute(() -> {
-                        WtpService wtpService = (WtpService) applicationContext.getBean("wtpServiceImpl");
-                        WtpMonitorHelper wtpMonitorHelper = new WtpMonitorHelper(wtpService);
-                        wtpMonitorHelper.wtpMonitor();
-                    }
-            );
+            WtpService wtpService = (WtpService) applicationContext.getBean("wtpServiceImpl");
+            WtpMonitorHelper wtpMonitorHelper = new WtpMonitorHelper(wtpService);
+            wtpMonitorHelper.wtpMonitor(configRefreshSecond);
         } catch (Exception e) {
             throw new RuntimeException("pushHealthLog");
         }

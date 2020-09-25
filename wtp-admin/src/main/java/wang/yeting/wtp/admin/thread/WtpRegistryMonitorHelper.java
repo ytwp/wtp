@@ -6,6 +6,8 @@ import wang.yeting.wtp.admin.bean.WtpRegistry;
 import wang.yeting.wtp.admin.service.WtpRegistryService;
 
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author : weipeng
@@ -17,19 +19,20 @@ public class WtpRegistryMonitorHelper {
 
     private WtpRegistryService wtpRegistryService;
 
+    private static ScheduledFuture<?> scheduledFuture;
+
     public WtpRegistryMonitorHelper(WtpRegistryService wtpRegistryService) {
         this.wtpRegistryService = wtpRegistryService;
     }
 
-    public void registryMonitor() {
-        while (MainThreadPool.monitorRun) {
+    public void registryMonitor(Long registryMonitorSecond) {
+        scheduledFuture = MainThreadPool.getScheduledThreadPoolExecutor().scheduleWithFixedDelay(() -> {
             try {
                 doRegistryMonitor();
-                Thread.sleep(300000L);
             } catch (Exception e) {
                 log.error("wtp ------> doRegistryMonitor Exception = [{}]. ", e);
             }
-        }
+        }, 0, registryMonitorSecond, TimeUnit.SECONDS);
     }
 
     private void doRegistryMonitor() {
@@ -45,4 +48,9 @@ public class WtpRegistryMonitorHelper {
         }
     }
 
+    public static void destroy() {
+        if (scheduledFuture != null) {
+            scheduledFuture.cancel(true);
+        }
+    }
 }

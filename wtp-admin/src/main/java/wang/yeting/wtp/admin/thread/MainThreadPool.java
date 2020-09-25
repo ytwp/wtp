@@ -13,11 +13,14 @@ public class MainThreadPool {
 
     private static ExecutorService executorService = null;
 
+    private static ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = null;
+
     public volatile static boolean monitorRun = true;
 
-    public static void loadMainThreadPool(ThreadPoolExecutor threadPoolExecutor, ExecutorService pullConfigExecutor) {
+    public static void loadMainThreadPool(ThreadPoolExecutor threadPoolExecutor, ExecutorService pullConfigExecutor, ScheduledThreadPoolExecutor scheduledThreadPool) {
         threadPool = threadPoolExecutor;
         executorService = pullConfigExecutor;
+        scheduledThreadPoolExecutor = scheduledThreadPool;
     }
 
     public static void execute(Runnable command) {
@@ -28,9 +31,16 @@ public class MainThreadPool {
         executorService.execute(command);
     }
 
+    public static ScheduledThreadPoolExecutor getScheduledThreadPoolExecutor() {
+        return scheduledThreadPoolExecutor;
+    }
+
     public static void destroy() {
         monitorRun = false;
+        WtpRegistryMonitorHelper.destroy();
+        WtpMonitorHelper.destroy();
         executorService.shutdown();
         threadPool.shutdown();
+        scheduledThreadPoolExecutor.shutdown();
     }
 }

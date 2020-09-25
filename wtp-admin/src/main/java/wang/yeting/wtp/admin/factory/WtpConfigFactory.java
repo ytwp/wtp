@@ -35,12 +35,15 @@ public class WtpConfigFactory {
 
     private static WtpConfigFactory wtpConfigFactory;
 
+    private static Long configExpire;
+
     public static WtpConfigFactory getInstance() {
         return wtpConfigFactory;
     }
 
-    public static void refreshInstance(RedisUtils redisUtils) {
+    public static void refreshInstance(RedisUtils redisUtils, Long configRefreshSecond) {
         wtpConfigFactory = new WtpConfigFactory(redisUtils);
+        configExpire = configRefreshSecond + 60;
     }
 
     private WtpConfigFactory(RedisUtils redisUtils) {
@@ -98,7 +101,7 @@ public class WtpConfigFactory {
             String appIdAndClusterId = entry.getKey();
             String[] split = appIdAndClusterId.split("-_-");
             List list = entry.getValue();
-            redisUtils.set(String.format(CONFIG_ALL_CLUSTER_ID, split[0], split[1]), list);
+            redisUtils.set(String.format(CONFIG_ALL_CLUSTER_ID, split[0], split[1]), list, configExpire);
         }
         redisUtils.hashPutAllList(CONFIG_ALL, appMap);
     }
@@ -139,7 +142,7 @@ public class WtpConfigFactory {
                 changeConfigList.add(config);
                 String key = String.format(CONFIG_CHANGE_CLUSTER_ID, wtp.getAppId(), wtp.getClusterId());
                 redisUtils.hashPut(key, wtpRegistry.getIp(), changeConfigList);
-                redisUtils.expire(key, 600);
+                redisUtils.expire(key, configExpire);
             }
         } catch (Exception e) {
             e.printStackTrace();
