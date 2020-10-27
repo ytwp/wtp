@@ -78,7 +78,7 @@ public class WtpPropertyProcessor implements ApplicationContextAware, SmartIniti
     }
 
     private void start() {
-        log.error("wtp ------> start.");
+        log.warn("wtp ------> start.");
 
         //生成注册对象
         initAdminBizList();
@@ -95,7 +95,7 @@ public class WtpPropertyProcessor implements ApplicationContextAware, SmartIniti
         //定时去拉取全部配置
         taskPullConfig();
 
-        log.error("wtp ------> started.");
+        log.warn("wtp ------> started.");
     }
 
     private void taskPullConfig() {

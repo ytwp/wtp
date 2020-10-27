@@ -37,8 +37,8 @@ public class MainThreadPool {
 
     public static void destroy() {
         monitorRun = false;
-        WtpRegistryMonitorHelper.destroy();
-        WtpMonitorHelper.destroy();
+        WtpRegistryMonitorHandler.destroy();
+        WtpMonitorHandler.destroy();
         executorService.shutdown();
         threadPool.shutdown();
         scheduledThreadPoolExecutor.shutdown();

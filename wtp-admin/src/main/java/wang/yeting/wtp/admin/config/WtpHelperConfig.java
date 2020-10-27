@@ -14,9 +14,9 @@ import wang.yeting.wtp.admin.factory.WtpFactory;
 import wang.yeting.wtp.admin.service.WtpRegistryService;
 import wang.yeting.wtp.admin.service.WtpService;
 import wang.yeting.wtp.admin.thread.MainThreadPool;
-import wang.yeting.wtp.admin.thread.PullConfigMonitorHelper;
-import wang.yeting.wtp.admin.thread.WtpMonitorHelper;
-import wang.yeting.wtp.admin.thread.WtpRegistryMonitorHelper;
+import wang.yeting.wtp.admin.thread.PullConfigMonitorHandler;
+import wang.yeting.wtp.admin.thread.WtpMonitorHandler;
+import wang.yeting.wtp.admin.thread.WtpRegistryMonitorHandler;
 import wang.yeting.wtp.admin.util.RedisUtils;
 
 import java.util.List;
@@ -79,8 +79,8 @@ public class WtpHelperConfig implements ApplicationContextAware, SmartInitializi
     private void pullConfigMonitor() {
         try {
             MainThreadPool.execute(() -> {
-                        PullConfigMonitorHelper pullConfigMonitorHelper = new PullConfigMonitorHelper();
-                        pullConfigMonitorHelper.pullConfigMonitor();
+                        PullConfigMonitorHandler pullConfigMonitorHandler = new PullConfigMonitorHandler();
+                        pullConfigMonitorHandler.pullConfigMonitor();
                     }
             );
         } catch (Exception e) {
@@ -98,8 +98,8 @@ public class WtpHelperConfig implements ApplicationContextAware, SmartInitializi
     private void registryMonitor() {
         try {
             WtpRegistryService wtpRegistryService = (WtpRegistryService) applicationContext.getBean("wtpRegistryServiceImpl");
-            WtpRegistryMonitorHelper wtpRegistryMonitorHelper = new WtpRegistryMonitorHelper(wtpRegistryService);
-            wtpRegistryMonitorHelper.registryMonitor(registryMonitorSecond);
+            WtpRegistryMonitorHandler wtpRegistryMonitorHandler = new WtpRegistryMonitorHandler(wtpRegistryService);
+            wtpRegistryMonitorHandler.registryMonitor(registryMonitorSecond);
         } catch (Exception e) {
             throw new RuntimeException("registryMonitor");
         }
@@ -108,8 +108,8 @@ public class WtpHelperConfig implements ApplicationContextAware, SmartInitializi
     private void wtpMonitor() {
         try {
             WtpService wtpService = (WtpService) applicationContext.getBean("wtpServiceImpl");
-            WtpMonitorHelper wtpMonitorHelper = new WtpMonitorHelper(wtpService);
-            wtpMonitorHelper.wtpMonitor(configRefreshSecond);
+            WtpMonitorHandler wtpMonitorHandler = new WtpMonitorHandler(wtpService);
+            wtpMonitorHandler.wtpMonitor(configRefreshSecond);
         } catch (Exception e) {
             throw new RuntimeException("pushHealthLog");
         }

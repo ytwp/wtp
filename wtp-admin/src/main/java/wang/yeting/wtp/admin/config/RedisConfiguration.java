@@ -22,7 +22,6 @@ public class RedisConfiguration {
         redis.setKeySerializer(stringRedisSerializer);
         redis.setValueSerializer(stringRedisSerializer);
         redis.setHashKeySerializer(stringRedisSerializer);
-        redis.setHashValueSerializer(stringRedisSerializer);
 
         redis.afterPropertiesSet();
 

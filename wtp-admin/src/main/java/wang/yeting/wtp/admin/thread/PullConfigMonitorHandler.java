@@ -1,7 +1,7 @@
 package wang.yeting.wtp.admin.thread;
 
 import lombok.extern.slf4j.Slf4j;
-import wang.yeting.wtp.admin.handler.DeferredResultHelper;
+import wang.yeting.wtp.admin.handler.DeferredResultHandler;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,18 +15,18 @@ import java.util.concurrent.ConcurrentMap;
  */
 
 @Slf4j
-public class PullConfigMonitorHelper {
+public class PullConfigMonitorHandler {
 
-    private static ConcurrentMap<String, DeferredResultHelper> deferredResultHelperMap = new ConcurrentHashMap<>();
+    private static ConcurrentMap<String, DeferredResultHandler> DeferredResultHandlerMap = new ConcurrentHashMap<>();
 
-    public static void add(DeferredResultHelper deferredResultHelper) {
-        String key = deferredResultHelper.getAppId() + deferredResultHelper.getClusterId() + deferredResultHelper.getIp();
-        deferredResultHelperMap.put(key, deferredResultHelper);
+    public static void add(DeferredResultHandler DeferredResultHandler) {
+        String key = DeferredResultHandler.getAppId() + DeferredResultHandler.getClusterId() + DeferredResultHandler.getIp();
+        DeferredResultHandlerMap.put(key, DeferredResultHandler);
     }
 
-    public static void remove(DeferredResultHelper deferredResultHelper) {
-        String key = deferredResultHelper.getAppId() + deferredResultHelper.getClusterId() + deferredResultHelper.getIp();
-        deferredResultHelperMap.remove(key);
+    public static void remove(DeferredResultHandler DeferredResultHandler) {
+        String key = DeferredResultHandler.getAppId() + DeferredResultHandler.getClusterId() + DeferredResultHandler.getIp();
+        DeferredResultHandlerMap.remove(key);
     }
 
     public void pullConfigMonitor() {
@@ -46,20 +46,20 @@ public class PullConfigMonitorHelper {
      */
     private void doPullConfigMonitor() {
         log.info("wtp ------> doPullConfigMonitor . ");
-        if (deferredResultHelperMap.size() == 0) {
+        if (DeferredResultHandlerMap.size() == 0) {
             return;
         }
-        Collection<DeferredResultHelper> deferredResultHelperCollection = deferredResultHelperMap.values();
-        ArrayList<DeferredResultHelper> list = new ArrayList<>(deferredResultHelperCollection);
+        Collection<DeferredResultHandler> DeferredResultHandlerCollection = DeferredResultHandlerMap.values();
+        ArrayList<DeferredResultHandler> list = new ArrayList<>(DeferredResultHandlerCollection);
         int n = list.size() / 10 + (list.size() % 10 > 0 ? 1 : 0);
         if (n <= 0) {
             return;
         }
-        List<List<DeferredResultHelper>> lists = averageAssign(list, n);
-        for (List<DeferredResultHelper> deferredResultHelpers : lists) {
+        List<List<DeferredResultHandler>> lists = averageAssign(list, n);
+        for (List<DeferredResultHandler> DeferredResultHandlers : lists) {
             MainThreadPool.pullExecute(() -> {
-                for (DeferredResultHelper deferredResultHelper : deferredResultHelpers) {
-                    deferredResultHelper.monitor();
+                for (DeferredResultHandler DeferredResultHandler : DeferredResultHandlers) {
+                    DeferredResultHandler.monitor();
                 }
             });
         }

@@ -11,14 +11,14 @@ import wang.yeting.wtp.admin.bean.Wtp;
 import wang.yeting.wtp.admin.bean.WtpLog;
 import wang.yeting.wtp.admin.bean.WtpRegistry;
 import wang.yeting.wtp.admin.factory.WtpConfigFactory;
-import wang.yeting.wtp.admin.handler.DeferredResultHelper;
+import wang.yeting.wtp.admin.handler.DeferredResultHandler;
 import wang.yeting.wtp.admin.model.vo.WtpVo;
 import wang.yeting.wtp.admin.service.ServerService;
 import wang.yeting.wtp.admin.service.WtpLogService;
 import wang.yeting.wtp.admin.service.WtpRegistryService;
 import wang.yeting.wtp.admin.service.WtpService;
-import wang.yeting.wtp.admin.thread.PullConfigMonitorHelper;
-import wang.yeting.wtp.admin.thread.WtpLogMonitorHelper;
+import wang.yeting.wtp.admin.thread.PullConfigMonitorHandler;
+import wang.yeting.wtp.admin.thread.WtpLogMonitorHandler;
 import wang.yeting.wtp.core.biz.model.*;
 import wang.yeting.wtp.core.util.HttpResponse;
 
@@ -39,7 +39,7 @@ public class ServerServiceImpl implements ServerService {
     private final WtpService wtpService;
     private final WtpLogService wtpLogService;
     private final WtpRegistryService wtpRegistryService;
-    private final WtpLogMonitorHelper wtpLogMonitorHelper;
+    private final WtpLogMonitorHandler wtpLogMonitorHandler;
 
     @Value("${pull.config.hold.count:30}")
     private Integer pullConfigHoldCount;
@@ -67,7 +67,7 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     public Boolean pushLog(WtpLogBo wtpLogBo) {
-        wtpLogMonitorHelper.wtpLogMonitor(wtpLogBo);
+        wtpLogMonitorHandler.wtpLogMonitor(wtpLogBo);
         WtpLog wtpLog = new WtpLog();
         BeanUtils.copyProperties(wtpLogBo, wtpLog);
         return wtpLogService.create(wtpLog);
@@ -86,11 +86,11 @@ public class ServerServiceImpl implements ServerService {
 
         DeferredResult<HttpResponse<ConfigChangeEvent>> deferredResult = new DeferredResult<>(pullConfigHoldCount * 1000L, DEFAULT_HTTP_RESPONSE);
 
-        DeferredResultHelper deferredResultHelper = new DeferredResultHelper(appId, clusterId, ip, pullConfigHoldCount, deferredResult);
+        DeferredResultHandler DeferredResultHandler = new DeferredResultHandler(appId, clusterId, ip, pullConfigHoldCount, deferredResult);
 
-        PullConfigMonitorHelper.add(deferredResultHelper);
+        PullConfigMonitorHandler.add(DeferredResultHandler);
 
-        deferredResult.onCompletion(() -> PullConfigMonitorHelper.remove(deferredResultHelper));
+        deferredResult.onCompletion(() -> PullConfigMonitorHandler.remove(DeferredResultHandler));
 
         return deferredResult;
     }

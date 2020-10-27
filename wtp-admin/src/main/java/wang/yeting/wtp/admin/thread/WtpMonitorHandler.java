@@ -16,13 +16,13 @@ import java.util.concurrent.TimeUnit;
  */
 
 @Slf4j
-public class WtpMonitorHelper {
+public class WtpMonitorHandler {
 
     private WtpService wtpService;
 
     private static ScheduledFuture<?> scheduledFuture;
 
-    public WtpMonitorHelper(WtpService wtpService) {
+    public WtpMonitorHandler(WtpService wtpService) {
         this.wtpService = wtpService;
     }
 

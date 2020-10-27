@@ -15,13 +15,13 @@ import java.util.concurrent.TimeUnit;
  */
 
 @Slf4j
-public class WtpRegistryMonitorHelper {
+public class WtpRegistryMonitorHandler {
 
     private WtpRegistryService wtpRegistryService;
 
     private static ScheduledFuture<?> scheduledFuture;
 
-    public WtpRegistryMonitorHelper(WtpRegistryService wtpRegistryService) {
+    public WtpRegistryMonitorHandler(WtpRegistryService wtpRegistryService) {
         this.wtpRegistryService = wtpRegistryService;
     }
 

@@ -17,7 +17,7 @@ import wang.yeting.wtp.core.biz.model.WtpLogBo;
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class WtpLogMonitorHelper {
+public class WtpLogMonitorHandler {
 
     private final EmailService emailService;
 
