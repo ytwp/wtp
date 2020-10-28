@@ -1,7 +1,7 @@
 # WTP - A reliable thread pool management system
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/ytwp/wtp)
-[![GitHub Release](https://img.shields.io/badge/release-v1.0.0-blue)](https://github.com/ytwp/wtp/releases)
+[![Gitee Release](https://img.shields.io/badge/release-v1.0.0-blue)](https://gitee.com/ytwp/wtp/releases)
 [![Maven Central Repo](https://img.shields.io/badge/maven%20central-v1.0.0-blue)](https://search.maven.org/artifact/wang.yeting/wtp-core)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -60,7 +60,7 @@ The project is based on [ApacheLicense-2.0](http://www.apache.org/licenses/LICEN
 # Support
 <table>
   <thead>
-    <th>群号：1041653365</th>
+    <th>QQ交流群号：1041653365</th>
   </thead>
 </table>
 
