@@ -18,7 +18,7 @@ WTP 是一个轻量级线程池管理系统，能够集中管理不同应用、�
 - client连接地址：http://121.36.54.20:5000
 - [演示环境部署方案](https://github.com/ytwp/wtp/wiki/%E5%88%86%E5%B8%83%E5%BC%8F%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-%E6%96%B9%E5%BC%8F)
 
-> 国内镜像：[gitee镜像](https://gitee.com/ytwp/wtp)
+> github镜像：[github镜像](https://github.com/ytwp/wtp)
 
 # License
 The project is based on [ApacheLicense-2.0](http://www.apache.org/licenses/LICENSE-2.0.txt).
@@ -49,13 +49,13 @@ The project is based on [ApacheLicense-2.0](http://www.apache.org/licenses/LICEN
   * wtp-admin支持HA部署。
   
 # Usage
-  * [接入指南](https://github.com/ytwp/wtp/wiki/%E6%8E%A5%E5%85%A5%E6%8C%87%E5%8D%97)
+  * [接入指南](https://gitee.com/ytwp/wtp/wiki/%E6%8E%A5%E5%85%A5%E6%8C%87%E5%8D%97)
  
 # Release Notes
-  * [发布历史](https://github.com/ytwp/wtp/releases)
+  * [发布历史](https://gitee.com/ytwp/wtp/releases)
 
 # FAQ
-  * [常见问题](https://github.com/ytwp/wtp/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
+  * [常见问题](https://gitee.com/ytwp/wtp/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
 
 # Support
 <table>
