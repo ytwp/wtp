@@ -49,13 +49,13 @@ The project is based on [ApacheLicense-2.0](http://www.apache.org/licenses/LICEN
   * wtp-admin支持HA部署。
   
 # Usage
-  * [接入指南](https://gitee.com/ytwp/wtp/wiki/%E6%8E%A5%E5%85%A5%E6%8C%87%E5%8D%97)
+  * [接入指南](https://gitee.com/ytwp/wtp/wikis/%E6%8E%A5%E5%85%A5%E6%8C%87%E5%8D%97?sort_id=2867497)
  
 # Release Notes
   * [发布历史](https://gitee.com/ytwp/wtp/releases)
 
 # FAQ
-  * [常见问题](https://gitee.com/ytwp/wtp/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
+  * [常见问题](https://gitee.com/ytwp/wtp/wikis/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98?sort_id=2867496)
 
 # Support
 <table>
