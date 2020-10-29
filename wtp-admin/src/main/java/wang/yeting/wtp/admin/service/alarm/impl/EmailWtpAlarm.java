@@ -1,6 +1,7 @@
 package wang.yeting.wtp.admin.service.alarm.impl;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import wang.yeting.wtp.admin.bean.Wtp;
 import wang.yeting.wtp.admin.service.alarm.WtpAlarm;
@@ -18,6 +19,7 @@ import java.util.Properties;
  * @date : 2020-10-28 5:15 下午
  */
 @Component
+@ConditionalOnProperty(name = "email.alarm.enabled", havingValue = "true")
 public class EmailWtpAlarm implements WtpAlarm {
 
     @Value("${email.user}")
