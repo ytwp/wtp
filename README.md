@@ -21,6 +21,8 @@ WTP 是一个轻量级线程池管理系统，能够集中管理不同应用、�
 > gitee：[https://gitee.com/ytwp/wtp](https://gitee.com/ytwp/wtp)
 >
 > github：[https://github.com/ytwp/wtp](https://github.com/ytwp/wtp)
+>
+> oschina：[https://www.oschina.net/p/wtp-admin](https://www.oschina.net/p/wtp-admin)
 
 # License
 The project is based on [ApacheLicense-2.0](http://www.apache.org/licenses/LICENSE-2.0.txt).
@@ -65,6 +67,17 @@ The project is based on [ApacheLicense-2.0](http://www.apache.org/licenses/LICEN
 </table>
 
 # Screenshots
+#### 线程池管理页面:
 ![线程池管理页面](https://img.yeting.wang/wtp/3.png)
+#### 线程池运行报表:
 ![线程池运行报表](https://img.yeting.wang/wtp/5.png)
+#### 线程池日志页面:
 ![线程池日志页面](https://img.yeting.wang/wtp/1.png)
+![线程池日志页面](https://img.yeting.wang/wtp/2.png)
+#### 告警通知页面（可扩展）
+|Email|企业微信|钉钉|
+|:--|:--|:--|
+|![Email](https://img.yeting.wang/wtp/email.jpg)|![企业微信](https://img.yeting.wang/wtp/wecom.jpg)|![钉钉](https://img.yeting.wang/wtp/dingding.jpg)|
+
+
+
