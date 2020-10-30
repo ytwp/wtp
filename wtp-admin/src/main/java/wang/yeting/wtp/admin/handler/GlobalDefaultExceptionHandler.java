@@ -20,22 +20,22 @@ import java.lang.reflect.UndeclaredThrowableException;
 public class GlobalDefaultExceptionHandler {
 
     @ExceptionHandler(value = PermissionException.class)
-    public Result handlerPermissionException(PermissionException exception) {
+    public Result<?> handlerPermissionException(PermissionException exception) {
         return Result.noPermission(exception.getMessage());
     }
 
     @ExceptionHandler(value = LoginException.class)
-    public Result handlerLoginException(LoginException exception) {
+    public Result<?> handlerLoginException(LoginException exception) {
         return Result.tokenExpired(exception.getMessage());
     }
 
     @ExceptionHandler(value = BusinessException.class)
-    public Result handlerBusinessException(BusinessException exception) {
+    public Result<?> handlerBusinessException(BusinessException exception) {
         return Result.exceptionError(exception.getMessage());
     }
 
     @ExceptionHandler(value = UndeclaredThrowableException.class)
-    public Result handlerUndeclaredThrowableException(UndeclaredThrowableException exception) {
+    public Result<?> handlerUndeclaredThrowableException(UndeclaredThrowableException exception) {
         Throwable undeclaredThrowable = exception.getUndeclaredThrowable();
         if (undeclaredThrowable instanceof LoginException) {
             return Result.tokenExpired(undeclaredThrowable.getMessage());
@@ -46,7 +46,7 @@ public class GlobalDefaultExceptionHandler {
     }
 
     @ExceptionHandler(value = Exception.class)
-    public Result handlerException(Exception exception) {
+    public Result<?> handlerException(Exception exception) {
         log.error("handlerException_{}", exception.getMessage());
         return Result.exceptionError(ResultCode.exception.message);
     }

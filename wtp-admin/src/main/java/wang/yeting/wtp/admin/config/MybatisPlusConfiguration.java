@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
  * @date : 2020-05-18 20:36
  */
 @SpringBootConfiguration
-public class MybatisPlusConfig {
+public class MybatisPlusConfiguration {
     @Bean
     public PaginationInterceptor paginationInterceptor() {
         PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
@@ -20,7 +20,7 @@ public class MybatisPlusConfig {
     }
 
     @Bean
-    public ISqlInjector sqlInjector () {
+    public ISqlInjector sqlInjector() {
         return new LogicSqlInjector();
     }
 }

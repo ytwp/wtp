@@ -62,11 +62,11 @@ public class WtpHelperConfig implements ApplicationContextAware, SmartInitializi
         pullConfigMonitor();
     }
 
-    private void initFactory(){
+    private void initFactory() {
         RedisUtils redisUtils = applicationContext.getBean(RedisUtils.class);
         WtpFactory.refreshInstance();
         WtpFactory wtpFactory = WtpFactory.getInstance();
-        WtpConfigFactory.refreshInstance(redisUtils,configRefreshSecond);
+        WtpConfigFactory.refreshInstance(redisUtils, configRefreshSecond);
         WtpConfigFactory wtpConfigFactory = WtpConfigFactory.getInstance();
 
         WtpService wtpService = applicationContext.getBean(WtpService.class);
@@ -84,7 +84,7 @@ public class WtpHelperConfig implements ApplicationContextAware, SmartInitializi
                     }
             );
         } catch (Exception e) {
-            throw new RuntimeException("pullConfigMonitor");
+            throw new RuntimeException("pullConfigMonitor", e);
         }
     }
 
