@@ -36,7 +36,7 @@ The project is based on [ApacheLicense-2.0](http://www.apache.org/licenses/LICEN
 	+ After the configuration of the Web page is modified, the client can receive the configuration in real time (1 second) and update the thread pool parameters to achieve the purpose of dynamic modification.
 
 + **hreshold alarm**
-	* the queue length USES percentage and thread activity percentage to alarm. It has supported mailbox, enterprise WeChat, nail alarm mode, and supports custom alarm mode.
+	* the queue length USES percentage and thread activity percentage to alarm. It has supported Email, WeCom, DingTalk, and supports custom alarm mode.
 
 + **Number of threads running log**
 	* Count the running state of the thread pool, the number of active threads, the maximum number of created threads, the length of the queue, the remaining length of the queue, the length of the queue, the number of tasks completed, the average time to complete the task, the number of occurrences of rejected, the rejected handling and so on... , to quickly understand how the thread pool is working.

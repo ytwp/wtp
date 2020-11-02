@@ -62,7 +62,11 @@ public class WtpAnnotationProcessor implements BeanPostProcessor, ApplicationCon
                 if (wtp == null) {
                     continue;
                 }
-                String name = getName(wtp, "wtp ------> field-wtphandler name invalid, for[" + bean.getClass() + "#" + declaredField + "] .");
+                String name = getName(wtp, "wtp ------> field-wtphandler name invalid, for[" + bean.getClass() + "#" + declaredField.getName() + "] .");
+                if (!declaredField.getType().isAssignableFrom(WtpThreadPoolExecutor.class)) {
+                    throw new WtpConfigException("wtp ------> field-wtphandler type invalid, for[" + bean.getClass() + "#" + declaredField.getName() + "] , " +
+                            "The correct method format like \" private WtpThreadPoolExecutor threadPoolExecutor; \" .");
+                }
                 wtpAnnotationContext.setWtpHandler(name, new FieldWtpHandler(bean, declaredField, wtp));
             }
         }
@@ -72,7 +76,7 @@ public class WtpAnnotationProcessor implements BeanPostProcessor, ApplicationCon
     private String getName(Wtp wtp, String errorLog) {
         String name = wtp.value();
         if (name.trim().length() == 0) {
-            throw new RuntimeException(errorLog);
+            throw new WtpConfigException(errorLog);
         }
         return name;
     }

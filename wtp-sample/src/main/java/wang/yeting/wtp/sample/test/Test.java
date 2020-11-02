@@ -12,6 +12,7 @@ import wang.yeting.wtp.core.enums.RejectedExecutionHandlerEnums;
 
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -62,6 +63,16 @@ public class Test implements WtpAnnotationContextAware {
     private WtpThreadPoolExecutor threadPoolExecutor5;
     @Wtp("test5")
     private WtpThreadPoolExecutor threadPoolExecutor6;
+
+
+    private ExecutorService threadPoolExecutor7;
+    @Wtp("test7")
+    public void setExecutorService(ExecutorService executor) {
+        this.threadPoolExecutor7 = executor;
+    }
+
+    @Wtp("test7")
+    private ExecutorService threadPoolExecutor8;
 
 
     public String getThreadPoolLog() {
