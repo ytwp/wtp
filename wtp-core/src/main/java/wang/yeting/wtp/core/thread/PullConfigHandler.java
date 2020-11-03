@@ -42,7 +42,7 @@ public class PullConfigHandler {
                     if (configChangeEvent.isChanged()) {
                         continue;
                     }
-                    log.info("wtp ------> doPullConfig- configChangeEvent：[{}]", configChangeEvent);
+                    log.info("wtp ------> doPullConfig - configChangeEvent：[{}]", configChangeEvent);
                     changeConfig(configChangeEvent);
                 } else {
                     log.error("wtp ------> doPullConfig failed. ");

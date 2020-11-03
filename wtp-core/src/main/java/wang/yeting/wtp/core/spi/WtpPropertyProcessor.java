@@ -28,9 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * @author : weipeng
@@ -44,7 +42,7 @@ public class WtpPropertyProcessor implements ApplicationContextAware, SmartIniti
 
     private WtpAnnotationContext wtpAnnotationContext;
 
-    private WtpConfigBean wtpConfigBean;
+    private final WtpConfigBean wtpConfigBean;
 
     private static List<AdminBiz> adminBizList;
 
@@ -65,7 +63,7 @@ public class WtpPropertyProcessor implements ApplicationContextAware, SmartIniti
         }
         ThreadPool.destroy();
         WtpThreadPoolFactory.getInstance().destroy();
-        log.error("wtp ------> destroy.");
+        log.warn("wtp ------> destroy.");
     }
 
     @Override
@@ -99,35 +97,26 @@ public class WtpPropertyProcessor implements ApplicationContextAware, SmartIniti
     }
 
     private void taskPullConfig() {
-        ThreadPool.execute(() -> {
-                    TaskPullConfigHandler taskPullConfigHandler = new TaskPullConfigHandler();
-                    taskPullConfigHandler.taskPullConfig(adminBizList);
-                }
-        );
+        TaskPullConfigHandler taskPullConfigHandler = new TaskPullConfigHandler();
+        taskPullConfigHandler.taskPullConfig(adminBizList);
     }
 
     private void initWtpThreadPool() {
-        int poolSize = 3 + adminBizList.size();
+        int maxPoolSize = 3 + adminBizList.size();
         ThreadPool.loadMainThreadPool(
-                new ThreadPoolExecutor(poolSize, poolSize, 60, TimeUnit.SECONDS, new ResizableCapacityLinkedBlockingQueue<>(10), r -> new Thread(r, "wtp main-" + r.hashCode()))
+                new ThreadPoolExecutor(0, maxPoolSize, 60L, TimeUnit.SECONDS, new SynchronousQueue<>(), r -> new Thread(r, "wtp main-" + r.hashCode()))
                 , new ScheduledThreadPoolExecutor(4, r -> new Thread(r, "wtp Scheduled-" + r.hashCode()))
         );
     }
 
     private void pushLog() {
-        ThreadPool.execute(() -> {
-                    PushLogHandler pushLogHandler = new PushLogHandler();
-                    pushLogHandler.pushLog(adminBizList, wtpConfigBean);
-                }
-        );
+        PushLogHandler pushLogHandler = new PushLogHandler();
+        pushLogHandler.pushLog(adminBizList, wtpConfigBean);
     }
 
     private void startPullConfig() {
-        ThreadPool.execute(() -> {
-                    PullConfigHandler pullConfigHandler = new PullConfigHandler();
-                    pullConfigHandler.pullConfig(adminBizList);
-                }
-        );
+        PullConfigHandler pullConfigHandler = new PullConfigHandler();
+        pullConfigHandler.pullConfig(adminBizList);
     }
 
     private void registryInAdmin() {
@@ -137,7 +126,7 @@ public class WtpPropertyProcessor implements ApplicationContextAware, SmartIniti
             if (response.getStatusCode() == HttpResponse.SUCCESS_CODE) {
                 configEvent = response.getBody();
             } else {
-                log.error("wtp ------> register {} failed. ");
+                log.error("wtp ------> register {} failed. ", adminBiz);
             }
         }
         if (configEvent == null) {
@@ -198,7 +187,7 @@ public class WtpPropertyProcessor implements ApplicationContextAware, SmartIniti
                     return;
                 }
             } catch (Exception e) {
-                log.error("wtp ------> register NoConfiguration Wtp Exception {}. ", e);
+                log.error("wtp ------> register NoConfiguration Wtp Exception. ", e);
             }
         }
         log.error("wtp ------> {} failed to register. ", wtp.value());

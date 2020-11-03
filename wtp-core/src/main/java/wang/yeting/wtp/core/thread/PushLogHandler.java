@@ -36,7 +36,9 @@ public class PushLogHandler {
     private static ScheduledFuture<?> scheduledFuture;
 
     private WtpConfigBean wtpConfigBean;
+
     private String appId;
+
     private String clusterId;
 
     public void pushLog(List<AdminBiz> adminBizList, WtpConfigBean wtpConfigBean) {

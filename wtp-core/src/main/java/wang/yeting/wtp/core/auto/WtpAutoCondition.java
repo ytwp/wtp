@@ -27,6 +27,6 @@ public class WtpAutoCondition implements Condition {
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
         Environment environment = context.getEnvironment();
         Boolean property = environment.getProperty(WtpPropertyEnum.WTP_ENABLED.getProperty(), Boolean.class);
-        return property == null ? false : property;
+        return property != null && property;
     }
 }

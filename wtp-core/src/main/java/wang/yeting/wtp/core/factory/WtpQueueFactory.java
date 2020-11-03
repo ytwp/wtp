@@ -21,7 +21,7 @@ import java.util.concurrent.*;
 public class WtpQueueFactory {
 
 
-    private ConcurrentMap<String, BlockingQueue<Runnable>> queueConcurrentMap = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, BlockingQueue<Runnable>> queueConcurrentMap = new ConcurrentHashMap<>();
 
     private static WtpQueueFactory wtpQueueFactory = new WtpQueueFactory();
 
