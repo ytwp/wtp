@@ -62,7 +62,7 @@ public class WtpThreadPoolFactory {
     /**
      * inject service of bean field
      *
-     * @param configEvent
+     * @param configEvent {@link ConfigEvent}
      */
     public void injectService(ConfigEvent configEvent) {
         WtpQueueFactory wtpQueueFactory = WtpQueueFactory.getInstance();

@@ -22,8 +22,8 @@ public class AdminBizClient implements AdminBiz, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private HttpLongPollingUtil httpLongPollingUtil;
-    private HttpRequest httpRequest;
+    private final HttpLongPollingUtil httpLongPollingUtil;
+    private final HttpRequest httpRequest;
 
     private static String PULL_CONFIG_URL = "/pullConfig";
     private static String TASK_PULL_CONFIG_URL = "/taskPullConfig";
@@ -32,15 +32,15 @@ public class AdminBizClient implements AdminBiz, Serializable {
     private static final String PUSH_LOG_URL = "/pushLog";
     private static final String REGISTER_NO_CONFIGURATION_WTP_URL = "/registerNoConfigurationWtp";
 
-    private static final Type configChangeEventType = TypeToken.getParameterized(HttpResponse.class, ConfigChangeEvent.class).getType();
-    private static final Type configEventType = TypeToken.getParameterized(HttpResponse.class, ConfigEvent.class).getType();
-    private static final Type booleanType = TypeToken.getParameterized(HttpResponse.class, Boolean.class).getType();
+    private static final Type CONFIG_CHANGE_EVENT_TYPE = TypeToken.getParameterized(HttpResponse.class, ConfigChangeEvent.class).getType();
+    private static final Type CONFIG_EVENT_TYPE = TypeToken.getParameterized(HttpResponse.class, ConfigEvent.class).getType();
+    private static final Type BOOLEAN_TYPE = TypeToken.getParameterized(HttpResponse.class, Boolean.class).getType();
 
-    private WtpConfigBean wtpConfigBean;
+    private final WtpConfigBean wtpConfigBean;
 
-    private QueryBo queryBo;
+    private final QueryBo queryBo;
 
-    private String addressUrl;
+    private final String addressUrl;
 
     public AdminBizClient(String addressUrl, WtpConfigBean wtpConfigBean) {
         this.wtpConfigBean = wtpConfigBean;
@@ -60,7 +60,7 @@ public class AdminBizClient implements AdminBiz, Serializable {
     @Override
     public HttpResponse<ConfigChangeEvent> pullConfig() {
         try {
-            return httpLongPollingUtil.doGet(httpRequest, configChangeEventType);
+            return httpLongPollingUtil.doGet(httpRequest, CONFIG_CHANGE_EVENT_TYPE);
         } catch (Exception e) {
             log.error(e.getLocalizedMessage());
         }
@@ -70,7 +70,7 @@ public class AdminBizClient implements AdminBiz, Serializable {
     @Override
     public HttpResponse<ConfigEvent> registry() {
         try {
-            return HttpUtil.postJson(this.addressUrl + REGISTRY_URL, queryBo, configEventType);
+            return HttpUtil.postJson(this.addressUrl + REGISTRY_URL, queryBo, CONFIG_EVENT_TYPE);
         } catch (Exception e) {
             return new HttpResponse<>(HttpResponse.FAIL_CODE, null);
         }
@@ -79,7 +79,7 @@ public class AdminBizClient implements AdminBiz, Serializable {
     @Override
     public HttpResponse<String> destroy() {
         try {
-            return HttpUtil.postJson(this.addressUrl + DESTROY_URL, queryBo, booleanType);
+            return HttpUtil.postJson(this.addressUrl + DESTROY_URL, queryBo, BOOLEAN_TYPE);
         } catch (Exception e) {
             return new HttpResponse<>(HttpResponse.FAIL_CODE, null);
         }
@@ -88,7 +88,7 @@ public class AdminBizClient implements AdminBiz, Serializable {
     @Override
     public HttpResponse<Boolean> pushLog(WtpLogBo wtpLogBo) {
         try {
-            return HttpUtil.postJson(this.addressUrl + PUSH_LOG_URL, wtpLogBo, booleanType);
+            return HttpUtil.postJson(this.addressUrl + PUSH_LOG_URL, wtpLogBo, BOOLEAN_TYPE);
         } catch (Exception e) {
             return new HttpResponse<>(HttpResponse.FAIL_CODE, null);
         }
@@ -97,7 +97,7 @@ public class AdminBizClient implements AdminBiz, Serializable {
     @Override
     public HttpResponse<Boolean> registerNoConfigurationWtp(WtpBo wtpBo) {
         try {
-            return HttpUtil.postJson(this.addressUrl + REGISTER_NO_CONFIGURATION_WTP_URL, wtpBo, booleanType);
+            return HttpUtil.postJson(this.addressUrl + REGISTER_NO_CONFIGURATION_WTP_URL, wtpBo, BOOLEAN_TYPE);
         } catch (Exception e) {
             return new HttpResponse<>(HttpResponse.FAIL_CODE, null);
         }
@@ -106,7 +106,7 @@ public class AdminBizClient implements AdminBiz, Serializable {
     @Override
     public HttpResponse<ConfigEvent> taskPullConfig() {
         try {
-            return HttpUtil.postJson(this.addressUrl + TASK_PULL_CONFIG_URL, Collections.emptyMap(), configEventType);
+            return HttpUtil.postJson(this.addressUrl + TASK_PULL_CONFIG_URL, Collections.emptyMap(), CONFIG_EVENT_TYPE);
         } catch (Exception e) {
             return new HttpResponse<>(HttpResponse.FAIL_CODE, null);
         }

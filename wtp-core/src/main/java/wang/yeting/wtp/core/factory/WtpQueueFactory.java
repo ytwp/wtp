@@ -53,7 +53,7 @@ public class WtpQueueFactory {
     /**
      * init Queue
      *
-     * @param configEvent
+     * @param configEvent {@link ConfigEvent}
      */
     public void initQueue(ConfigEvent configEvent) {
         Set<String> nameSet = configEvent.changedKeys();

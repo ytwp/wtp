@@ -17,8 +17,8 @@ public abstract class WtpHandler {
     /**
      * 赋值
      *
-     * @param threadPool
-     * @return
+     * @param threadPool {@link WtpThreadPoolExecutor} 值
+     * @return {@link Boolean} 赋值结果
      */
     public abstract Boolean assignment(WtpThreadPoolExecutor threadPool);
 

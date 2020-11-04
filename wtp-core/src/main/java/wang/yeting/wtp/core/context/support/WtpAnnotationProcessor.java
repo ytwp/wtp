@@ -34,7 +34,7 @@ public class WtpAnnotationProcessor implements BeanPostProcessor, ApplicationCon
         try {
             annotatedMethods = MethodIntrospector.selectMethods(bean.getClass(), (MethodIntrospector.MetadataLookup<Wtp>) method -> AnnotatedElementUtils.findMergedAnnotation(method, Wtp.class));
         } catch (RuntimeException e) {
-            log.error("wtp ------> method-wtphandler resolve error for bean[" + beanName + "].", e);
+            log.error("wtp ------> method-wtpHandler resolve error for bean[" + beanName + "].", e);
         }
         if (Objects.nonNull(annotatedMethods) && !annotatedMethods.isEmpty()) {
             for (Map.Entry<Method, Wtp> methodWtpEntry : annotatedMethods.entrySet()) {
@@ -43,9 +43,9 @@ public class WtpAnnotationProcessor implements BeanPostProcessor, ApplicationCon
                 if (wtp == null) {
                     continue;
                 }
-                String name = getName(wtp, "wtp ------> method-wtphandler name invalid, for[" + bean.getClass() + "#" + method.getName() + "] .");
+                String name = getName(wtp, "wtp ------> method-wtpHandler name invalid, for[" + bean.getClass() + "#" + method.getName() + "] .");
                 if (!(method.getParameterTypes().length == 1 && method.getParameterTypes()[0].isAssignableFrom(WtpThreadPoolExecutor.class))) {
-                    throw new WtpConfigException("wtp ------> method-wtphandler param-classtype invalid, for[" + bean.getClass() + "#" + method.getName() + "] , " +
+                    throw new WtpConfigException("wtp ------> method-wtpHandler param-class type invalid, for[" + bean.getClass() + "#" + method.getName() + "] , " +
                             "The correct method format like \" public void setThreadPoolExecutor(WtpThreadPoolExecutor threadPoolExecutor) \" .");
                 }
                 method.setAccessible(true);
@@ -62,9 +62,9 @@ public class WtpAnnotationProcessor implements BeanPostProcessor, ApplicationCon
                 if (wtp == null) {
                     continue;
                 }
-                String name = getName(wtp, "wtp ------> field-wtphandler name invalid, for[" + bean.getClass() + "#" + declaredField.getName() + "] .");
+                String name = getName(wtp, "wtp ------> field-wtpHandler name invalid, for[" + bean.getClass() + "#" + declaredField.getName() + "] .");
                 if (!declaredField.getType().isAssignableFrom(WtpThreadPoolExecutor.class)) {
-                    throw new WtpConfigException("wtp ------> field-wtphandler type invalid, for[" + bean.getClass() + "#" + declaredField.getName() + "] , " +
+                    throw new WtpConfigException("wtp ------> field-wtpHandler type invalid, for[" + bean.getClass() + "#" + declaredField.getName() + "] , " +
                             "The correct method format like \" private WtpThreadPoolExecutor threadPoolExecutor; \" .");
                 }
                 wtpAnnotationContext.setWtpHandler(name, new FieldWtpHandler(bean, declaredField, wtp));

@@ -17,14 +17,14 @@ public @interface Wtp {
     /**
      * pool name
      *
-     * @return
+     * @return //pool name
      */
     String value();
 
     /**
      * default core pool size
      *
-     * @return
+     * @return default core pool size
      */
     int defaultCorePoolSize() default 5;
 
