@@ -1,6 +1,5 @@
 package wang.yeting.wtp.core.util;
 
-import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import wang.yeting.wtp.core.exceptions.WtpConfigException;
@@ -12,6 +11,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.function.Function;
@@ -88,7 +88,7 @@ public class HttpLongPollingUtil {
 
             try {
                 isr = new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8);
-                response = CharStreams.toString(isr);
+                response = charStreamsToString(isr);
             } catch (IOException ex) {
                 /**
                  * according to https://docs.oracle.com/javase/7/docs/technotes/guides/net/http-keepalive.html,
@@ -99,7 +99,7 @@ public class HttpLongPollingUtil {
                 if (errorStream != null) {
                     esr = new InputStreamReader(errorStream, StandardCharsets.UTF_8);
                     try {
-                        CharStreams.toString(esr);
+                        charStreamsToString(esr);
                     } catch (IOException ioe) {
                         //ignore
                     }
@@ -138,6 +138,38 @@ public class HttpLongPollingUtil {
             }
         }
         throw new WtpConfigStatusCodeException(statusCode, String.format("Get operation failed for %s", httpRequest.getUrl()));
+    }
+
+    public static String charStreamsToString(Readable r) throws IOException {
+        return toStringBuilder(r).toString();
+    }
+
+    private static StringBuilder toStringBuilder(Readable r) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        copy(r, sb);
+        return sb;
+    }
+
+    public static long copy(Readable from, Appendable to) throws IOException {
+        checkNotNull(from);
+        checkNotNull(to);
+        CharBuffer buf = CharBuffer.allocate(2048);
+        long total = 0L;
+        while (from.read(buf) != -1) {
+            buf.flip();
+            to.append(buf);
+            total += (long) buf.remaining();
+            buf.clear();
+        }
+        return total;
+    }
+
+    public static <T> T checkNotNull(T reference) {
+        if (reference == null) {
+            throw new NullPointerException();
+        } else {
+            return reference;
+        }
     }
 
 }
