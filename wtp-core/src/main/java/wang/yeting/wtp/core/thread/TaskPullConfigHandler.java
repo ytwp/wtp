@@ -25,7 +25,7 @@ public class TaskPullConfigHandler {
             try {
                 doTaskPullConfig(adminBizList);
             } catch (Exception e) {
-                log.error("wtp ------> taskPullConfig Exception = [{}]. ", e);
+                log.error("wtp ------> taskPullConfig Exception .", e);
             }
         }, 300, 300, TimeUnit.SECONDS);
     }
@@ -40,10 +40,10 @@ public class TaskPullConfigHandler {
                     return;
                 }
             } catch (Exception e) {
-                log.error("wtp ------> doTaskPullConfig Exception: {} ");
+                log.error("wtp ------> doTaskPullConfig Exception .", e);
             }
         }
-        log.error("wtp ------> doTaskPullConfig {} failed. ");
+        log.error("wtp ------> doTaskPullConfig all AdminBiz failed. ");
     }
 
     public void refreshConfig(ConfigEvent configEvent) {

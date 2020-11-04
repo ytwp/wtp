@@ -13,7 +13,7 @@ public interface WtpAnnotationContextAware extends Aware {
     /**
      * Set the {@link WtpAnnotationContext} that this component runs in.
      *
-     * @param wtpAnnotationContext
+     * @param wtpAnnotationContext {@link WtpAnnotationContext}
      */
     void setWtpAnnotationContext(WtpAnnotationContext wtpAnnotationContext);
 }

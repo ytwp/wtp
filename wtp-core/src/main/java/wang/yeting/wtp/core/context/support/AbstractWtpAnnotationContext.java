@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class AbstractWtpAnnotationContext implements WtpAnnotationContext {
 
-    private Map<String, List<WtpHandler>> wtpHandlerMap;
+    private final Map<String, List<WtpHandler>> wtpHandlerMap;
 
     public AbstractWtpAnnotationContext() {
         wtpHandlerMap = new HashMap<>();
@@ -25,8 +25,8 @@ public class AbstractWtpAnnotationContext implements WtpAnnotationContext {
     /**
      * Put wtpHandler into WtpAnnotationContext
      *
-     * @param name
-     * @param wtpHandler
+     * @param name       {@link String}
+     * @param wtpHandler {@link WtpHandler}
      */
     @Override
     public void setWtpHandler(String name, WtpHandler wtpHandler) {

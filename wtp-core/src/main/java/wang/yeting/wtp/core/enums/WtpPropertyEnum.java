@@ -43,7 +43,7 @@ public enum WtpPropertyEnum {
      */
     WTP_CONNECT_RETRY_INTERVAL("wtp.connect.retry.interval");
 
-    private String property;
+    private final String property;
 
     WtpPropertyEnum(String property) {
         this.property = property;

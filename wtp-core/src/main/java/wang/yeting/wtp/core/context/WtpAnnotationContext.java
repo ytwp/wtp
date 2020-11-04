@@ -16,8 +16,8 @@ public interface WtpAnnotationContext {
     /**
      * Put wtpHandler into WtpAnnotationContext
      *
-     * @param name
-     * @param wtpHandler
+     * @param name       {@link String}
+     * @param wtpHandler {@link WtpHandler}
      */
     void setWtpHandler(String name, WtpHandler wtpHandler);
 

@@ -49,7 +49,7 @@ public class PullConfigHandler {
                     Thread.sleep(secondsDelay);
                 }
             } catch (Exception e) {
-                log.error("wtp ------> doPullConfig Exception = [{}]. ", e);
+                log.error("wtp ------> doPullConfig Exception .", e);
                 try {
                     Thread.sleep(secondsDelay);
                 } catch (InterruptedException interruptedException) {

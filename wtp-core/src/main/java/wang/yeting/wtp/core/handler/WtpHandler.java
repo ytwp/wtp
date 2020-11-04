@@ -14,6 +14,12 @@ public abstract class WtpHandler {
 
     public Wtp wtp;
 
+    /**
+     * 赋值
+     *
+     * @param threadPool
+     * @return
+     */
     public abstract Boolean assignment(WtpThreadPoolExecutor threadPool);
 
 }

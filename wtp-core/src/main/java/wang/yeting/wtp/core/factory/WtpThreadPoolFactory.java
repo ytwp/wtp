@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class WtpThreadPoolFactory {
 
-    private ConcurrentMap<String, WtpThreadPoolExecutor> threadPoolExecutorConcurrentMap = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, WtpThreadPoolExecutor> threadPoolExecutorConcurrentMap = new ConcurrentHashMap<>();
 
     private static WtpThreadPoolFactory wtpThreadPoolFactory = new WtpThreadPoolFactory();
 
@@ -46,9 +46,9 @@ public class WtpThreadPoolFactory {
 
     public WtpThreadPoolExecutor loadDefault(Wtp wtp) {
         String name = wtp.value();
-        Integer corePoolSize = wtp.defaultCorePoolSize();
-        Integer maximumPoolSize = wtp.defaultMaximumPoolSize();
-        Long keepAliveSeconds = wtp.defaultKeepAliveSeconds();
+        int corePoolSize = wtp.defaultCorePoolSize();
+        int maximumPoolSize = wtp.defaultMaximumPoolSize();
+        long keepAliveSeconds = wtp.defaultKeepAliveSeconds();
         WtpQueueFactory wtpQueueFactory = WtpQueueFactory.getInstance();
         BlockingQueue<Runnable> blockingQueue = wtpQueueFactory.loadDefaultQueue(wtp);
         String rejectedExecutionHandlerName = wtp.rejectedExecutionHandlerName().getRejectedExecutionHandlerName();

@@ -55,8 +55,8 @@ public enum QueueEnums {
      */
     linkedTransferQueue("LinkedTransferQueue", LinkedTransferQueue.class);
 
-    private String queueName;
-    private Class<?> queueClass;
+    private final String queueName;
+    private final Class<?> queueClass;
 
     QueueEnums(String queueName, Class<?> queueClass) {
         this.queueName = queueName;

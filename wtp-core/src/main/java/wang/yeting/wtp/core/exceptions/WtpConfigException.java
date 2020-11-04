@@ -6,6 +6,7 @@ package wang.yeting.wtp.core.exceptions;
  */
 
 public class WtpConfigException extends RuntimeException {
+
     public WtpConfigException(String message) {
         super(message);
     }
@@ -13,4 +14,5 @@ public class WtpConfigException extends RuntimeException {
     public WtpConfigException(String message, Throwable cause) {
         super(message, cause);
     }
+
 }

@@ -40,8 +40,8 @@ public enum RejectedExecutionHandlerEnums {
      */
     discardOldestPolicy("DiscardOldestPolicy", new WtpThreadPoolExecutor.DiscardOldestPolicy());
 
-    private String rejectedExecutionHandlerName;
-    private WtpRejectedExecutionHandler wtpRejectedExecutionHandler;
+    private final String rejectedExecutionHandlerName;
+    private final WtpRejectedExecutionHandler wtpRejectedExecutionHandler;
 
 
     RejectedExecutionHandlerEnums(String rejectedExecutionHandlerName, WtpRejectedExecutionHandler wtpRejectedExecutionHandler) {
@@ -52,8 +52,8 @@ public enum RejectedExecutionHandlerEnums {
     private static final Map<String, RejectedExecutionHandlerEnums> ENUM_MAP = new HashMap<>(RejectedExecutionHandlerEnums.values().length);
 
     static {
-        for (RejectedExecutionHandlerEnums e : RejectedExecutionHandlerEnums.values()) {
-            ENUM_MAP.put(e.getRejectedExecutionHandlerName(), e);
+        for (RejectedExecutionHandlerEnums enums : RejectedExecutionHandlerEnums.values()) {
+            ENUM_MAP.put(enums.getRejectedExecutionHandlerName(), enums);
         }
     }
 

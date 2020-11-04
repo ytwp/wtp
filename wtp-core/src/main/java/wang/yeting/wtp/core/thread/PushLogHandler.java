@@ -55,7 +55,7 @@ public class PushLogHandler {
             try {
                 doPushLog();
             } catch (Exception e) {
-                log.error("wtp ------> doPushLog Exception = [{}]. ", e);
+                log.error("wtp ------> doPushLog Exception .", e);
             }
         }, 60, 60, TimeUnit.SECONDS);
     }
