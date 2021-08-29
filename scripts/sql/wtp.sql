@@ -144,3 +144,12 @@ CREATE TABLE `wtp_registry`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- ----------------------------
+-- init data
+-- ----------------------------
+INSERT INTO `wtp`.`user`(`user_id`, `nickname`, `avatar`, `username`, `password`, `phone`, `email`, `role`, `status`, `created`, `modified`) VALUES (1, 'Supper Admin', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 'wtpwtp', '5e843ec165eee460b42f6619a92286fd', '', '', 'SUPPER-ADMIN', 10, 0, 0);
+INSERT INTO `wtp`.`user`(`user_id`, `nickname`, `avatar`, `username`, `password`, `phone`, `email`, `role`, `status`, `created`, `modified`) VALUES (2, 'user', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 'user', '5e843ec165eee460b42f6619a92286fd', '', '11', 'USER', 10, 0, 1600957552652);
+INSERT INTO `wtp`.`user`(`user_id`, `nickname`, `avatar`, `username`, `password`, `phone`, `email`, `role`, `status`, `created`, `modified`) VALUES (3, 'admin', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 'admin', '5e843ec165eee460b42f6619a92286fd', '', '', 'ADMIN', 10, 1598016851125, 1598016851125);
+
+
